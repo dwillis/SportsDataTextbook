@@ -2,7 +2,7 @@
 
 Last chapter, we looked at correlations and linear regression to predict how one element of a game would predict the score. But we know that a single variable, in all but the rarest instances, is not going to be that predictive. We need more than one. Enter multiple regression. Multiple regression lets us add -- wait for it -- multiple predictors to our equation to help us get a better fit to reality.
 
-That presents it's own problems. So let's get set up. The dataset we'll use is all college football games since the 2011 season.
+That presents it's own problems. So let's get set up. The dataset we'll use is all college football games between 2011 and 2021.
 
 ```{r}
 #| warning: false
@@ -13,7 +13,7 @@ library(downloadthis)
 library(glue)
 
 dllink <- download_link(
-  link = "http://mattwaite.github.io/sportsdatafiles/footballlogs1120.csv",
+  link = "https://dwillis.github.io/sportsdatafiles/footballlogs1121.csv",
   button_label = "Download csv file",
   button_type = "danger",
   has_icon = TRUE,
@@ -36,7 +36,7 @@ library(tidyverse)
 And the data.
 
 ```{r}
-logs <- read_csv("data/footballlogs1120.csv")
+logs <- read_csv("data/footballlogs1121.csv")
 ```
 
 One way to show how successful a footballl team was for a game is to show the differential between the team's score and the opponent's score. Score a lot more than the opponent = good, score a lot less than the opponent = bad. And, relatively speaking, the more the better. So let's create that differential. Let's also get our net yardage stat back. And because we'll need it later, let's add the turnover margin.
@@ -68,7 +68,7 @@ First things first: What is the adjusted R-squared?
 
 Second: what is the p-value and is it less than .05?
 
-Third: Compare the residual standard error. We went from 13.12 to 10.55. The meaning of this is both really opaque and also simple -- by adding data, we reduced the amount of error in our model. Residual standard error is the total distance between what our model would predict and what we actually have in the data. So lots of residual error means the distance between reality and our model is wider. So the width of our predictive range in this example shrank while we improved the amount of the difference we could predict. That's good, and not always going to be the case.
+Third: Compare the residual standard error. We went from 13.05 to 10.55. The meaning of this is both really opaque and also simple -- by adding data, we reduced the amount of error in our model. Residual standard error is the total distance between what our model would predict and what we actually have in the data. So lots of residual error means the distance between reality and our model is wider. So the width of our predictive range in this example shrank while we improved the amount of the difference we could predict. That's good, and not always going to be the case.
 
 One of the more difficult things to understand about multiple regression is the issue of multicollinearity. What that means is that there is significant correlation overlap between two variables -- the two are related to each other as well as to the target output -- and all you are doing by adding both of them is adding error with no real value to the R-squared. In pure statistics, we don't want any multicollinearity at all. Violating that assumption limits the applicability of what you are doing. So if we have some multicollinearity, it limits our scope of application to college football We can't say this will work for every football league and level everywhere. What we need to do is see how correlated each value is to each other and throw out ones that are highly co-correlated.
 
@@ -113,13 +113,13 @@ What is the Adjusted R-squared now? What is the p-value and is it less than .05?
 
 The final thing we can do with this is predict things. Look at our coefficients table. See the Estimates? We can build a formula from that, same as we did with linear regressions.
 
-How does this apply in the real world? Let's pretend for a minute that you are Scott Frost, and you have a mess on your hands. Your job is to win conference titles. To do that, we need to know what attributes of a team should we emphasize. We can do that by looking at what previous Big Ten conference champions looked like.
+How does this apply in the real world? Let's pretend for a minute that you are Mike Locksley, and you have a mess on your hands. Your job is to win conference titles. To do that, we need to know what attributes of a team should we emphasize. We can do that by looking at what previous Big Ten conference champions looked like.
 
 So if our goal is to predict a conference champion team, we need to know what those teams did. Here's the regular season conference champions in this dataset.
 
 ```{r}
 logs %>% 
-  filter(Team == "Ohio State" & Season == 2020 | Team == "Ohio State" & Season == 2019 | Team == "Ohio State" & Season == 2018) %>% 
+  filter(Team == "Ohio State" & Season == 2021 | Team == "Ohio State" & Season == 2020 | Team == "Ohio State" & Season == 2019 | Team == "Ohio State" & Season == 2018) %>% 
   summarise(
     meanNetYards = mean(NetYards),
     meanTurnoverMargin = mean(TurnoverMargin),
@@ -131,17 +131,17 @@ logs %>%
 Now it's just plug and chug.
 
 ```{r}
-(0.0547465*195.8824) + (3.8806793*0.6764706) + (-3.9374905*5.044118	) + (3.9152803*6.908824) + 0.4960303
+(0.0551813*193.5833	) + (3.8548574*0.6875) + (-3.8991399*5.145833	) + (3.8612863*7.28125) + 0.5826970
 ```
 
 So a team with those numbers is going to average scoring 21 more points per game than their opponent. Sound like Ohio State in the last three years?
 
-How does that compare to Nebraska this season?
+How does that compare to Maryland for last season?
 
 ```{r}
 logs %>% 
   filter(
-    Team == "Nebraska" & Season == 2020
+    Team == "Maryland" & Season == 2021
     ) %>% 
   summarise(
     meanNetYards = mean(NetYards),
@@ -152,7 +152,7 @@ logs %>%
 ```
 
 ```{r}
-(0.0547465*5) + (3.8806793*-1.375) + (-3.9374905*5.4375) + (3.9152803*5.5375) + 0.4960303
+(0.0551813*39.30769	) + (3.8548574*-0.5384615) + (-3.8991399*.669231	) + (3.8612863*6.238462) + 0.5826970
 ```
 
-By this model, it predicted we would average being outscored by our opponents by 4.3 points over the season. Reality? We were outscored by 6.25 on average.
+By this model, it predicted we would average outscoring our opponents by 22 points over the season! The reality? We were outscored by 8.4 on average.

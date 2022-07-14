@@ -43,7 +43,7 @@ library(tidyverse)
 
 The first thing we need to do is get some data to work with. We do that by reading it in. In our case, we're going to read data from a csv file -- a comma-separated values file.
 
-The CSV file we're going to read from is a [Basketball Reference](https://www.basketball-reference.com/leagues/NBA_2020_advanced.html) page of advanced metrics for NBA players this season. The Sports Reference sites are a godsend of data, a trove of stuff, and we're going to use it a lot in this class.
+The CSV file we're going to read from is a [Basketball Reference](https://www.basketball-reference.com/leagues/NBA_2022_advanced.html) page of advanced metrics for NBA players this past season. The Sports Reference sites are a godsend of data, a trove of stuff, and we're going to use it a lot in this class.
 
 ```{r}
 #| warning: false
@@ -55,7 +55,7 @@ library(downloadthis)
 library(glue)
 
 dllink <- download_link(
-  link = "http://mattwaite.github.io/sportsdatafiles/nbaadvancedplayers1920.csv",
+  link = "https://dwillis.github.io/sportsdatafiles/nbaadvancedplayers2122.csv",
   button_label = "Download csv file",
   button_type = "danger",
   has_icon = TRUE,
@@ -71,7 +71,7 @@ So step 2, after setting up our libraries, is most often going to be importing d
 
 The code looks *something* like this, but hold off copying it just yet:
 
-`nbaplayers <- read_csv("~/Box/SportsData/nbaadvancedplayers1920.csv")`
+`nbaplayers <- read_csv("~/SportsData/nbaadvancedplayers2122.csv")`
 
 Let's unpack that.
 
@@ -79,12 +79,12 @@ The first part -- nbaplayers -- is the name of your variable. A variable is just
 
 The \<- bit is the variable assignment operator. It's how we know we're assigning something to a word. Think of the arrow as saying "Take everything on the right of this arrow and stuff it into the thing on the left." So we're creating an empty vessel called `nbaplayers` and stuffing all this data into it.
 
-The `read_csv` bits are pretty obvious, except for one thing. What happens in the quote marks is the path to the data. In there, I have to tell R where it will find the data. The easiest thing to do, if you are confused about how to find your data, is to put your data in the same folder as as your notebook (you'll have to save that notebook first). If you do that, then you just need to put the name of the file in there (nbaadvancedplayers1920.csv). In my case, I've got a folder called Box in my home directory (that's the `~` part), and in there is a folder called SportsData that has the file called nbaadvancedplayers1920.csv in it. Some people -- insane people -- leave the data in their downloads folder. The data path then would be `~/Downloads/nameofthedatafilehere.csv` on PC or Mac.
+The `read_csv` bits are pretty obvious, except for one thing. What happens in the quote marks is the path to the data. In there, I have to tell R where it will find the data. The easiest thing to do, if you are confused about how to find your data, is to put your data in the same folder as as your notebook (you'll have to save that notebook first). If you do that, then you just need to put the name of the file in there (nbaadvancedplayers2122.csv). In my case, in my home directory (that's the `~` part), there is a folder called SportsData that has the file called nbaadvancedplayers2122.csv in it. Some people -- insane people -- leave the data in their downloads folder. The data path then would be `~/Downloads/nameofthedatafilehere.csv` on PC or Mac.
 
 **What you put in there will be different from mine**. So your first task is to import the data.
 
 ```{r}
-nbaplayers <- read_csv("data/nbaadvancedplayers1920.csv")
+nbaplayers <- read_csv("data/nbaadvancedplayers2122.csv")
 ```
 
 Now we can inspect the data we imported. What does it look like? To do that, we use `head(nbaplayers)` to show the headers and **the first six rows of data**. If we wanted to see them all, we could just simply enter `mountainlions` and run it.
@@ -99,7 +99,7 @@ head(nbaplayers)
 nrow(nbaplayers)
 ```
 
-Another way to look at nrow -- we have 651 players from this season in our dataset.
+Another way to look at nrow -- we have 812 players from this season in our dataset.
 
 What if we wanted to know how many players there were by position? To do that by hand, we'd have to take each of the 651 records and sort them into a pile. We'd put them in groups and then count them.
 
@@ -133,7 +133,7 @@ nbaplayers %>%
   ) %>% arrange(desc(total))
 ```
 
-So the most common position in the NBA? Shooting guard, followed by power forward.
+So the most common position in the NBA? Shooting guard, followed by small forward (although it's close between SF and point guard). 
 
 We can, if we want, group by more than one thing. Which team has the most of a single position? To do that, we can group by the team -- called Tm in the data -- and position, or Pos in the data:
 
@@ -149,7 +149,7 @@ So wait, what team is TOT?
 
 Valuable lesson: whoever collects the data has opinions on how to solve problems. In this case, Basketball Reference, when a player get's traded, records stats for the player's first team, their second team, and a combined season total for a team called TOT, meaning Total. Is there a team abbreviated TOT? No. So ignore them here.
 
-Sacramento has 9 power forward. Brooklyn has 8 shooting guards, as do the Lakers. You can learn a bit about how a team is assembled by looking at these simple counts.
+Boston has 8 shooting guards. Dallas has 9 point guards? You can learn a bit about how a team is assembled by looking at these simple counts.
 
 ## Other aggregates: Mean and median
 
@@ -169,7 +169,7 @@ nbaplayers %>%
   )
 ```
 
-So there's 651 players in the data. Let's look at shooting guards. The average shooting guard plays 842 minutes and the median is 653.5 minutes.
+So there's 812 players in the data. Let's look at shooting guards. The average shooting guard plays 820 minutes and the median is 665 minutes.
 
 Why?
 
@@ -179,7 +179,7 @@ Let's let sort help us.
 nbaplayers %>% arrange(desc(MP))
 ```
 
-The player with the most minutes on the floor is a shooting guard. Shooting guard is the most common position, so that means there's CJ McCollum rolling up 2,556 minutes in a season, and then there's Cleveland Cavalier's sensation J.P. Macura. Never heard of J.P. Macura? Might be because he logged one minute in one game this season.
+The player with the most minutes on the floor is a small forward. So that means there's Mikal Bridges rolling up 2,854 minutes in a season, and then there's Boston sensation Justin Jackson. Never heard of Justin Jackson? Might be because he logged two minutes in one game this season. 
 
 That's a huge difference.
 
@@ -202,4 +202,4 @@ nbaplayers %>%
     stdev = sd(MP)) %>% arrange(desc(total))
 ```
 
-So again, no surprise, shooting guards spend the most minutes on the floor in the NBA. They average 842 minutes, but we noted why that's trouble. The minimum is the J.P. Macura Award, max is the Trailblazer's failing at load management, and the standard deviation is a measure of how spread out the data is. In this case, not the highest spread among positions, but pretty high. So you know you've got some huge minutes players and a bunch of bench players.
+So again, no surprise, shooting guards spend the most minutes on the floor in the NBA. They average 820 minutes, but we noted why that's trouble. The minimum is a one-minute wonder, max is some team failing at load management, and the standard deviation is a measure of how spread out the data is. In this case, not the highest spread among positions, but pretty high. So you know you've got some huge minutes players and a bunch of bench players.
