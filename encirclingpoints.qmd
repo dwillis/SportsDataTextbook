@@ -17,7 +17,7 @@ library(tidyverse)
 library(ggalt)
 ```
 
-Let's say we want to highlight the top scorers in college basketball. So let's use our player data.
+Let's say we want to highlight the top scorers in women's college basketball. So let's use our player data.
 
 ```{r}
 #| warning: false
@@ -28,7 +28,7 @@ library(downloadthis)
 library(glue)
 
 dllink <- download_link(
-  link = "http://mattwaite.github.io/sportsdatafiles/players20.csv",
+  link = "https://dwillis.github.io/sportsdatafiles/wbb_players_2022.csv",
   button_label = "Download csv file",
   button_type = "danger",
   has_icon = TRUE,
@@ -42,29 +42,29 @@ glue("<pre><p><strong>For this walkthrough:</strong></p><p>{dllink}</p></pre>")
 And while we're loading it, let's filter out anyone who hasn't played. 
 
 ```{r}
-players <- read_csv("data/players20.csv") %>% filter(MP > 0)
+players <- read_csv("data/wbb_players_2022.csv") %>% filter(mp > 0)
 ```
 
 We've done this before, but let's make a standard scatterplot of minutes and points. 
 
 ```{r}
-ggplot() + geom_point(data=players, aes(x=MP, y=PTS))
+ggplot() + geom_point(data=players, aes(x=mp, y=pts))
 ```
 
 So we can see right away that there are some dots at the very top that we'd want to highlight. Who are these scoring machines? 
 
-Like we have done in the past, let's make a dataframe of top scorers. We'll set the cutoff at 650 points in a season. 
+Like we have done in the past, let's make a dataframe of top scorers. We'll set the cutoff at 700 points in a season. 
 
 ```{r}
-topscorers <- players %>% filter(PTS > 650)
+topscorers <- players %>% filter(pts > 700)
 ```
 
 And like we've done in the past, we can add it to the chart with another geom_point. We'll make all the players grey, we'll make all the top scorers black.
 
 ```{r}
 ggplot() + 
-  geom_point(data=players, aes(x=MP, y=PTS), color="grey") +
-  geom_point(data=topscorers, aes(x=MP, y=PTS), color="black")
+  geom_point(data=players, aes(x=mp, y=pts), color="grey") +
+  geom_point(data=topscorers, aes(x=mp, y=pts), color="black")
 ```
 
 And like that, we're on the path to something publishable. We'll need to label those dots with `ggrepel` and we'll need to drop the default grey and add some headlines and all that. And, for the most part, we've got a solid chart. 
@@ -78,9 +78,9 @@ Let's start with `s_shape` 1 and `expand` 1.
 
 ```{r}
 ggplot() + 
-  geom_point(data=players, aes(x=MP, y=PTS), color="grey") + 
-  geom_point(data=topscorers, aes(x=MP, y=PTS), color="black") + 
-  geom_encircle(data=topscorers, aes(x=MP, y=PTS), s_shape=1, expand=1, colour="red")
+  geom_point(data=players, aes(x=mp, y=pts), color="grey") + 
+  geom_point(data=topscorers, aes(x=mp, y=pts), color="black") + 
+  geom_encircle(data=topscorers, aes(x=mp, y=pts), s_shape=1, expand=1, colour="red")
 ```
 
 Whoa. That's ... not good.
@@ -89,31 +89,32 @@ Let's go the opposite direction.
 
 ```{r}
 ggplot() + 
-  geom_point(data=players, aes(x=MP, y=PTS), color="grey") + 
-  geom_point(data=topscorers, aes(x=MP, y=PTS), color="black") + 
-  geom_encircle(data=topscorers, aes(x=MP, y=PTS), s_shape=0, expand=0, colour="red")
+  geom_point(data=players, aes(x=mp, y=pts), color="grey") + 
+  geom_point(data=topscorers, aes(x=mp, y=pts), color="black") + 
+  geom_encircle(data=topscorers, aes(x=mp, y=pts), s_shape=0, expand=0, colour="red")
 ```
 
 Better, but ... the circle cuts through multiple dots. 
 
-This takes a little bit of finessing, but a shape of .5 means the line will have some bend to it -- it'll look more like someone circled it with a pen. Then, the expand is better if you use hundredths instead of tenths. So .01 instead of .1. Here's mine after fiddling with it for a bit.
+This takes a little bit of finessing, but a shape of .5 means the line will have some bend to it -- it'll look more like someone circled it with a pen. Then, the expand is better if you use hundredths instead of tenths. So .01 instead of .1. Here's mine after fiddling with it for a bit, and I'll add in player names as a label.
 
 ```{r}
 ggplot() + 
-  geom_point(data=players, aes(x=MP, y=PTS), color="grey") + 
-  geom_point(data=topscorers, aes(x=MP, y=PTS), color="black") + 
-  geom_encircle(data=topscorers, aes(x=MP, y=PTS), s_shape=.5, expand=.03, colour="red")
+  geom_point(data=players, aes(x=mp, y=pts), color="grey") + 
+  geom_point(data=topscorers, aes(x=mp, y=pts), color="black") + 
+  geom_text(data=topscorers, aes(x=mp, y=pts, label=player), hjust = 0, vjust=1) +
+  geom_encircle(data=topscorers, aes(x=mp, y=pts), s_shape=.5, expand=.03, colour="red")
 ```
 
-Now let's clean this up and make it presentable. If you look at the top scorers, only two were Wooden Award finalists. So here's what a chart telling that story might look like.
+Now let's clean this up and make it presentable. If you look at the top scorers, four were Wooden Award finalists. So here's what a chart telling that story might look like.
 
 ```{r}
 ggplot() + 
-  geom_point(data=players, aes(x=MP, y=PTS), color="grey") + 
-  geom_point(data=topscorers, aes(x=MP, y=PTS), color="black") + 
-  geom_encircle(data=topscorers, aes(x=MP, y=PTS), s_shape=.5, expand=.03, colour="red") +
+  geom_point(data=players, aes(x=mp, y=pts), color="grey") + 
+  geom_point(data=topscorers, aes(x=mp, y=pts), color="black") + 
+  geom_encircle(data=topscorers, aes(x=mp, y=pts), s_shape=.5, expand=.03, colour="red") +
   geom_text(aes(x=725, y=700, label="Top scorers")) + 
-  labs(title="Only two top scorers are Wooden Award candidates", subtitle="Iowa's Garza and Marquette's Howard are the only two looking at postseason hardware.", x="Minutes", y="Points") + 
+  labs(title="Four top scorers are Wooden Award candidates", subtitle="Big scorers Caitlin Clark, NaLyssa Smith, Ayoka Lee and Aneesah Morrow among 15 finalists", x="Minutes", y="Points") + 
   theme_minimal() + 
   theme(
     plot.title = element_text(size = 16, face = "bold"),
@@ -129,18 +130,18 @@ You can use circling outside of the top of something. It's a bit obvious that th
 
 Works the same way -- use layering and color smartly and tell the story with all your tools.
 
-Let's grab the top three point attempt takers on the Nebraska roster. As of now, only one will be coming back. 
+Let's grab the top three point attempt takers on the Maryland roster. As of now, only one will be coming back. 
 
 ```{r}
-nutop <- players %>% filter(Team == "Nebraska Cornhuskers") %>% top_n(3, `3PA`)
+mdtop <- players %>% filter(team == "Maryland") %>% top_n(3, fg3a)
 ```
 
-And just like above, we can plug in our players geom, our nutop dataframe into another geom, then encircle that dataframe. Slap some headlines and annotations on it and here's what we get:
+And just like above, we can plug in our players geom, our mdtop dataframe into another geom, then encircle that dataframe. Slap some headlines and annotations on it and here's what we get:
 
 ```{r}
-ggplot() + geom_point(data=players, aes(x=MP, y=`3PA`), color="grey") + geom_point(data=nutop, aes(x=MP, y=`3PA`), color="red") + geom_encircle(data=nutop, aes(x=MP, y=`3PA`), s_shape=.02, expand=.18, colour="red") +
-  geom_text(aes(x=400, y=100, label="Nebraska's top three shooters")) + 
-  labs(title="Did Hoiberg install his system?", subtitle="Nebraska's top three point shooters were nowhere near the tops in college basketball", x="Minutes", y="Three point attempts") + 
+ggplot() + geom_point(data=players, aes(x=mp, y=fg3a), color="grey") + geom_point(data=mdtop, aes(x=mp, y=fg3a), color="red") + geom_encircle(data=mdtop, aes(x=mp, y=fg3a), s_shape=.02, expand=.18, colour="red") +
+  geom_text(aes(x=400, y=100, label="Maryland's top three shooters")) + 
+  labs(title="The Big Three?", subtitle="Maryland's top three point shooters not among the leaders in college basketball ", x="Minutes", y="Three point attempts") + 
   theme_minimal() + 
   theme(
     plot.title = element_text(size = 16, face = "bold"),
@@ -150,4 +151,4 @@ ggplot() + geom_point(data=players, aes(x=MP, y=`3PA`), color="grey") + geom_poi
     )
 ```
 
-The dot on the far right? Cam Mack. Oh what could have been. 
+From the top, Maryland's dots are Katie Benzan, Chloe Bibby and ... Shyanne Sellers, the true freshman.
