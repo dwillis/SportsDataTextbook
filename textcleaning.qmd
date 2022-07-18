@@ -2,7 +2,7 @@
 
 On occasion, you'll get some data from someone that ... isn't quite what you need it to be. There's something flawed in it. Some extra text, some choice that the data provider made that you just don't agree with. 
 
-There's a ton of tools in the tidyverse to fix this, and you already have some tools in your toolboxt. Let's take a look at a couple. 
+There's a ton of tools in the tidyverse to fix this, and you already have some tools in your toolbox. Let's take a look at a couple. 
 
 First, you know what you need.
 
@@ -27,7 +27,7 @@ library(downloadthis)
 library(glue)
 
 dllink <- download_link(
-  link = "http://mattwaite.github.io/sportsdatafiles/nbaplayers.csv",
+  link = "https://dwillis.github.io/sportsdatafiles/nbaplayers.csv",
   button_label = "Download csv file",
   button_type = "danger",
   has_icon = TRUE,
@@ -85,7 +85,7 @@ library(downloadthis)
 library(glue)
 
 dllink <- download_link(
-  link = "http://mattwaite.github.io/sportsdatafiles/killsperset.csv",
+  link = "https://dwillis.github.io/sportsdatafiles/killsperset.csv",
   button_label = "Download csv file",
   button_type = "danger",
   has_icon = TRUE,
@@ -125,7 +125,7 @@ Now, let's get the conference separated. A problem is going to crop up here -- t
 ```{r}
 kills %>% 
   separate(Player, into=c("Player", "School"), sep=",") %>%
-  separate(School, into=c("School", "Conference"), sep="\\(") %>% 
+  separate(School, into=c("School", "Conference"), sep="\\(")
   head()
 ```
 

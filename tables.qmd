@@ -10,7 +10,7 @@ For this assignment, we'll need `gt` so go over to the console and run:
 install.packages("gt")
 ```
 
-So what does all of these libraries do? Let's gather a few and use data of every game in the last 5 years.
+So what does all of these libraries do? Let's gather a few and use data of every men's basketball game between 2015-2020.
 
 ```{r}
 #| warning: false
@@ -21,7 +21,7 @@ library(downloadthis)
 library(glue)
 
 dllink <- download_link(
-  link = "http://mattwaite.github.io/sportsdatafiles/logs1520.csv",
+  link = "http://dwillis.github.io/sportsdatafiles/logs1520.csv",
   button_label = "Download csv file",
   button_type = "danger",
   has_icon = TRUE,
@@ -47,7 +47,7 @@ And the data.
 logs <- read_csv("data/logs1520.csv")
 ```
 
-Let's ask this question: Fred Ball is supposed to be play fast and shoot threes -- a pro-style offense. How much did Nebraska change in that regard from Tim Miles? In other words, which college basketball team saw the greatest increase in three point attempts last season as a percentage of shots? The simplest way to calculate that is by percent change. 
+Let's ask this question: which college basketball team saw the greatest increase in three point attempts last season as a percentage of shots? The simplest way to calculate that is by percent change. 
 
 We've got a little work to do, putting together ideas we've used before. What we need to end up with is some data that looks like this:
 
@@ -72,7 +72,7 @@ We've output tables to the screen a thousand times in this class with `head`, bu
 threechange %>% gt()
 ```
 
-So there you have it. Mississippi Valley State changed their team so much they took 51 percent more threes last season from the season before. Where did Nebraska come out? Isn't Fred Ball supposed to be a lot of threes? We ranked 111th in college basketball in terms of change from the season before. Believe it or not, Nebraska took four fewer threes in the first season of Fred Ball than the last season of Tim Miles.  
+So there you have it. Mississippi Valley State changed their team so much they took 51 percent more threes in 2019-20 from the season before. Where did Maryland come out? We ranked 49th in college basketball in terms of change from the season before.
 
 `gt` has a mountain of customization options. The good news is that it works in a very familiar pattern. We'll start with fixing headers. What we have isn't bad, but PercentChange isn't good either. Let's fix that.
 
@@ -94,8 +94,8 @@ threechange %>%
     PercentChange = "Percent Change"
   ) %>%
   tab_header(
-    title = "Does Hoiberg's offense push threes more than Miles?",
-    subtitle = "Nebraska wasn't in the top 100 of teams shooting more threes. These 10 teams completely changed their offense."
+    title = "Did Maryland Shoot More Threes in 2019-20?",
+    subtitle = "Yes, but it wasn't a big change. These 10 teams completely changed their offenses."
   )
 ```
 
@@ -108,8 +108,8 @@ threechange %>%
     PercentChange = "Percent Change"
   ) %>%
   tab_header(
-    title = "Does Hoiberg's offense push threes more than Miles?",
-    subtitle = "Nebraska wasn't in the top 100 of teams shooting more threes. These 10 teams completely changed their offense."
+    title = "Did Maryland Shoot More Threes in 2019-20?",
+    subtitle = "Yes, but it wasn't a big change. These 10 teams completely changed their offenses."
   ) %>% tab_style(
     style = cell_text(color = "black", weight = "bold", align = "left"),
     locations = cells_title("title")
@@ -124,8 +124,8 @@ threechange %>%
     PercentChange = "Percent Change"
   ) %>%
   tab_header(
-    title = "Does Hoiberg's offense push threes more than Miles?",
-    subtitle = "Nebraska wasn't in the top 100 of teams shooting more threes. These 10 teams completely changed their offense."
+    title = "Did Maryland Shoot More Threes in 2019-20?",
+    subtitle = "Yes, but it wasn't a big change. These 10 teams completely changed their offenses."
   ) %>% tab_style(
     style = cell_text(color = "black", weight = "bold", align = "left"),
     locations = cells_title("title")
@@ -142,8 +142,8 @@ threechange %>%
     PercentChange = "Percent Change"
   ) %>%
   tab_header(
-    title = "Does Hoiberg's offense push threes more than Miles?",
-    subtitle = "Nebraska wasn't in the top 100 of teams shooting more threes. These 10 teams completely changed their offense."
+    title = "Did Maryland Shoot More Threes in 2019-20?",
+    subtitle = "Yes, but it wasn't a big change. These 10 teams completely changed their offenses."
   ) %>% tab_style(
     style = cell_text(color = "black", weight = "bold", align = "left"),
     locations = cells_title("title")
@@ -152,7 +152,7 @@ threechange %>%
     locations = cells_title("subtitle")
   ) %>%
   tab_source_note(
-    source_note = md("**By:** Matt Waite  |  **Source:** [Sports Reference](https://www.sports-reference.com/cbb/seasons/)")
+    source_note = md("**By:** Derek Willis  |  **Source:** [Sports Reference](https://www.sports-reference.com/cbb/seasons/)")
   )
 ```
 We can do a lot with `tab_style`. For instance, we can make the headers bold and reduce the size a bit to reduce font congestion in the area.
@@ -163,8 +163,8 @@ threechange %>%
     PercentChange = "Percent Change"
   ) %>%
   tab_header(
-    title = "Does Hoiberg's offense push threes more than Miles?",
-    subtitle = "Nebraska wasn't in the top 100 of teams shooting more threes. These 10 teams completely changed their offense."
+    title = "Did Maryland Shoot More Threes in 2019-20?",
+    subtitle = "Yes, but it wasn't a big change. These 10 teams completely changed their offenses."
   ) %>% 
   tab_style(
     style = cell_text(color = "black", weight = "bold", align = "left"),
@@ -175,7 +175,7 @@ threechange %>%
     locations = cells_title("subtitle")
   ) %>%  
   tab_source_note(
-    source_note = md("**By:** Matt Waite  |  **Source:** [Sports Reference](https://www.sports-reference.com/cbb/seasons/)")
+    source_note = md("**By:** Derek Willis  |  **Source:** [Sports Reference](https://www.sports-reference.com/cbb/seasons/)")
   ) %>%
   tab_style(
      locations = cells_column_labels(columns = everything()),
@@ -193,11 +193,11 @@ threechange %>%
     PercentChange = "Percent Change"
   ) %>%
   tab_header(
-    title = "Does Hoiberg's offense push threes more than Miles?",
-    subtitle = "Nebraska wasn't in the top 100 of teams shooting more threes. These 10 teams completely changed their offense."
+    title = "Did Maryland Shoot More Threes in 2019-20?",
+    subtitle = "Yes, but it wasn't a big change. These 10 teams completely changed their offenses."
   ) %>%  
   tab_source_note(
-    source_note = md("**By:** Matt Waite  |  **Source:** [Sports Reference](https://www.sports-reference.com/cbb/seasons/)")
+    source_note = md("**By:** Derek Willis  |  **Source:** [Sports Reference](https://www.sports-reference.com/cbb/seasons/)")
   ) %>% 
   tab_style(
     style = cell_text(color = "black", weight = "bold", align = "left"),
@@ -225,11 +225,11 @@ threechange %>%
     PercentChange = "Percent Change"
   ) %>%
   tab_header(
-    title = "Does Hoiberg's offense push threes more than Miles?",
-    subtitle = "Nebraska wasn't in the top 100 of teams shooting more threes. These 10 teams completely changed their offense."
+    title = "Did Maryland Shoot More Threes in 2019-20?",
+    subtitle = "Yes, but it wasn't a big change. These 10 teams completely changed their offenses."
   ) %>%  
   tab_source_note(
-    source_note = md("**By:** Matt Waite  |  **Source:** [Sports Reference](https://www.sports-reference.com/cbb/seasons/)")
+    source_note = md("**By:** Derek Willis  |  **Source:** [Sports Reference](https://www.sports-reference.com/cbb/seasons/)")
   ) %>% 
   tab_style(
     style = cell_text(color = "black", weight = "bold", align = "left"),
@@ -262,11 +262,11 @@ threechange %>%
     PercentChange = "Percent Change"
   ) %>%
   tab_header(
-    title = "Does Hoiberg's offense push threes more than Miles?",
-    subtitle = "Nebraska wasn't in the top 100 of teams shooting more threes. These 10 teams completely changed their offense."
+    title = "Did Maryland Shoot More Threes in 2019-20?",
+    subtitle = "Yes, but it wasn't a big change. These 10 teams completely changed their offenses."
   ) %>%  
   tab_source_note(
-    source_note = md("**By:** Matt Waite  |  **Source:** [Sports Reference](https://www.sports-reference.com/cbb/seasons/)")
+    source_note = md("**By:** Derek Willis  |  **Source:** [Sports Reference](https://www.sports-reference.com/cbb/seasons/)")
   ) %>% 
   tab_style(
     style = cell_text(color = "black", weight = "bold", align = "left"),
