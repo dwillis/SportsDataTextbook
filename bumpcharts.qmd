@@ -13,7 +13,7 @@ library(tidyverse)
 library(ggbump)
 ```
 
-Let's use last season's college football playoff rankings (this year wasn't done as of this writing): 
+Let's use the 2020-21 college football playoff rankings: 
 
 ```{r}
 #| warning: false
@@ -24,7 +24,7 @@ library(downloadthis)
 library(glue)
 
 dllink <- download_link(
-  link = "http://mattwaite.github.io/sportsdatafiles/cfbranking.csv",
+  link = "https://dwillis.github.io/sportsdatafiles/cfbranking.csv",
   button_label = "Download csv file",
   button_type = "danger",
   has_icon = TRUE,
@@ -56,7 +56,7 @@ ggplot() +
 
 Well, it's a start. 
 
-The warning that you're seeing is that there's three teams last season who made one appearance on the college football playoff rankings and disappeared. Nebraska fans would bite your arm off for that. Alas. We should eliminate them and thin up our chart a little. Let's just take teams that finished in the top 10. We're going to use a neat filter trick for this that you learned earlier using %in%. 
+The warning that you're seeing is that there's three teams last season who made one appearance on the college football playoff rankings and disappeared. Some fans would bite your arm off for that. Alas. We should eliminate them and thin up our chart a little. Let's just take teams that finished in the top 10. We're going to use a neat filter trick for this that you learned earlier using %in%. 
 
 ```{r}
 top10 <- rankings %>% filter(Week == 17 & Rank <= 10)

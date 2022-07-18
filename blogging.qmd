@@ -62,9 +62,9 @@ knitr::include_graphics(rep("images/blog3.png"))
 
 When you hit Create Project, you should get an R Studio screen. You might have a file open called config.yaml. If you don't, open it (you can use the files pane in the bottom right). This file will look different depending on which theme you used. This configuration file needs to have a few things in it. This is the config.yaml for my website, but you should use it as a guide for what yours will need:
 
-    baseurl: http://mattwaite.github.io/
+    baseurl: https://dwillis.github.io/
     languageCode: en-us
-    title: Matt Waite's GitHub Site
+    title: Derek Willis' GitHub Site
     theme: hugo-lithium
     googleAnalytics: ''
     disqusShortname: ''
@@ -82,14 +82,14 @@ When you hit Create Project, you should get an R Studio screen. You might have a
         - name: About
           url: /about/
         - name: GitHub
-          url: https://github.com/mattwaite
+          url: https://github.com/dwillis
         - name: Twitter
-          url: https://twitter.com/mattwaite
+          url: https://twitter.com/derekwillis
     params:
       
       MathJaxCDN: //cdnjs.cloudflare.com/ajax/libs
       MathJaxVersion: 2.7.5
-      description: Tools and teaching materials made by Matt Waite of the University of Nebraska-Lincoln
+      description: Tools and teaching materials made by Derek Willis of the University of Maryland
       favicon: favicon.ico
       highlightjsCDN: //cdnjs.cloudflare.com/ajax/libs
       highlightjsLang:
@@ -267,4 +267,4 @@ This is where you will commit files to your repository. GitHub is a two-step pro
 knitr::include_graphics(rep("images/blog13.png"))
 ```
 
-In a few minutes, you should be able to go to username.github.io in a browser and you'll see your site. [Here's mine](http://mattwaite.github.io/).
+In a few minutes, you should be able to go to username.github.io in a browser and you'll see your site. [Here's mine](https://dwillis.github.io/).

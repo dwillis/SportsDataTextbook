@@ -20,7 +20,7 @@ So for this example, I want to look at where Big Ten teams compare to the rest o
 
 I'm going to create a scatterplot with offensive yards per play on the X axis and defensive yards per play on the y axis. We can then divide the grid into four quadrants. Teams with high yards per offensive play and low defensive yards per play are teams with good offenses and good defenses. The opposite means bad defense, bad offense. Then, to drive the point home, I'm going to make the dot the size of the total wins on the season -- the bubble in my bubble charts. 
 
-We'll use this season's college football games. 
+We'll use last season's college football games. 
 
 ```{r}
 #| warning: false
@@ -31,7 +31,7 @@ library(downloadthis)
 library(glue)
 
 dllink <- download_link(
-  link = "http://mattwaite.github.io/sportsdatafiles/footballlogs21.csv",
+  link = "https://dwillis.github.io/sportsdatafiles/footballlogs21.csv",
   button_label = "Download csv file",
   button_type = "danger",
   has_icon = TRUE,
@@ -182,7 +182,7 @@ ggplot() +
     aes(x=OffensiveYPP, y=DefensiveYPP, label=Team)
   )
 ```
-Well, what do you know about that? Nebraska was ... really a mixed bag this season.
+Well, what do you know about that? Maryland was ... really a mixed bag this season.
 
 All that's left is some labels and some finishing touches. 
 
@@ -203,7 +203,7 @@ ggplot() +
     data=bigten, 
     aes(x=OffensiveYPP, y=DefensiveYPP, label=Team)
   ) +
-  labs(title="Is Nebraska moving up to the Big Ten's best?", subtitle="The Huskers offense and defense puts it among ranked teams in the conference.", caption="Source: NCAA | By Matt Waite")  + theme_minimal() + 
+  labs(title="Is Maryland moving up to the Big Ten's best?", subtitle="The Terps offense and defense puts it among ranked teams in the conference.", caption="Source: NCAA | By Derek Willis")  + theme_minimal() + 
   theme(
     plot.title = element_text(size = 16, face = "bold"),
     axis.title = element_text(size = 8), 
