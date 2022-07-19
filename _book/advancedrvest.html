@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-0.9.626">
+<meta name="generator" content="quarto-0.9.646">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -234,7 +234,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./circularbarcharts.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">Circular bar charts</span></a>
+  <a href="./circularbarcharts.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">Circular bar plots</span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -376,7 +376,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
 <p>With the chapter, we learned how to grab one table from one page. But what if you needed more than that? What if you needed hundreds of tables from hundreds of pages? What if you needed to combine one table on one page into a bigger table, but hundreds of times. There’s a way to do this, it just takes patience, a lot of logic, a lot of debugging and, for me, a fair bit of swearing.</p>
 <p>So what we are after are game by game stats for each college basketball team in America.</p>
-<p><a href="https://www.sports-reference.com/cbb/seasons/2019-school-stats.html">We can see from this page</a> that each team is linked. If we follow each link, we get a ton of tables. But they aren’t what we need. There’s a link to gamelogs underneath the team names.</p>
+<p><a href="https://www.sports-reference.com/cbb/seasons/2022-school-stats.html">We can see from this page</a> that each team is linked. If we follow each link, we get a ton of tables. But they aren’t what we need. There’s a link to gamelogs underneath the team names.</p>
 <p>So we can see from this that we’ve got some problems.</p>
 <ol type="1">
 <li>The team name isn’t in the table. Nor is the conference.</li>
@@ -392,7 +392,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 <p>First things first, we need to grab the url to each team from that first link.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>url <span class="ot">&lt;-</span> <span class="st">"https://www.sports-reference.com/cbb/seasons/2019-school-stats.html"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>url <span class="ot">&lt;-</span> <span class="st">"https://www.sports-reference.com/cbb/seasons/2022-school-stats.html"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>But notice first, we don’t want to grab the table. The table doesn’t help us. We need to grab the only <em>link</em> in the table. So we can do that by using the table xpath node, then grabbing the anchor tags in the table, then get only the link out of them (instead of the linked text).</p>
 <div class="cell">
@@ -406,7 +406,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div class="cell">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>schools[<span class="dv">4</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] "/cbb/schools/alabama-am/2019.html"</code></pre>
+<pre><code>[1] "/cbb/schools/alabama-am/2022.html"</code></pre>
 </div>
 </div>
 <p>So note, that’s the relative path to Alabama A&amp;M’s team page. By relative path, I mean it doesn’t have the root domain. So we need to add that to each request or we’ll get no where.</p>
@@ -419,7 +419,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>Third: The conference.</p>
 <p>Fourth is the table itself, noting to ignore the headers. The last bit fixes the headers, removes the garbage header data from the table, converts the data to numbers, fixes the date and mutates a team and conference value. It looks like a lot, and it took a bit of twiddling to get it done, but it’s no different from what you did for your last homework.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>page <span class="ot">&lt;-</span> <span class="fu">read_html</span>(<span class="st">"https://www.sports-reference.com/cbb/schools/abilene-christian/2019-gamelogs.html"</span>)</span>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>page <span class="ot">&lt;-</span> <span class="fu">read_html</span>(<span class="st">"https://www.sports-reference.com/cbb/schools/abilene-christian/2022-gamelogs.html"</span>)</span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  </span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>team <span class="ot">&lt;-</span> page <span class="sc">%&gt;%</span></span>
 <span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">html_nodes</span>(<span class="at">xpath =</span> <span class="st">'//*[@id="meta"]/div[2]/h1/span[2]'</span>) <span class="sc">%&gt;%</span></span>
@@ -446,7 +446,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>logs <span class="ot">&lt;-</span> <span class="fu">tibble</span>()</span>
 <span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> schools){</span>
-<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>  log_url <span class="ot">&lt;-</span> <span class="fu">gsub</span>(<span class="st">"/2019.html"</span>,<span class="st">"/2019-gamelogs.html"</span>, i)</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>  log_url <span class="ot">&lt;-</span> <span class="fu">gsub</span>(<span class="st">"/2022.html"</span>,<span class="st">"/2022-gamelogs.html"</span>, i)</span>
 <span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>  school_url <span class="ot">&lt;-</span> <span class="fu">paste</span>(uri, log_url, <span class="at">sep=</span><span class="st">""</span>)  <span class="co"># creating the url to fetch</span></span>
 <span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>  </span>
 <span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>  page <span class="ot">&lt;-</span> <span class="fu">read_html</span>(school_url)</span>
@@ -471,7 +471,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 <p>The magic here is in <code>for (i in schools){</code>. What that says is for each iterator in schools – for each school in schools – do what follows each time. So we take the code we wrote for one school and use it for every school.</p>
 <p>This part:</p>
-<pre><code>  log_url &lt;- gsub("/2019.html","/2019-gamelogs.html", i)
+<pre><code>  log_url &lt;- gsub("/2022.html","/2022-gamelogs.html", i)
   school_url &lt;- paste(uri, log_url, sep="")  # creating the url to fetch
   
   page &lt;- read_html(school_url)</code></pre>

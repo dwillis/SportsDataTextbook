@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-0.9.626">
+<meta name="generator" content="quarto-0.9.646">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -171,7 +171,7 @@ ul.task-list{list-style: none;}
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./circularbarcharts.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">Circular bar charts</span></a>
+  <a href="./circularbarcharts.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">Circular bar plots</span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -345,9 +345,9 @@ ul.task-list{list-style: none;}
 <section id="a-simple-way-to-get-data" class="level2" data-number="3.3">
 <h2 data-number="3.3" class="anchored" data-anchor-id="a-simple-way-to-get-data"><span class="header-section-number">3.3</span> A simple way to get data</h2>
 <p>One good thing about sports is that there’s lots of interest in it. And that means there’s outlets that put sports data on the internet. Now I’m going to show you a trick to getting it easily.</p>
-<p>The site sports-reference.com takes NCAA (and other league) stats and puts them online. For instance, <a href="https://www.sports-reference.com/cbb/schools/nebraska/2019-gamelogs.html">here’s their page on Nebraska basketball’s game logs</a>, which you should open now.</p>
+<p>The site sports-reference.com takes NCAA (and other league) stats and puts them online. For instance, <a href="https://www.sports-reference.com/cbb/schools/maryland/2022-gamelogs.html">here’s their page on Maryland’s men’s basketball’s game logs</a>, which you should open now.</p>
 <p>Now, in a new tab, log into Google Docs/Drive and open a new spreadsheet. In the first cell of the first row, copy and paste this formula in:</p>
-<pre><code>=IMPORTHTML("https://www.sports-reference.com/cbb/schools/nebraska/2019-gamelogs.html", "table", 1)</code></pre>
+<pre><code>=IMPORTHTML("https://www.sports-reference.com/cbb/schools/maryland/2022-gamelogs.html", "table", 1)</code></pre>
 <p>If it worked right, you’ve got the data from that page in a spreadsheet.</p>
 </section>
 <section id="cleaning-the-data" class="level2" data-number="3.4">
@@ -355,7 +355,7 @@ ul.task-list{list-style: none;}
 <p>The first thing we need to do is recognize that we don’t have data, really. We have the results of a formula. You can tell by putting your cursor on that field, where you’ll see the formula again. This is where you’d look:</p>
 <div class="cell">
 <div class="cell-output-display">
-<p><img src="images/clean1.png" class="img-fluid" width="1198"></p>
+<p><img src="images/clean1.png" class="img-fluid" width="719"></p>
 </div>
 </div>
 <p>The solution is easy:</p>
@@ -363,7 +363,7 @@ ul.task-list{list-style: none;}
 <p>You can verify that it worked by looking in that same row 1 column A, where you’ll see the formula is gone.</p>
 <div class="cell">
 <div class="cell-output-display">
-<p><img src="images/clean2.png" class="img-fluid" width="1325"></p>
+<p><img src="images/clean2.png" class="img-fluid" width="686"></p>
 </div>
 </div>
 <p>Now you have data, but your headers are all wrong. You want your headers to be one line – not two, like they have. And the header names repeat – first for our team, then for theirs. So you have to change each header name to be UsORB or TeamORB and OpponentORB instead of just ORB.</p>
@@ -372,7 +372,7 @@ ul.task-list{list-style: none;}
 <p>You can use sorting to get rid of anything that’s not data. So click on Data &gt; Sort Range. You’ll want to check the “Data has header row” field. Then hit Sort.</p>
 <div class="cell">
 <div class="cell-output-display">
-<p><img src="images/clean3.png" class="img-fluid" width="778"></p>
+<p><img src="images/clean3.png" class="img-fluid" width="585"></p>
 </div>
 </div>
 <p>Now all you need to do is search through the data for where your junk data – extra headers, blanks, etc. – got sorted and delete it. After you’ve done that, you can export it for use in R. Go to File &gt; Download as &gt; Comma Separated Values. Remember to put it in the same directory as your R Notebook file so you can import the data easily.</p>

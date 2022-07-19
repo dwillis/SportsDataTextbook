@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-0.9.626">
+<meta name="generator" content="quarto-0.9.646">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -234,7 +234,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./circularbarcharts.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">Circular bar charts</span></a>
+  <a href="./circularbarcharts.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">Circular bar plots</span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -381,7 +381,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>But the question before you is this: is what McKewon said true? Does keeping a lid on your opponent’s ability to score three pointers mean more wins?</p>
 <p>This is what we’re going to start to answer today. And we’ll do it with scatterplots and regressions. Scatterplots are very good at showing <strong>relationships between two numbers</strong>.</p>
 <p>First, we need libraries and every college basketball game from the 2019-2020 season. Why that season? Because I did this with the COVID season and everything was wonky and made no sense. To make it make sense, you had to do a ton of twisting and turning and that was pointless. <strong>What we’re interested in is less about a specific team and more about a general point: Are these numbers related and by how much? What can they tell you about your team in general?</strong></p>
-<pre><p><strong>For this walkthrough:</strong></p><p><a href="http://mattwaite.github.io/sportsdatafiles/logs1520.csv">
+<pre><p><strong>For this walkthrough:</strong></p><p><a href="https://dwillis.github.io/sportsdatafiles/logs1520.csv">
   <button class="btn btn-danger"><i class="fa fa-save"></i> Download csv file</button>
 </a></p></pre>
 <p>Load the tidyverse.</p>
@@ -430,11 +430,7 @@ date  (1): Date
 </div>
 <p>Now let’s look at the scatterplot. With a scatterplot, we put what predicts the thing on the X axis, and the thing being predicted on the Y axis. In this case, X is our three pointers given up, y is our wins.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>() <span class="sc">+</span> </span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(</span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">data=</span>threedef, </span>
-<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">aes</span>(<span class="at">x=</span>TotalOpp3P, <span class="at">y=</span>Wins)</span>
-<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>    )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>() <span class="sc">+</span> <span class="fu">geom_point</span>(<span class="at">data=</span>threedef, <span class="fu">aes</span>(<span class="at">x=</span>TotalOpp3P, <span class="at">y=</span>Wins))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <p><img src="scatterplots_files/figure-html/unnamed-chunk-6-1.png" class="img-fluid" width="672"></p>
 </div>
@@ -481,19 +477,19 @@ F-statistic: 0.1378 on 1 and 2104 DF,  p-value: 0.7106</code></pre>
 <p>The first thing: R-squared. In this case, the Adjusted R-squared value is -0.0004098, which we can interpret as the number of threes the opponent makes predicts about a teeny tiny percent of the variance in wins. Which sounds not great.</p>
 <p>Second: The P-value. We want anything less than .05. If it’s above .05, the difference between them is not statistically significant – it’s probably explained by random chance. In our case, we have 0.7106. Is that more than .05? Yes. Yes it is. So this is random. There’s no relationship between the number of threes the opponent makes and the number of wins a team has.</p>
 <p>Normally, we’d stop here, but let’s look at the third element: The coefficient. In this case, the coefficient for TeamOpp3P is -0.001400. What this model predicts, given that and the intercept of 17.199150, is this: Every team starts with about 17 wins. For every 100 three pointers the other team makes, you lose .14 games off that total. So if you give up 100 threes in a season, you’ll be a 17 win team. Give up 200, you’re closer to a 16 win team, and so on. How am I doing that? Remember your algebra and y = mx + b. In this case, y is the wins, m is the coefficient, x is the number of threes given up and b is the intercept.</p>
-<p>Let’s use Nebraska as an example. They had 276 threes scored on them in the 2019-2020 season.</p>
-<p>y = -0.001400 * 276 + 17.199150 or 16.8 wins.</p>
-<p>How many wins did Nebraska have? 7.</p>
-<p>What does that mean? It means that as disappointing a season as it was, Nebraska UNDERPERFORMED according to this model. But our R-squared is so small that even if this weren’t random, it would be largely pointless. Put another way: more than 99 percent of the difference in wins between teams is predicted by something else.</p>
-<p>Where is Nebraska on the plot? We know we can use layering for that.</p>
+<p>Let’s use Maryland as an example. They had 227 threes scored on them in the 2019-2020 season.</p>
+<p>y = -0.001400 * 227 + 17.199150 or 16.8 wins.</p>
+<p>How many wins did Maryland have? 24.</p>
+<p>What does that mean? It means that Maryland OVERPERFORMED according to this model. But our R-squared is so small that even if this weren’t random, it would be largely pointless. Put another way: more than 99 percent of the difference in wins between teams is predicted by something else.</p>
+<p>Where is Maryland on the plot? We know we can use layering for that.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>nu <span class="ot">&lt;-</span> threedef <span class="sc">%&gt;%</span> <span class="fu">filter</span>(Team <span class="sc">==</span> <span class="st">"Nebraska Cornhuskers"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>umd <span class="ot">&lt;-</span> threedef <span class="sc">%&gt;%</span> <span class="fu">filter</span>(Team <span class="sc">==</span> <span class="st">"Maryland Terrapins"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>() <span class="sc">+</span> </span>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">data=</span>threedef, <span class="fu">aes</span>(<span class="at">x=</span>TotalOpp3P, <span class="at">y=</span>Wins)) <span class="sc">+</span></span>
 <span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">data=</span>threedef, <span class="fu">aes</span>(<span class="at">x=</span>TotalOpp3P, <span class="at">y=</span>Wins), <span class="at">method=</span><span class="st">"lm"</span>) <span class="sc">+</span></span>
-<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">data=</span>nu, <span class="fu">aes</span>(<span class="at">x=</span>TotalOpp3P, <span class="at">y=</span>Wins), <span class="at">color=</span><span class="st">"red"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">data=</span>umd, <span class="fu">aes</span>(<span class="at">x=</span>TotalOpp3P, <span class="at">y=</span>Wins), <span class="at">color=</span><span class="st">"red"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>`geom_smooth()` using formula 'y ~ x'</code></pre>
 </div>
@@ -559,14 +555,14 @@ Multiple R-squared:  0.3857,    Adjusted R-squared:  0.3854
 F-statistic:  1322 on 1 and 2106 DF,  p-value: &lt; 2.2e-16</code></pre>
 </div>
 </div>
-<p>The p-value isn’t random. The adjusted R-squared is pushing 40 percent. We’ve got something here. Let’s use our coefficents to look at Nebraska’s 2019-2020 season (not the COVID season, because all the nunmbers are super weird in that season).</p>
+<p>The p-value isn’t random. The adjusted R-squared is pushing 40 percent. We’ve got something here. Let’s use our coefficients to look at Maryland’s 2019-2020 season (not the COVID season, because all the numbers are super weird in that season).</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>(<span class="fl">153.942</span> <span class="sc">*</span> .<span class="dv">405</span>) <span class="sc">+</span> <span class="sc">-</span><span class="fl">51.155</span> </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>(<span class="fl">153.942</span> <span class="sc">*</span> .<span class="dv">419</span>) <span class="sc">+</span> <span class="sc">-</span><span class="fl">50.733</span> </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 11.19151</code></pre>
+<pre><code>[1] 13.7687</code></pre>
 </div>
 </div>
-<p>So this model says that based only on Nebraska’s shooting percentage, they should have won 11 games. They won 7. So per our model, Nebraska underperformed. Obviously there’s room for improvement here, but you can see the power in scatterplots + regression.</p>
+<p>So this model says that based only on Maryland’s shooting percentage, they should have won 13 or 14 games. They won 24. So per our model, Maryland overperformed. Obviously there’s room for improvement in the model here, but you can see the power in scatterplots + regression.</p>
 
 
 </section>

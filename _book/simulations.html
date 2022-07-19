@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-0.9.626">
+<meta name="generator" content="quarto-0.9.646">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -234,7 +234,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./circularbarcharts.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">Circular bar charts</span></a>
+  <a href="./circularbarcharts.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">Circular bar plots</span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -383,7 +383,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 </div>
 <p>Let’s simulate 39 three point attempts 1000 times with his season long shooting percentage and see if this could just be random chance or something else.</p>
-<p>We do this using a base R function called <code>rbinom</code> or binomial distribution. So what that means is there’s a normally distrubuted chance that James Palmer Jr.&nbsp;is going to shoot above and below his career three point shooting percentage. If we randomly assign values in that distribution 1000 times, how many times will it come up 7, like this example?</p>
+<p>We do this using a base R function called <code>rbinom</code> or binomial distribution. So what that means is there’s a normally distributed chance that James Palmer Jr.&nbsp;is going to shoot above and below his career three point shooting percentage. If we randomly assign values in that distribution 1000 times, how many times will it come up 7, like this example?</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1234</span>)</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
@@ -405,11 +405,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>So what we see is given his season long shooting percentage, it’s not out of the realm of randomness that with just 39 attempts for Palmer, he’s only hit only 7. In 1000 simulations, it comes up 35 times. Is he below where he should be? Yes. Will he likely improve and soon? Unless something is very wrong, yes. And indeed, by the end of the season, he finished with a .313 shooting percentage from 3 point range. So we can say he was just unlucky.</p>
 <section id="cold-streaks" class="level2" data-number="14.1">
 <h2 data-number="14.1" class="anchored" data-anchor-id="cold-streaks"><span class="header-section-number">14.1</span> Cold streaks</h2>
-<p>During the Western Illinois game in the 2018-2019 season, the team, shooting .329 on the season from behind the arc, went 0-15 in the second half. How strange is that?</p>
+<p>During the final regular-season game in the 2021-22 season, Maryland, shooting .326 on the season from behind the arc, went 1-15 in the first half. How strange is that?</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1234</span>)</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>simulations <span class="ot">&lt;-</span> <span class="fu">rbinom</span>(<span class="at">n =</span> <span class="dv">1000</span>, <span class="at">size =</span> <span class="dv">15</span>, <span class="at">prob =</span> .<span class="dv">329</span>)</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>simulations <span class="ot">&lt;-</span> <span class="fu">rbinom</span>(<span class="at">n =</span> <span class="dv">1000</span>, <span class="at">size =</span> <span class="dv">15</span>, <span class="at">prob =</span> .<span class="dv">326</span>)</span>
 <span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(simulations)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
@@ -419,10 +419,10 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div class="cell-output cell-output-stdout">
 <pre><code>simulations
   0   1   2   3   4   5   6   7   8   9  10  11 
-  5  16  59 132 200 218 172  92  65  34   4   3 </code></pre>
+  5  17  61 135 204 222 164  93  60  33   3   3 </code></pre>
 </div>
 </div>
-<p>Short answer: Really weird. If you simulate 15 threes 1000 times, sometimes you’ll see them miss all of them, but only a few times – five times, in this case. Most of the time, the team won’t go 0-15 even once. So going ice cold is not totally out of the realm of random chance, but it’s highly unlikely.</p>
+<p>Short answer: Pretty weird, but not totally unheard of. If you simulate 15 threes 1000 times, about 50 times it will result in a single made three-pointer. It’s slightly more common that the team would hit 8 threes out of 15. So going that cold is not totally out of the realm of random chance, but it’s pretty uncommon.</p>
 
 
 </section>

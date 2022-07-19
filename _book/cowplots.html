@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-0.9.626">
+<meta name="generator" content="quarto-0.9.646">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -234,7 +234,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./circularbarcharts.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">Circular bar charts</span></a>
+  <a href="./circularbarcharts.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">Circular bar plots</span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -377,18 +377,18 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(cowplot)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>We’ll use the college football attendance data we’ve used before.</p>
-<pre><p><strong>For this walkthrough:</strong></p><p><a href="http://mattwaite.github.io/sportsdatafiles/attendance.csv">
+<pre><p><strong>For this walkthrough:</strong></p><p><a href="https://dwillis.github.io/sportsdatafiles/attendance.csv">
   <button class="btn btn-danger"><i class="fa fa-save"></i> Download csv file</button>
 </a></p></pre>
 <p>And load it.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>attendance <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"data/attendance.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
-<pre><code>Rows: 150 Columns: 8
+<pre><code>Rows: 149 Columns: 9
 ── Column specification ────────────────────────────────────────────────────────
 Delimiter: ","
 chr (2): Institution, Conference
-dbl (6): 2013, 2014, 2015, 2016, 2017, 2018
+dbl (7): 2013, 2014, 2015, 2016, 2017, 2018, 2019
 
 ℹ Use `spec()` to retrieve the full column specification for this data.
 ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
@@ -396,7 +396,7 @@ dbl (6): 2013, 2014, 2015, 2016, 2017, 2018
 </div>
 <p>Making a quick percent change.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>attendance <span class="ot">&lt;-</span> attendance <span class="sc">%&gt;%</span> <span class="fu">mutate</span>(<span class="at">change =</span> ((<span class="st">`</span><span class="at">2018</span><span class="st">`</span><span class="sc">-</span><span class="st">`</span><span class="at">2017</span><span class="st">`</span>)<span class="sc">/</span><span class="st">`</span><span class="at">2017</span><span class="st">`</span>)<span class="sc">*</span><span class="dv">100</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>attendance <span class="ot">&lt;-</span> attendance <span class="sc">%&gt;%</span> <span class="fu">mutate</span>(<span class="at">change =</span> ((<span class="st">`</span><span class="at">2019</span><span class="st">`</span><span class="sc">-</span><span class="st">`</span><span class="at">2018</span><span class="st">`</span>)<span class="sc">/</span><span class="st">`</span><span class="at">2018</span><span class="st">`</span>)<span class="sc">*</span><span class="dv">100</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Let’s chart the top 10 and bottom 10 of college football ticket growth … and shrinkage.</p>
 <div class="cell">
@@ -433,7 +433,7 @@ dbl (6): 2013, 2014, 2015, 2016, 2017, 2018
 <div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>bar1 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>() <span class="sc">+</span> </span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">data=</span>top10, <span class="fu">aes</span>(<span class="at">x=</span><span class="fu">reorder</span>(Institution, change), <span class="at">weight=</span>change)) <span class="sc">+</span></span>
 <span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_flip</span>() <span class="sc">+</span> </span>
-<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title=</span><span class="st">"College football winners..."</span>, <span class="at">subtitle =</span> <span class="st">"Not every football program saw attendance shrink in 2018. But some really did."</span>,  <span class="at">x=</span><span class="st">""</span>, <span class="at">y=</span><span class="st">"Percent change"</span>, <span class="at">caption =</span> <span class="st">""</span>) <span class="sc">+</span> </span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title=</span><span class="st">"College football winners..."</span>, <span class="at">subtitle =</span> <span class="st">"Not every football program saw attendance shrink in 2019. But some really did."</span>,  <span class="at">x=</span><span class="st">""</span>, <span class="at">y=</span><span class="st">"Percent change"</span>, <span class="at">caption =</span> <span class="st">""</span>) <span class="sc">+</span> </span>
 <span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span> </span>
 <span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(</span>
 <span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">16</span>, <span class="at">face =</span> <span class="st">"bold"</span>),</span>
@@ -446,7 +446,7 @@ dbl (6): 2013, 2014, 2015, 2016, 2017, 2018
 <div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>bar2 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>() <span class="sc">+</span> </span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">data=</span>bottom10, <span class="fu">aes</span>(<span class="at">x=</span><span class="fu">reorder</span>(Institution, change), <span class="at">weight=</span>change)) <span class="sc">+</span></span>
 <span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_flip</span>() <span class="sc">+</span>  </span>
-<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"... and losers"</span>, <span class="at">subtitle=</span> <span class="st">""</span>, <span class="at">x=</span><span class="st">""</span>, <span class="at">y=</span><span class="st">""</span>,  <span class="at">caption=</span><span class="st">"Source: NCAA | By Matt Waite"</span>) <span class="sc">+</span> </span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"... and losers"</span>, <span class="at">subtitle=</span> <span class="st">""</span>, <span class="at">x=</span><span class="st">""</span>, <span class="at">y=</span><span class="st">""</span>,  <span class="at">caption=</span><span class="st">"Source: NCAA | By Derek Willis"</span>) <span class="sc">+</span> </span>
 <span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span> </span>
 <span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(</span>
 <span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">16</span>, <span class="at">face =</span> <span class="st">"bold"</span>),</span>
@@ -463,13 +463,13 @@ dbl (6): 2013, 2014, 2015, 2016, 2017, 2018
 </div>
 <p>What’s missing here? Color. Our eyes aren’t drawn to anything (except maybe the top and bottom). So we need to help that. A bar chart without context or color to draw attention to something isn’t much of a bar chart. Same with a line chart – if your line chart has one line, no context, no color, it’s going to fare poorly.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>cc <span class="ot">&lt;-</span> bottom10 <span class="sc">%&gt;%</span> <span class="fu">filter</span>(Institution <span class="sc">==</span> <span class="st">"Coastal Caro."</span>)</span>
-<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>gs <span class="ot">&lt;-</span> top10 <span class="sc">%&gt;%</span> <span class="fu">filter</span>(Institution <span class="sc">==</span> <span class="st">"Ga. Southern"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>ho <span class="ot">&lt;-</span> bottom10 <span class="sc">%&gt;%</span> <span class="fu">filter</span>(Institution <span class="sc">==</span> <span class="st">"Houston"</span>)</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>ks <span class="ot">&lt;-</span> top10 <span class="sc">%&gt;%</span> <span class="fu">filter</span>(Institution <span class="sc">==</span> <span class="st">"Kansas"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>bar1 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>() <span class="sc">+</span> </span>
 <span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">data=</span>top10, <span class="fu">aes</span>(<span class="at">x=</span><span class="fu">reorder</span>(Institution, change), <span class="at">weight=</span>change)) <span class="sc">+</span> </span>
-<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">data=</span>gs, <span class="fu">aes</span>(<span class="at">x=</span><span class="fu">reorder</span>(Institution, change), <span class="at">weight=</span>change), <span class="at">fill=</span><span class="st">"#011E41"</span>) <span class="sc">+</span> </span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">data=</span>ks, <span class="fu">aes</span>(<span class="at">x=</span><span class="fu">reorder</span>(Institution, change), <span class="at">weight=</span>change), <span class="at">fill=</span><span class="st">"#011E41"</span>) <span class="sc">+</span> </span>
 <span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_flip</span>() <span class="sc">+</span> </span>
 <span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title=</span><span class="st">"College football winners..."</span>, <span class="at">subtitle =</span> <span class="st">"Not every football program saw attendance shrink in 2018. But some really did."</span>,  <span class="at">x=</span><span class="st">""</span>, <span class="at">y=</span><span class="st">"Percent change"</span>, <span class="at">caption =</span> <span class="st">""</span>) <span class="sc">+</span></span>
 <span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span> </span>
@@ -483,9 +483,9 @@ dbl (6): 2013, 2014, 2015, 2016, 2017, 2018
 <div class="cell">
 <div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>bar2 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>() <span class="sc">+</span> </span>
 <span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">data=</span>bottom10, <span class="fu">aes</span>(<span class="at">x=</span><span class="fu">reorder</span>(Institution, change), <span class="at">weight=</span>change)) <span class="sc">+</span> </span>
-<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">data=</span>cc, <span class="fu">aes</span>(<span class="at">x=</span><span class="fu">reorder</span>(Institution, change), <span class="at">weight=</span>change), <span class="at">fill=</span><span class="st">"#006F71"</span>) <span class="sc">+</span> </span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">data=</span>ho, <span class="fu">aes</span>(<span class="at">x=</span><span class="fu">reorder</span>(Institution, change), <span class="at">weight=</span>change), <span class="at">fill=</span><span class="st">"#006F71"</span>) <span class="sc">+</span> </span>
 <span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_flip</span>() <span class="sc">+</span>  </span>
-<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"... and losers"</span>, <span class="at">subtitle=</span> <span class="st">""</span>, <span class="at">x=</span><span class="st">""</span>, <span class="at">y=</span><span class="st">""</span>,  <span class="at">caption=</span><span class="st">"Source: NCAA | By Matt Waite"</span>) <span class="sc">+</span> </span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"... and losers"</span>, <span class="at">subtitle=</span> <span class="st">""</span>, <span class="at">x=</span><span class="st">""</span>, <span class="at">y=</span><span class="st">""</span>,  <span class="at">caption=</span><span class="st">"Source: NCAA | By Derek Willis"</span>) <span class="sc">+</span> </span>
 <span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span> </span>
 <span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(</span>
 <span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">16</span>, <span class="at">face =</span> <span class="st">"bold"</span>),</span>

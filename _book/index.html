@@ -2,12 +2,12 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-0.9.626">
+<meta name="generator" content="quarto-0.9.646">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="author" content="Matt Waite">
-<meta name="dcterms.date" content="2022-06-27">
+<meta name="author" content="Matt Waite &amp; Derek Willis">
+<meta name="dcterms.date" content="2022-07-19">
 
 <title>Sports Data Analysis and Visualization</title>
 <style>
@@ -235,7 +235,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./circularbarcharts.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">Circular bar charts</span></a>
+  <a href="./circularbarcharts.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">Circular bar plots</span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -376,14 +376,14 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
     <div>
     <div class="quarto-title-meta-heading">Author</div>
     <div class="quarto-title-meta-contents">
-             <p>Matt Waite </p>
+             <p>Matt Waite &amp; Derek Willis </p>
           </div>
   </div>
     
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">June 27, 2022</p>
+      <p class="date">July 19, 2022</p>
     </div>
   </div>
     
@@ -394,14 +394,10 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
 <section id="throwing-cold-water-on-hot-takes" class="level1" data-number="1">
 <h1 data-number="1"><span class="header-section-number">1</span> Throwing cold water on hot takes</h1>
-<p>The 2018 season started out disastrously for the Nebraska Cornhuskers. The first game against a probably overmatched opponent? Called on account of an epic thunderstorm that plowed right over Memorial Stadium. The next game? Loss. The one following? Loss. The next four? All losses, after the fanbase was whipped into a hopeful frenzy by the hiring of Scott Frost, national title winning quarterback turned hot young coach come back home to save a mythical football program from the mediocrity it found itself mired in.</p>
-<p>All that excitement lay in tatters.</p>
-<p>On sports talk radio, on the sports pages and across social media and cafe conversations, one topic kept coming up again and again to explain why the team was struggling: Penalties. The team was just committing too many of them. In fact, six games and no wins into the season, they were dead last in the FBS penalty yards.</p>
-<p>Worse yet for this line of reasoning? Nebraska won game 7, against Minnesota, committing only six penalties for 43 yards, just about half their average over the season. Then they won game 8 against FCS patsy Bethune Cookman, committing only five penalties for 35 yards. That’s a whopping 75 yards less than when they were losing. See? Cut the penalties, win games screamed the radio show callers.</p>
-<p>The problem? It’s not true. Penalties might matter for a single drive. They may even throw a single game. But if you look at every top-level college football team since 2009, the number of penalty yards the team racks up means absolutely nothing to the total number of points they score. There’s no relationship between them. Penalty yards have no discernible influence on points beyond just random noise.</p>
-<p>Put this another way: If you were Scott Frost, and a major college football program was paying you $5 million a year to make your team better, what should you focus on in practice? If you had growled at some press conference that you’re going to work on penalties in practice until your team stops committing them, the results you’d get from all that wasted practice time would be impossible to separate from just random chance. You very well may reduce your penalty yards and still lose.</p>
-<p>How do I know this? Simple statistics.</p>
-<p>That’s one of the three pillars of this book: Simple stats. The three pillars are:</p>
+<p>Why do teams struggle? There are lots of potential reasons: injuries, athletes in the wrong position, poor execution. Or it could be external factors: well-prepared opponents, the weather, the altitude or, of course, the refs.</p>
+<p>You could turn the question around: why do teams succeed? Again, there are plenty of possibilities that get tossed around on talk radio, on the sports pages and across social media. A lot of hot takes.</p>
+<p>The more fundamental question that this course will empower you to answer is this: what do teams and athletes <em>do</em>? Using data, you’ll learn to ask questions and visualize the answers, ranging across sports and scenarios. What did the 2021-22 Maryland men’s lacrosse team do well en route to the national championship? How has the transfer portal (and additional eligibility) changed the nature of programs? In football, do penalties have any relationship on scoring?</p>
+<p>To get into these and other questions, we’ll use a lot of different tools and techniques, but this class rests on three pillars:</p>
 <ol type="1">
 <li>Simple, easy to understand statistics …</li>
 <li>… extracted using simple code …</li>
@@ -425,13 +421,13 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </section>
 <section id="about-this-book" class="level2" data-number="1.2">
 <h2 data-number="1.2" class="anchored" data-anchor-id="about-this-book"><span class="header-section-number">1.2</span> About this book</h2>
-<p>This book is the collection of class materials for the author’s Sports Data Analysis and Visualization class at the University of Nebraska-Lincoln’s College of Journalism and Mass Communications. There’s some things you should know about it:</p>
+<p>This book is the collection of class materials for the Fall 2022 JOUR479X course in the Philip Merrill College of Journalism at the University of Maryland. There’s some things you should know about it:</p>
 <ul>
 <li>It is free for students.</li>
 <li>The topics will remain the same but the text is going to be constantly tinkered with.</li>
-<li>What is the work of the author is copyright Matt Waite 2019.</li>
+<li>What is the work of the author is copyright Derek Willis 2022 &amp; Matt Waite 2019.</li>
 <li>The text is <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">Attribution-NonCommercial-ShareAlike 4.0 International</a> Creative Commons licensed. That means you can share it and change it, but only if you share your changes with the same license and it cannot be used for commercial purposes. I’m not making money on this so you can’t either.</li>
-<li>As such, the whole book – authored in Quarto – is <a href="https://github.com/mattwaite/sportsdatabook">open sourced on Github</a>. Pull requests welcomed!</li>
+<li>As such, the whole book – authored in Quarto – is <a href="https://github.com/dwillis/SportsDataTextbook">open sourced on Github</a>. Pull requests welcomed!</li>
 </ul>
 
 
