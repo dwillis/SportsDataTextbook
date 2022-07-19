@@ -32,13 +32,13 @@ total <- read_csv("data/totaloffense.csv")
 
 offense <- total %>% left_join(scoring, by=c("Name", "Year"))
 
-nu <- offense %>% filter(Name == "Nebraska") %>% filter(Year == 2018)
+umd <- offense %>% filter(Name == "Maryland") %>% filter(Year == 2018)
 ```
 
 ```{r}
 ggplot(offense, aes(x=`Yards/G`, y=`Points/G`)) + 
   geom_point(color="grey") + geom_smooth(method=lm, se=FALSE) + 
-  labs(x="Total yards per game", y="Points per game", title="Headline here", subtitle="This is the chatter. It is chatter. Chatter.", caption="Source: NCAA | By Matt Waite") + 
+  labs(x="Total yards per game", y="Points per game", title="Headline here", subtitle="This is the chatter. It is chatter. Chatter.", caption="Source: NCAA | By Derek Willis") + 
   theme_minimal() + 
   theme(
     plot.title = element_text(size = 16, face = "bold"),
@@ -46,8 +46,8 @@ ggplot(offense, aes(x=`Yards/G`, y=`Points/G`)) +
     plot.subtitle = element_text(size=10), 
     panel.grid.minor = element_blank()
     ) +
-  geom_point(data=nu, aes(x=`Yards/G`, y=`Points/G`), color="red") + 
-  geom_text_repel(data=nu, aes(x=`Yards/G`, y=`Points/G`, label="Nebraska 2018"))
+  geom_point(data=umd, aes(x=`Yards/G`, y=`Points/G`), color="red") + 
+  geom_text_repel(data=umd, aes(x=`Yards/G`, y=`Points/G`, label="Maryland 2018"))
 ```
 
 First, let's start with some headline basics:
@@ -63,7 +63,7 @@ Given our graph, here's a few that don't work.
 ```{r}
 ggplot(offense, aes(x=`Yards/G`, y=`Points/G`)) + 
   geom_point(color="grey") + geom_smooth(method=lm, se=FALSE) + 
-  labs(x="Total yards per game", y="Points per game", title="Nebraska's offense", subtitle="Nebraska's 2018 offense is the red dot.", caption="Source: NCAA | By Matt Waite") + 
+  labs(x="Total yards per game", y="Points per game", title="Maryland's offense", subtitle="Maryland's 2018 offense is the red dot.", caption="Source: NCAA | By Derek Willis") + 
   theme_minimal() + 
   theme(
     plot.title = element_text(size = 16, face = "bold"),
@@ -71,8 +71,8 @@ ggplot(offense, aes(x=`Yards/G`, y=`Points/G`)) +
     plot.subtitle = element_text(size=10), 
     panel.grid.minor = element_blank()
     ) +
-  geom_point(data=nu, aes(x=`Yards/G`, y=`Points/G`), color="red") + 
-  geom_text_repel(data=nu, aes(x=`Yards/G`, y=`Points/G`, label="Nebraska 2018"))
+  geom_point(data=umd, aes(x=`Yards/G`, y=`Points/G`), color="red") + 
+  geom_text_repel(data=umd, aes(x=`Yards/G`, y=`Points/G`, label="Maryland 2018"))
 ```
 The problems here: 
 
@@ -86,7 +86,7 @@ Another example:
 ```{r}
 ggplot(offense, aes(x=`Yards/G`, y=`Points/G`)) + 
   geom_point(color="grey") + geom_smooth(method=lm, se=FALSE) + 
-  labs(x="Total yards per game", y="Points per game", title="Points per game vs total yards per game", subtitle="Nebraska's 2018 offense is below the blue line, which is bad.", caption="Source: NCAA | By Matt Waite") + 
+  labs(x="Total yards per game", y="Points per game", title="Points per game vs total yards per game", subtitle="Maryland's 2018 offense is above the blue line, which is good.", caption="Source: NCAA | By Derek Willis") + 
   theme_minimal() + 
   theme(
     plot.title = element_text(size = 16, face = "bold"),
@@ -94,8 +94,8 @@ ggplot(offense, aes(x=`Yards/G`, y=`Points/G`)) +
     plot.subtitle = element_text(size=10), 
     panel.grid.minor = element_blank()
     ) +
-  geom_point(data=nu, aes(x=`Yards/G`, y=`Points/G`), color="red") + 
-  geom_text_repel(data=nu, aes(x=`Yards/G`, y=`Points/G`, label="Nebraska 2018"))
+  geom_point(data=umd, aes(x=`Yards/G`, y=`Points/G`), color="red") + 
+  geom_text_repel(data=umd, aes(x=`Yards/G`, y=`Points/G`, label="Maryland 2018"))
 ```
 What's wrong here? 
 
@@ -110,7 +110,7 @@ Let's try to do this better.
 ```{r}
 ggplot(offense, aes(x=`Yards/G`, y=`Points/G`)) + 
   geom_point(color="grey") + geom_smooth(method=lm, se=FALSE) + 
-  labs(x="Total yards per game", y="Points per game", title="Nebraska's strength?", subtitle="The Husker's offense was supposed to power the team. It underperformed.", caption="Source: NCAA | By Matt Waite") + 
+  labs(x="Total yards per game", y="Points per game", title="Maryland's strength", subtitle="The Terps' offense was supposed to power the team, and it did.", caption="Source: NCAA | By Derek Willis") + 
   theme_minimal() + 
   theme(
     plot.title = element_text(size = 16, face = "bold"),
@@ -118,8 +118,8 @@ ggplot(offense, aes(x=`Yards/G`, y=`Points/G`)) +
     plot.subtitle = element_text(size=10), 
     panel.grid.minor = element_blank()
     ) +
-  geom_point(data=nu, aes(x=`Yards/G`, y=`Points/G`), color="red") + 
-  geom_text_repel(data=nu, aes(x=`Yards/G`, y=`Points/G`, label="Nebraska 2018"))
+  geom_point(data=umd, aes(x=`Yards/G`, y=`Points/G`), color="red") + 
+  geom_text_repel(data=umd, aes(x=`Yards/G`, y=`Points/G`, label="Maryland 2018"))
 ```
 
 What works here: 
@@ -133,7 +133,7 @@ One more, same chart.
 ```{r}
 ggplot(offense, aes(x=`Yards/G`, y=`Points/G`)) + 
   geom_point(color="grey") + geom_smooth(method=lm, se=FALSE) + 
-  labs(x="Total yards per game", y="Points per game", title="Nebraska's offense underperformed", subtitle="The Husker's should have scored nearly a touchdown more given their output.", caption="Source: NCAA | By Matt Waite") + 
+  labs(x="Total yards per game", y="Points per game", title="Maryland's offense overperformed", subtitle="The Terps' offense fared better than many given their output.", caption="Source: NCAA | By Derek Willis") + 
   theme_minimal() + 
   theme(
     plot.title = element_text(size = 16, face = "bold"),
@@ -141,14 +141,14 @@ ggplot(offense, aes(x=`Yards/G`, y=`Points/G`)) +
     plot.subtitle = element_text(size=10), 
     panel.grid.minor = element_blank()
     ) +
-  geom_point(data=nu, aes(x=`Yards/G`, y=`Points/G`), color="red") + 
-  geom_text_repel(data=nu, aes(x=`Yards/G`, y=`Points/G`, label="Nebraska 2018"))
+  geom_point(data=umd, aes(x=`Yards/G`, y=`Points/G`), color="red") + 
+  geom_text_repel(data=umd, aes(x=`Yards/G`, y=`Points/G`, label="Maryland 2018"))
 ```
 
 What works here: 
 
-* Strong verb: underperformed.
+* Strong verb: overperformed.
 * Headline tells the story. Chatter bolsters it. 
-* Doesn't repeat Nebraska or Huskers. 
+* Doesn't repeat Maryland or Terps 
 
 Taking time to sharpen your headlines will make your graphics better.

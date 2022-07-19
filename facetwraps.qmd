@@ -23,7 +23,7 @@ library(downloadthis)
 library(glue)
 
 dllink <- download_link(
-  link = "http://mattwaite.github.io/sportsdatafiles/logs20.csv",
+  link = "https://dwillis.github.io/sportsdatafiles/logs22.csv",
   button_label = "Download csv file",
   button_type = "danger",
   has_icon = TRUE,
@@ -37,7 +37,7 @@ glue("<pre><p><strong>For this walkthrough:</strong></p><p>{dllink}</p></pre>")
 And load it.
 
 ```{r}
-logs <- read_csv("data/logs20.csv")
+logs <- read_csv("data/logs22.csv")
 ```
 
 Let's narrow our pile and look just at the Big Ten.
@@ -71,7 +71,7 @@ big10 %>% summarise(mean(TeamFGPCT))
 
 ```{r}
 ggplot() + 
-  geom_hline(yintercept=.4361078, color="blue") + 
+  geom_hline(yintercept=0.4532143, color="blue") + 
   geom_line(data=big10, aes(x=Date, y=TeamFGPCT, group=Team)) + 
   scale_y_continuous(limits = c(0, .7)) + 
   facet_wrap(~Team)
@@ -85,7 +85,7 @@ Facet grids allow us to put teams on the same plane, versus just repeating them.
 
 ```{r}
 ggplot() + 
-  geom_hline(yintercept=.4361078, color="blue") + 
+  geom_hline(yintercept=0.4532143, color="blue") + 
   geom_line(data=big10, aes(x=Date, y=TeamFGPCT, group=Team)) + 
   scale_y_continuous(limits = c(0, .7)) + 
   facet_grid(Team ~ .)
@@ -95,7 +95,7 @@ And here they are next to each other:
 
 ```{r}
 ggplot() + 
-  geom_hline(yintercept=.4361078, color="blue") + 
+  geom_hline(yintercept=0.4532143, color="blue") + 
   geom_line(data=big10, aes(x=Date, y=TeamFGPCT, group=Team)) + 
   scale_y_continuous(limits = c(0, .7)) + 
   facet_grid(. ~ Team)

@@ -4,8 +4,8 @@ project:
 book:
   title: "Sports Data Analysis and Visualization"
   subtitle: "Code, data and visuals for storytellers"
-  author: "Matt Waite"
-  date: "6/27/2022"
+  author: "Matt Waite & Derek Willis"
+  date: "7/19/2022"
   chapters:
     - index.qmd
     - intro.qmd

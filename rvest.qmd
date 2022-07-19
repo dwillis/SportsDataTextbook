@@ -101,11 +101,11 @@ Unfortunately, non-standard means there's no one way to do it -- it's going to d
 
 I'll explain.
 
-Let's try to get [season team stats from Sports Reference](https://www.sports-reference.com/cbb/seasons/2020-school-stats.html). If you look at that page, you'll see the problem right away -- the headers span two rows, and they repeat. That's going to be all kinds of no good. You can't import that. Dataframes must have names all in one row. If you have two-line headers, you have a problem you have to fix before you can do anything else with it.
+Let's try to get [season team stats from Sports Reference](https://www.sports-reference.com/cbb/seasons/2022-school-stats.html). If you look at that page, you'll see the problem right away -- the headers span two rows, and they repeat. That's going to be all kinds of no good. You can't import that. Dataframes must have names all in one row. If you have two-line headers, you have a problem you have to fix before you can do anything else with it.
 
 First we'll grab the page.
 ```{r}
-url <- "https://www.sports-reference.com/cbb/seasons/2020-school-stats.html"
+url <- "https://www.sports-reference.com/cbb/seasons/2022-school-stats.html"
 ```
 
 Now, similar to our example above, we'll read the html, use XPath to find the table, and then read that table with a directive passed to it setting the header to FALSE. That tells rvest that there isn't a header row. Just import it as data. 

@@ -49,7 +49,7 @@ library(downloadthis)
 library(glue)
 
 dllink1 <- download_link(
-  link = "http://mattwaite.github.io/sportsdatafiles/scoringoffense.csv",
+  link = "https://dwillis.github.io/sportsdatafiles/scoringoffense.csv",
   button_label = "Download csv file",
   button_type = "danger",
   has_icon = TRUE,
@@ -58,7 +58,7 @@ dllink1 <- download_link(
 )
 
 dllink2 <- download_link(
-  link = "http://mattwaite.github.io/sportsdatafiles/totaloffense.csv",
+  link = "https://dwillis.github.io/sportsdatafiles/totaloffense.csv",
   button_label = "Download csv file",
   button_type = "danger",
   has_icon = TRUE,
@@ -80,11 +80,11 @@ offense <- total %>% left_join(scoring, by=c("Name", "Year"))
 
 ```
 
-We're going to need this later, so let's grab Nebraska's 2018 stats from this dataframe. 
+We're going to need this later, so let's grab Maryland's 2018 stats from this dataframe. 
 
 ```{r}
-nu <- offense %>% 
-  filter(Name == "Nebraska") %>% 
+umd <- offense %>% 
+  filter(Name == "Maryland") %>% 
   filter(Year == 2018)
 ```
 
@@ -121,9 +121,9 @@ ggplot() +
   labs(
     x="Total yards per game", 
     y="Points per game", 
-    title="Nebraska's underperforming offense", 
-    subtitle="The Husker's offense was the strength of the team. They underperformed.",
-    caption="Source: NCAA | By Matt Waite"
+    title="Maryland's overperforming offense", 
+    subtitle="The Terps' offense was the strength of the team. They overperformed.",
+    caption="Source: NCAA | By Derek Willis"
     )
 
 ```
@@ -138,9 +138,9 @@ ggplot() +
   labs(
     x="Total yards per game", 
     y="Points per game", 
-    title="Nebraska's underperforming offense", 
-    subtitle="The Husker's offense was the strength of the team. They underperformed.",
-    caption="Source: NCAA | By Matt Waite"
+    title="Maryland's overperforming offense", 
+    subtitle="The Terps' offense was the strength of the team. They overperformed.",
+    caption="Source: NCAA | By Derek Willis"
     ) + 
   theme_minimal()
 ```
@@ -155,9 +155,9 @@ ggplot() +
   labs(
     x="Total yards per game", 
     y="Points per game", 
-    title="Nebraska's underperforming offense", 
-    subtitle="The Husker's offense was the strength of the team. They underperformed.",
-    caption="Source: NCAA | By Matt Waite") + 
+    title="Maryland's overperforming offense", 
+    subtitle="The Terps' offense was the strength of the team. They overperformed.",
+    caption="Source: NCAA | By Derek Willis") +
   theme_minimal() + 
   theme(
     plot.title = element_text(size = 20, face = "bold")
@@ -174,9 +174,9 @@ ggplot() +
   labs(
     x="Total yards per game", 
     y="Points per game", 
-    title="Nebraska's underperforming offense", 
-    subtitle="The Husker's offense was the strength of the team. They underperformed.", 
-    caption="Source: NCAA | By Matt Waite") + 
+    title="Maryland's overperforming offense", 
+    subtitle="The Terps' offense was the strength of the team. They overperformed.",
+    caption="Source: NCAA | By Derek Willis") +
   theme_minimal() + 
   theme(
     plot.title = element_text(size = 20, face = "bold"),
@@ -186,7 +186,7 @@ ggplot() +
     ) 
 ```
 
-Missing from this graph is the context that the headline promises. Where is Nebraska? We haven't added it yet. So let's add a point and a label for it. 
+Missing from this graph is the context that the headline promises. Where is Maryland? We haven't added it yet. So let's add a point and a label for it. 
 
 ```{r}
 #| message: false
@@ -196,9 +196,9 @@ ggplot() +
   labs(
     x="Total yards per game", 
     y="Points per game", 
-    title="Nebraska's underperforming offense", 
-    subtitle="The Husker's offense was the strength of the team. They underperformed.", 
-    caption="Source: NCAA | By Matt Waite") + 
+    title="Maryland's overperforming offense", 
+    subtitle="The Terps' offense was the strength of the team. They overperformed.",
+    caption="Source: NCAA | By Derek Willis") +
   theme_minimal() + 
   theme(
     plot.title = element_text(size = 16, face = "bold"),
@@ -206,8 +206,8 @@ ggplot() +
     plot.subtitle = element_text(size=10), 
     panel.grid.minor = element_blank()
     ) +
-  geom_point(data=nu, aes(x=`Yards/G`, y=`Points/G`), color="red") + 
-  geom_text_repel(data=nu, aes(x=`Yards/G`, y=`Points/G`, label="Nebraska 2018"))
+  geom_point(data=umd, aes(x=`Yards/G`, y=`Points/G`), color="red") + 
+  geom_text_repel(data=umd, aes(x=`Yards/G`, y=`Points/G`, label="Maryland 2018"))
 ```
 
 If we're happy with this output -- if it meets all of our needs for publication -- then we can simply export it as a png file. We do that by adding `+ ggsave("plot.png", width=5, height=2)` to the end of our code. Note the width and the height are from our knitr parameters at the top -- you have to repeat them or the graph will export at the default 7x7. 
@@ -222,16 +222,16 @@ Frequently in my classes, students use the waffle charts library quite extensive
 library(waffle)
 ```
 
-Let's look at the offensive numbers from the 2018 Nebraska v. Wisconsin football game. Nebraska lost 41-24, but Wisconsin gained only 15 yards more than Nebraska did. You can find the [official stats on the NCAA's website](https://www.ncaa.com/game/football/fbs/2018/10/06/nebraska-wisconsin/team-stats).
+Let's look at the offensive numbers from the 2021 Maryland v. Illinois football game. Maryland won 20-17, even though the Terps outgained the Illini by 113 yards. You can find the [official stats on the NCAA's website](https://www.ncaa.com/game/football/fbs/2021/09/17/maryland-illinois/team-stats).
 
 I'm going to make two vectors for each team and record rushing yards and passing yards. 
 
 ```{r}
-ne <- c("Rushing"=111, "Passing"=407, 15)
-wi <- c("Rushing"=370, "Passing"=163, 0)
+md <- c("Rushing"=131, "Passing"=350, 113)
+il <- c("Rushing"=183, "Passing"=185, 0)
 ```
 
-So what does the breakdown of Nebraska's night look like? How balanced was the offense? 
+So what does the breakdown of Maryland's night look like? How balanced was the offense? 
 
 The waffle library can break this down in a way that's easier on the eyes than a pie chart. We call the library, add the data, specify the number of rows, give it a title and an x value label, and to clean up a quirk of the library, we've got to specify colors. 
 
@@ -240,11 +240,11 @@ The waffle library can break this down in a way that's easier on the eyes than a
 We can add labels and themes, but you have to be careful. The waffle library is applying it's own theme, but if we override something they are using in their theme, some things that are hidden come back and make it worse. So here is an example of how to use ggplot's `labs` and the theme to make a fully publication ready graphic. 
 
 ```{r}
-waffle(ne/10, rows = 5, xlab="1 square = 10 yards", colors = c("black", "red", "white")) + 
+waffle(md/10, rows = 5, xlab="1 square = 10 yards", colors = c("black", "red", "white")) + 
   labs(
-    title="Nebraska vs Wisconsin on offense", 
-    subtitle="The Huskers couldn't get much of a running game going.",
-    caption="Source: NCAA | Graphic by Matt Waite") + 
+    title="Maryland vs Illinois on offense", 
+    subtitle="The Terps couldn't get much of a running game going.",
+    caption="Source: NCAA | Graphic by Derek Willis") + 
   theme(
     plot.title = element_text(size = 16, face = "bold"),
     axis.title = element_text(size = 10),
@@ -267,24 +267,24 @@ Here is a full example. I start with my waffle iron code, but note that each waf
 ```{r}
 iron(
  waffle(
-   ne/10, 
+   md/10, 
    rows = 2, 
-   xlab="Nebraska",
+   xlab="Maryland",
    colors = c("black", "red", "white")) + 
    labs(
-     title="Nebraska vs Wisconsin: By the numbers", 
-     subtitle="The Huskers couldn't run, Wisconsin could.") + 
+     title="Maryland vs Illinois: By the numbers", 
+     subtitle="The Terps couldn't run, the Illini could.") + 
    theme(
     plot.title = element_text(size = 16, face = "bold"),
     axis.title = element_text(size = 10),
     axis.title.y = element_blank()
   ),
  waffle(
-   wi/10, 
+   il/10, 
    rows = 2, 
-   xlab="Wisconsin\n1 square = 10 yards", 
+   xlab="Illinois\n1 square = 10 yards", 
    colors = c("black", "red", "white")) + 
-   labs(caption="Source: NCAA | Graphic by Matt Waite")
+   labs(caption="Source: NCAA | Graphic by Derek Willis")
 ) 
 ```
 
@@ -300,7 +300,7 @@ First things first, we'll need to install `ggtext` with install.packages. Then w
 library(ggtext)
 ```
 
-Let's bo back to our scatterplot above. As created, it's very simple, and the chatter doesn't say much. Let's write chatter that instead of being super spare is more verbose.
+Let's go back to our scatterplot above. As created, it's very simple, and the chatter doesn't say much. Let's write chatter that instead of being super spare is more verbose.
 
 ```{r}
 #| message: false
@@ -310,9 +310,9 @@ ggplot() +
   labs(
     x="Total yards per game", 
     y="Points per game", 
-    title="Nebraska's underperforming offense", 
-    subtitle="The Husker's offense was the strength of the team, having to overcome a defense changing systems and struggling to stop opponents. But if you compare the offense to every other offense and how many points they score vs the number of yards they roll up, NU underperformed.", 
-    caption="Source: NCAA | By Matt Waite") + 
+    title="Maryland's overperforming offense", 
+    subtitle="The Terps' offense was the strength of the team, having to overcome a defense that often struggled to stop opponents. If you compare the offense to every other offense and how many points they score vs the number of yards they roll up, Maryland actually overperformed.", 
+    caption="Source: NCAA | By Derek Willis") + 
   theme_minimal() + 
   theme(
     plot.title = element_text(size = 16, face = "bold"),
@@ -320,10 +320,10 @@ ggplot() +
     plot.subtitle = element_text(size=10), 
     panel.grid.minor = element_blank()
     ) +
-  geom_point(data=nu, aes(x=`Yards/G`, y=`Points/G`), color="red") + 
-  geom_text_repel(data=nu, aes(x=`Yards/G`, y=`Points/G`, label="Nebraska 2018"))
+  geom_point(data=umd, aes(x=`Yards/G`, y=`Points/G`), color="red") + 
+  geom_text_repel(data=umd, aes(x=`Yards/G`, y=`Points/G`, label="Maryland 2018"))
 ```
-You can see the problem right away -- it's too long and gets cut off. One way to fix this is to put `\n` where you think the line break should be. That's a newline character, so it would add a return there. But with ggtext, you can use simple HTML to style the text, which opens up a lot of options. We can use a <br> to break the line and we can use `*` to italicize the word "underperformed" to add emphasis. The other thing we need to do is in the theme element, change the `element_text` for plot.subtitle to `element_markdown`.
+You can see the problem right away -- it's too long and gets cut off. One way to fix this is to put `\n` where you think the line break should be. That's a newline character, so it would add a return there. But with ggtext, you can use simple HTML to style the text, which opens up a lot of options. We can use a <br> to break the line. The other thing we need to do is in the theme element, change the `element_text` for plot.subtitle to `element_markdown`.
 
 ```{r}
 #| message: false
@@ -333,9 +333,9 @@ ggplot() +
   labs(
     x="Total yards per game", 
     y="Points per game", 
-    title="Nebraska's underperforming offense", 
-    subtitle="The Husker's offense was the strength of the team, having to overcome a defense changing systems and struggling to stop opponents. But if you compare<br>the offense to every other offense and how many points they score vs the number of yards they roll up, NU *underperformed*.", 
-    caption="Source: NCAA | By Matt Waite") + 
+    title="Maryland's overperforming offense", 
+    subtitle="The Terps' offense was the strength of the team, having to overcome a defense that often struggled to stop<br/>opponents. If you compare the offense to every other offense and how many points they score vs the number of<br/> yards they roll up, Maryland actually overperformed.", 
+    caption="Source: NCAA | By Derek Willis") + 
   theme_minimal() + 
   theme(
     plot.title = element_text(size = 16, face = "bold"),
@@ -343,8 +343,8 @@ ggplot() +
     plot.subtitle = element_markdown(size=10), 
     panel.grid.minor = element_blank()
     ) +
-  geom_point(data=nu, aes(x=`Yards/G`, y=`Points/G`), color="red") + 
-  geom_text_repel(data=nu, aes(x=`Yards/G`, y=`Points/G`, label="Nebraska 2018"))
+  geom_point(data=umd, aes(x=`Yards/G`, y=`Points/G`), color="red") + 
+  geom_text_repel(data=umd, aes(x=`Yards/G`, y=`Points/G`, label="Maryland 2018"))
 ```
 With ggtext, there's a lot more you can do with CSS, like change the color of text, that I don't recommend. Also, there's only a few HTML tags that have been implemented. For example, you can't add links because the `a` tag hasn't been added. 
 
@@ -358,9 +358,9 @@ ggplot() +
   labs(
     x="Total yards per game", 
     y="Points per game is an imperfect metric of offensive efficiency because defenses and special teams score points as well.", 
-    title="Nebraska's underperforming offense", 
-    subtitle="The Husker's offense was the strength of the team, having to overcome a defense changing systems and struggling to stop opponents. But if you compare<br>the offense to every other offense and how many points they score vs the number of yards they roll up, NU *underperformed*.", 
-    caption="Source: NCAA | By Matt Waite") + 
+    title="Maryland's overperforming offense", 
+    subtitle="The Terps' offense was the strength of the team, having to overcome a defense that often struggled to stop<br/>opponents. If you compare the offense to every other offense and how many points they score vs the number of<br/> yards they roll up, Maryland actually overperformed.", 
+    caption="Source: NCAA | By Derek Willis") + 
   theme_minimal() + 
   theme(
     plot.title = element_text(size = 16, face = "bold"),
@@ -372,8 +372,8 @@ ggplot() +
       width = grid::unit(2.5, "in")
     )
     ) +
-  geom_point(data=nu, aes(x=`Yards/G`, y=`Points/G`), color="red") + 
-  geom_text_repel(data=nu, aes(x=`Yards/G`, y=`Points/G`, label="Nebraska 2018"))
+  geom_point(data=umd, aes(x=`Yards/G`, y=`Points/G`), color="red") + 
+  geom_text_repel(data=umd, aes(x=`Yards/G`, y=`Points/G`, label="Maryland 2018"))
 ```
 One last advanced trick: Adding a text box explainer in the graphic. This should be used in somewhat rare circumstances -- you don't want to pollute your data space with lots of text. If your graphic needs so much explainer text, you should be asking yourself hard questions about if your chart is clearly telling a story.
 
@@ -385,19 +385,19 @@ ggplot() +
   geom_point(data=offense, aes(x=`Yards/G`, y=`Points/G`), color="grey") + 
   geom_smooth(data=offense, aes(x=`Yards/G`, y=`Points/G`), method=lm, se=FALSE) + 
   geom_textbox(
-    aes(x=500, 
-        y=25, 
-        label="Dots below the blue line indicate offenses that scored fewer points than their yards per game would suggest they should.", 
+    aes(x=225, 
+        y=50, 
+        label="Dots above the blue line indicate offenses that scored more points than their yards per game would suggest they should.", 
         orientation = "upright", 
         hjust=0, 
         vjust=1), width = unit(2.8, "in")) +
-  geom_point(aes(x=500, y=25), size=2) + 
+  geom_point(aes(x=225, y=50), size=2) + 
   labs(
     x="Total yards per game", 
     y="Points per game", 
-    title="Nebraska's underperforming offense", 
-    subtitle="The Husker's offense was the strength of the team, having to overcome a defense changing systems and struggling to stop opponents. But if you compare<br>the offense to every other offense and how many points they score vs the number of yards they roll up, NU *underperformed*.", 
-    caption="Source: NCAA | By Matt Waite") + 
+    title="Maryland's overperforming offense", 
+    subtitle="The Terps' offense was the strength of the team, having to overcome a defense that often struggled to stop<br/>opponents. If you compare the offense to every other offense and how many points they score vs the number of<br/> yards they roll up, Maryland actually overperformed.", 
+    caption="Source: NCAA | By Derek Willis") + 
   theme_minimal() + 
   theme(
     plot.title = element_text(size = 16, face = "bold"),
@@ -405,7 +405,7 @@ ggplot() +
     plot.subtitle = element_markdown(size=10), 
     panel.grid.minor = element_blank()
     ) +
-  geom_point(data=nu, aes(x=`Yards/G`, y=`Points/G`), color="red") + 
-  geom_text_repel(data=nu, aes(x=`Yards/G`, y=`Points/G`, label="Nebraska 2018"))
+  geom_point(data=umd, aes(x=`Yards/G`, y=`Points/G`), color="red") + 
+  geom_text_repel(data=umd, aes(x=`Yards/G`, y=`Points/G`, label="Maryland 2018"))
 ```
 

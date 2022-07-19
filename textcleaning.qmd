@@ -125,7 +125,7 @@ Now, let's get the conference separated. A problem is going to crop up here -- t
 ```{r}
 kills %>% 
   separate(Player, into=c("Player", "School"), sep=",") %>%
-  separate(School, into=c("School", "Conference"), sep="\\(")
+  separate(School, into=c("School", "Conference"), sep="\\(") %>% 
   head()
 ```
 

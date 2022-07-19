@@ -1,6 +1,6 @@
 # Project Checklist
 
-The main projects in SPMC350 Sports Data Analysis and Visualization involve writing a blog post, created on GitHub pages, about a sports topic that uses code, data and three graphics to tell a story. The assignment is worth 20 percent of the semester grade. 
+The main projects in JOUR479X Sports Data Analysis and Visualization involve writing a blog post, created on GitHub pages, about a sports topic that uses code, data and three graphics to tell a story. The assignment is worth 20 percent of the semester grade. 
 
 An example of a B+/A- post: [Is Nebraska the best worst team in college basketball?](http://mattwaite.github.io/2021/03/28/is-nebraska-the-best-worst-team-in-college-basketball/)
 
@@ -14,7 +14,7 @@ An example of a B+/A- post: [Is Nebraska the best worst team in college basketba
 
 ## Headline checklist
 
-1. Are your headlines just labels? Example: Nebraska's offense. NBA's Best Shooters. The best NFL punters. Those are labels, not headlines.
+1. Are your headlines just labels? Example: Maryland's offense. NBA's Best Shooters. The best NFL punters. Those are labels, not headlines.
 2. Do your headlines tell a story, or attempt to draw me into one?
 3. Do your headlines include words that are what the chart is about?
 4. Do your headlines point me toward what I should see in the chart?

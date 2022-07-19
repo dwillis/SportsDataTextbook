@@ -13,7 +13,7 @@ library(tidyverse)
 library(ggrepel)
 ```
 
-Now we'll grab the data, each football game in 2020.
+Now we'll grab the data, each football game in 2021.
 
 ```{r}
 #| warning: false
@@ -24,7 +24,7 @@ library(downloadthis)
 library(glue)
 
 dllink <- download_link(
-  link = "http://mattwaite.github.io/sportsdatafiles/footballlogs20.csv",
+  link = "https://dwillis.github.io/sportsdatafiles/footballlogs21.csv",
   button_label = "Download csv file",
   button_type = "danger",
   has_icon = TRUE,
@@ -38,7 +38,7 @@ glue("<pre><p><strong>For this walkthrough:</strong></p><p>{dllink}</p></pre>")
 Now load it.
 
 ```{r}
-logs <- read_csv("data/footballlogs20.csv")
+logs <- read_csv("data/footballlogs21.csv")
 ```
 
 I'm going to set up a point chart that places teams on two-axes -- yards per play on offense on the x axis, and yards per play on defense. We did this in the bubble charts example.
@@ -67,7 +67,7 @@ averages
 I also want to highlight playoff teams.
 
 ```{r}
-playoff_teams <- c("Notre Dame", "Alabama", "Clemson", "Ohio State")
+playoff_teams <- c("Cincinnati", "Alabama", "Michigan", "Ohio State")
 
 playoffs <- ypp %>% filter(Team %in% playoff_teams)
 ```
@@ -82,10 +82,10 @@ ggplot() +
   geom_point(data=playoffs, aes(x=OffensiveYPP, y=DefensiveYPP)) +
   geom_hline(yintercept=5.7, color="dark grey") + 
   geom_vline(xintercept=5.7, color="dark grey") + 
-  geom_text(aes(x=6.8, y=5, label="Good Offense, Good Defense"), color="blue") +
+  geom_text(aes(x=7, y=5.5, label="Good Offense, Good Defense"), color="blue") +
   geom_text(aes(x=5, y=6, label="Bad Defense, Bad Offense"), color="blue") +
   geom_text_repel(data=playoffs, aes(x=OffensiveYPP, y=DefensiveYPP, label=Team)) +
-  labs(x="Offensive Yards Per Play", y="Defensive Points Per Play", title="All four playoff teams are good", subtitle="Each of the four have above average offenses and defenses.", caption="Source: Sports-Reference.com | By Matt Waite") +
+  labs(x="Offensive Yards Per Play", y="Defensive Points Per Play", title="All four playoff teams are good", subtitle="Each of the four have above average offenses and defenses.", caption="Source: Sports-Reference.com | By Derek Willis") +
   theme_minimal() + 
   theme(
     plot.title = element_text(size = 16, face = "bold"),

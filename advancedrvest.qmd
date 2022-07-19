@@ -4,7 +4,7 @@ With the chapter, we learned how to grab one table from one page. But what if yo
 
 So what we are after are game by game stats for each college basketball team in America. 
 
-[We can see from this page](https://www.sports-reference.com/cbb/seasons/2019-school-stats.html) that each team is linked. If we follow each link, we get a ton of tables. But they aren't what we need. There's a link to gamelogs underneath the team names. 
+[We can see from this page](https://www.sports-reference.com/cbb/seasons/2022-school-stats.html) that each team is linked. If we follow each link, we get a ton of tables. But they aren't what we need. There's a link to gamelogs underneath the team names. 
 
 So we can see from this that we've got some problems. 
 
@@ -26,7 +26,7 @@ library(lubridate)
 First things first, we need to grab the url to each team from that first link.
 
 ```{r}
-url <- "https://www.sports-reference.com/cbb/seasons/2019-school-stats.html"
+url <- "https://www.sports-reference.com/cbb/seasons/2022-school-stats.html"
 ```
 
 But notice first, we don't want to grab the table. The table doesn't help us. We need to grab the only *link* in the table. So we can do that by using the table xpath node, then grabbing the anchor tags in the table, then get only the link out of them (instead of the linked text). 
@@ -65,7 +65,7 @@ Fourth is the table itself, noting to ignore the headers. The last bit fixes the
 
 ```{r}
 #| eval: false
-page <- read_html("https://www.sports-reference.com/cbb/schools/abilene-christian/2019-gamelogs.html")
+page <- read_html("https://www.sports-reference.com/cbb/schools/abilene-christian/2022-gamelogs.html")
   
 team <- page %>%
   html_nodes(xpath = '//*[@id="meta"]/div[2]/h1/span[2]') %>%
@@ -99,7 +99,7 @@ uri <- "https://www.sports-reference.com"
 logs <- tibble()
 
 for (i in schools){
-  log_url <- gsub("/2019.html","/2019-gamelogs.html", i)
+  log_url <- gsub("/2022.html","/2022-gamelogs.html", i)
   school_url <- paste(uri, log_url, sep="")  # creating the url to fetch
   
   page <- read_html(school_url)
@@ -128,7 +128,7 @@ The magic here is in `for (i in schools){`. What that says is for each iterator 
 This part:
 
 ```
-  log_url <- gsub("/2019.html","/2019-gamelogs.html", i)
+  log_url <- gsub("/2022.html","/2022-gamelogs.html", i)
   school_url <- paste(uri, log_url, sep="")  # creating the url to fetch
   
   page <- read_html(school_url)
