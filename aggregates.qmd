@@ -87,7 +87,7 @@ The `read_csv` bits are pretty obvious, except for one thing. What happens in th
 nbaplayers <- read_csv("data/nbaadvancedplayers2122.csv")
 ```
 
-Now we can inspect the data we imported. What does it look like? To do that, we use `head(nbaplayers)` to show the headers and **the first six rows of data**. If we wanted to see them all, we could just simply enter `mountainlions` and run it.
+Now we can inspect the data we imported. What does it look like? To do that, we use `head(nbaplayers)` to show the headers and **the first six rows of data**. If we wanted to see them all, we could just simply enter `nbaplayers` and run it.
 
 To get the number of records in our dataset, we run `nrow(nbaplayers)`
 
