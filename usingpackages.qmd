@@ -115,7 +115,7 @@ progressr::with_progress({
 
 With progressr, you'll see a progress bar in the console, which lets you know that your command is still working, since some of these requests take minutes to complete. Player box scores is quicker -- five seasons was a matter of seconds. 
 
-If you look at the wbb_player_box data we now have, we have each player in each game over each season -- more than 300,000 records. Finding out who Nebraska's top 10 single-season scoring leaders are is a matter of grouping, summing and filtering.
+If you look at the wbb_player_box data we now have, we have each player in each game over each season -- more than 300,000 records. Finding out who Maryland's top 10 single-season scoring leaders are is a matter of grouping, summing and filtering.
 
 ```{r}
 #| message: false

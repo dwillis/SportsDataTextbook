@@ -39,7 +39,6 @@ book:
     - headlines.qmd
     - annotations.qmd
     - finishingtouches.qmd
-    - rtweet.qmd
     - rvest.qmd
     - advancedrvest.qmd
     - blogging.qmd

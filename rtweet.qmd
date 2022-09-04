@@ -106,12 +106,10 @@ This brings up a good point about saving any data you import from Twitter's API.
 write_as_csv(terpsTweets, "data/terpsTweets.csv")
 ```
 
-__Be aware that this function will overwrite data.__ If you make changes to your `huskerTweets` object and then run the `write_as_csv()` function again, it will overwrite your saved file with the modifications you made to your object. The lesson then is to always save an extra copy of your data in a separate directory, just in case you do accidentally make a mistake in overwriting your data. 
+__Be aware that this function will overwrite data.__ If you make changes to your `terpsTweets` object and then run the `write_as_csv()` function again, it will overwrite your saved file with the modifications you made to your object. The lesson then is to always save an extra copy of your data in a separate directory, just in case you do accidentally make a mistake in overwriting your data. 
 
 
 ## The data used here
-
- 
 
 To make it easier to work with, I am going to combine these two data sets into one using the `bind_rows()` function from `dplyr`. There is a slight problem though, some people may have had a tweet that contained both the __#terps__ and __#feartheturtle__ hashtags in their tweet. So if we combine these two data sets, there might be duplicate data. To dedupe the data, we can apply a `distinct(text, .keep_all = TRUE)` to remove any duplicates. The `.keep_all = TRUE` argument just tells R to keep all columns in the data frame after our data has been deduped.  
 
