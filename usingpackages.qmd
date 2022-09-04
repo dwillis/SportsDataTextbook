@@ -33,11 +33,11 @@ library(tidyverse)
 library(cfbfastR)
 ```
 
-You might be thinking, "Oh wow, I can get play by play data for college football. Let's look at what are the five most heartbreaking plays of last year's  Maryland season." Because what better way to determine doom than by looking at the steepest drop-off in win probability, which is included in the data. 
+You might be thinking, "Oh wow, I can get play by play data for college football. Let's look at what are the five most heartbreaking plays of last year's  Maryland season." Because what better way to determine doom than by looking at the steepest drop-off in win probability, which is included in the data.
 
-Great idea. Let's do it.
+Great idea. Let's do it. You'll need to make sure that your API key has been added to your environment.
 
-The first thing to do is [read the documentation](https://saiemgilani.github.io/cfbfastR/reference/cfbd_pbp_data.html). You'll see that you can request data for each week. For example, here's week 2, which is actually Maryland's third game (the week 0 game is lumped in with week 1).
+The first thing to do is [read the documentation](https://cfbfastr.sportsdataverse.org/). You'll see that you can request data for each week. For example, here's week 2, which is actually Maryland's third game (the week 0 game is lumped in with week 1).
 
 ```{r}
 maryland <- cfbd_pbp_data(
