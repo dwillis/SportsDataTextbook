@@ -17,7 +17,7 @@ library(downloadthis)
 library(glue)
 
 dllink <- download_link(
-  link = "https://raw.githubusercontent.com/dwillis/NCAAWomensSoccerData/main/data/ncaa_womens_soccer_matchstats_2022.csv",
+  link = "https://raw.githubusercontent.com/dwillis/NCAAWomensSoccerData/main/data/ncaa_womens_soccer_matchstats_2021.csv",
   button_label = "Download csv file",
   button_type = "danger",
   has_icon = TRUE,
@@ -40,7 +40,7 @@ library(tidyverse)
 Now import the data.
 
 ```{r}
-correlations <- read_csv("data/ncaa_womens_soccer_matchstats_2022.csv")
+correlations <- read_csv("data/ncaa_womens_soccer_matchstats_2021.csv")
 ```
 
 To do this, we need all college soccer teams and their season stats from this year. How much, over the course of a season, does a thing matter? That's the question you're going to answer.
@@ -66,7 +66,7 @@ In R, there is a `cor` function, and it works much the same as `mean` or `median
 newcorrelations %>% summarise(correlation = cor(differential, fouls, method="pearson"))
 ```
 
-So on a scale of -1 to 1, where 0 means there's no relationship at all and 1 or -1 means a perfect relationship, penalty yards and whether or not the team scores more points than it give up are at 0.02543571. You could say they're 2.5 percent related toward the positive -- more penalties, the higher your differential. Another way to say it? They're 97.5 percent not related.
+So on a scale of -1 to 1, where 0 means there's no relationship at all and 1 or -1 means a perfect relationship, fouls and whether or not the team scores more goals than it gives up are at 0.02543571. You could say they're 2.5 percent related toward the positive -- more fouls, the higher your differential. Another way to say it? They're 97.5 percent not related.
 
 What about the number of yellow cards instead of fouls? Do more aggressive defensive teams also score more?
 
@@ -77,11 +77,11 @@ newcorrelations %>%
 
 So wait, what does this all mean?
 
-It means that when you look at every game in college soccer, the number of goals and yellow cards have a negative impact on the score difference between your team and the other team. But the relationship is barely anything at all. Like 93+ percent plus not related. So neither penalties nor yellow cards have much of any relationship with the difference in goal-scoring.
+It means that when you look at every game in college soccer, the number of goals and yellow cards have a negative impact on the score difference between your team and the other team. But the relationship is barely anything at all. Like 93+ percent plus not related. So neither fouls nor yellow cards have much of any relationship with the difference in goal-scoring.
 
 Normally, at this point, you'd quit while you were ahead. A correlation coefficient that shows there's no relationship between two things means stop. It's pointless to go on. But let's put this fully to rest.
 
-Enter regression. Regression is how we try to fit our data into a line that explains the relationship the best. Regressions will help us predict things as well -- if we have a team that has so many penalties, what kind of point differential could we expect? So regressions are about prediction, correlations are about description. Correlations describe a relationship. Regressions help us predict what that relationship means and what it might look like in the real world. Specifically, it tells us how much of the change in a dependent variable can be explained by the independent variable.
+Enter regression. Regression is how we try to fit our data into a line that explains the relationship the best. Regressions will help us predict things as well -- if we have a team that has so many fouls, what kind of point differential could we expect? So regressions are about prediction, correlations are about description. Correlations describe a relationship. Regressions help us predict what that relationship means and what it might look like in the real world. Specifically, it tells us how much of the change in a dependent variable can be explained by the independent variable.
 
 Another thing regressions do is give us some other tools to evaluate if the relationship is real or not.
 
@@ -100,7 +100,7 @@ There's three things we need here:
 
 So fouls are totally meaningless to the outcome of a game.
 
-You can see the problem in a graph. On the X axis is penalty yards, on the y is aggregate score. If these elements had a strong relationship, we'd see a clear pattern moving from right to left, sloping down. On the left would be the teams with few penalties and a positive point differential. On right would be teams with high penalty yards and negative point differentials. Do you see that below?
+You can see the problem in a graph. On the X axis is fouls, on the y is point differential. If these elements had a strong relationship, we'd see a clear pattern moving from right to left, sloping down. On the left would be the teams with few fouls and a positive point differential. On right would be teams with high fouls and negative point differentials. Do you see that below?
 
 ```{r echo=FALSE}
 ggplot(newcorrelations, aes(x=fouls, y=differential)) + geom_point()
