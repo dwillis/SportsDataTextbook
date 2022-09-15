@@ -17,7 +17,7 @@ library(downloadthis)
 library(glue)
 
 dllink <- download_link(
-  link = "https://raw.githubusercontent.com/dwillis/NCAAWomensSoccerData/main/data/ncaa_womens_soccer_matchstats_2021.csv",
+  link = "https://raw.githubusercontent.com/dwillis/NCAAWomensSoccerData/main/data/ncaa_womens_soccer_matchstats_2022.csv",
   button_label = "Download csv file",
   button_type = "danger",
   has_icon = TRUE,
@@ -40,7 +40,7 @@ library(tidyverse)
 Now import the data.
 
 ```{r}
-correlations <- read_csv("data/ncaa_womens_soccer_matchstats_2021.csv")
+correlations <- read_csv("data/ncaa_womens_soccer_matchstats_2022.csv")
 ```
 
 To do this, we need all college soccer teams and their season stats from this year. How much, over the course of a season, does a thing matter? That's the question you're going to answer.
@@ -51,7 +51,7 @@ We're going to use two different methods here and they're closely related. Corre
 
 But is there one?
 
-We're going create a new dataframe called newcorrelations that takes our data that we imported and adds a column called `differential` because we don't have separate offense and defense penalties, and then we'll use correlations to see how related those two things are.
+We're going create a new dataframe called newcorrelations that takes our data that we imported and adds a column called `differential` which is the difference between `goals` and `defensive_goals`, and then we'll use correlations to see how related those two things are.
 
 ```{r}
 newcorrelations <- correlations %>% 
