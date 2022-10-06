@@ -25,6 +25,7 @@ book:
     - stackedbars.qmd
     - circularbarcharts.qmd
     - wafflecharts.qmd
+    - linecharts.qmd
     - stepcharts.qmd
     - dumbbellcharts.qmd
     - scatterplots.qmd

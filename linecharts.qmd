@@ -4,7 +4,7 @@ So far, we've talked about bar charts -- stacked or otherwise -- are good for sh
 
 **Line charts are good for showing change over time.** 
 
-Let's look at how we can answer this question: Why was Nebraska terrible at basketball last season?
+Let's look at how we can answer this question: Why did Maryland struggle at basketball last season?
 
 We'll need the logs of every game in college basketball for this.
 
@@ -13,7 +13,7 @@ library(downloadthis)
 library(glue)
 
 dllink <- download_link(
-  link = "https://dwillis.github.io/sports-data-files/logs21.csv",
+  link = "https://dwillis.github.io/sports-data-files/logs22.csv",
   button_label = "Download csv file",
   button_type = "danger",
   has_icon = TRUE,
@@ -34,7 +34,7 @@ library(tidyverse)
 And now load the data.
 
 ```{r}
-logs <- read_csv("data/logs21.csv")
+logs <- read_csv("data/logs22.csv")
 ```
 
 This data has every game from every team in it, so we need to use filtering to limit it, because we just want to look at Maryland. If you don't remember, flip back to chapter 6. 
@@ -63,15 +63,15 @@ Note also that our X axis labels are automated. It knows it's a date and it just
 
 ## This is too simple. 
 
-With datasets, we want to invite comparison. So let's answer the question visually. Let's put two lines on the same chart. How does Maryland compare to Michigan State, for example? 
+With datasets, we want to invite comparison. So let's answer the question visually. Let's put two lines on the same chart. How does Maryland compare to Illinois, for example? 
 
 ```{r}
-msu <- logs %>% filter(Team == "Michigan State")
+ill <- logs %>% filter(Team == "Illinois")
 ```
 
 In this case, because we have two different datasets, we're going to put everything in the geom instead of the ggplot step. We also have to explicitly state what dataset we're using by saying `data=` in the geom step.
 
-First, let's chart Nebraska. Read carefully. First we set the data. Then we set our aesthetic. Unlike bars, we need an X and a Y variable. In this case, our X is the date of the game, Y is the thing we want the lines to move with. In this case, the Team Field Goal Percentage -- TeamFGPCT. 
+First, let's chart Maryland. Read carefully. First we set the data. Then we set our aesthetic. Unlike bars, we need an X and a Y variable. In this case, our X is the date of the game, Y is the thing we want the lines to move with. In this case, the Team Field Goal Percentage -- TeamFGPCT. 
 
 ```{r}
 ggplot() + geom_line(data=umd, aes(x=Date, y=TeamFGPCT), color="red")
@@ -82,19 +82,19 @@ Now, by using +, we can add Michigan State to it. REMEMBER COPY AND PASTE IS A T
 ```{r}
 ggplot() + 
   geom_line(data=umd, aes(x=Date, y=TeamFGPCT), color="red") + 
-  geom_line(data=msu, aes(x=Date, y=TeamFGPCT), color="green")
+  geom_line(data=ill, aes(x=Date, y=TeamFGPCT), color="orange")
 ```
 
-Let's flatten our lines out by zeroing the Y axis.
+Let's flatten our lines out by zeroing the Y axis. We'll set the upper limit of the y-axis to 0.70 because Illinois shot fantastically well in one December game.
 
 ```{r}
 ggplot() + 
   geom_line(data=umd, aes(x=Date, y=TeamFGPCT), color="red") + 
-  geom_line(data=msu, aes(x=Date, y=TeamFGPCT), color="green") + 
-  scale_y_continuous(limits = c(0, .65))
+  geom_line(data=ill, aes(x=Date, y=TeamFGPCT), color="orange") + 
+  scale_y_continuous(limits = c(0, .70))
 ```
 
-So visually speaking, the difference between Maryland and Michigan State's season is that while both had some significant variations shooting the ball, Maryland's positive outliers were greater and Michigan State's low points were lower.
+So visually speaking, the difference between Maryland and Illinois' season is that while both had some significant variations shooting the ball, Illinois' positive outliers were greater and Maryland's low points were lower - especially after conference play started.
 
 ## But what if I wanted to add a lot of lines. 
 
@@ -112,11 +112,11 @@ I can keep layering on layers all day if I want. And if my dataset has more than
 ggplot() + 
   geom_line(data=p5conf, aes(x=Date, y=TeamFGPCT, group=Team), color="grey") + 
   geom_line(data=umd, aes(x=Date, y=TeamFGPCT), color="red") + 
-  geom_line(data=msu, aes(x=Date, y=TeamFGPCT), color="green") + 
+  geom_line(data=ill, aes(x=Date, y=TeamFGPCT), color="orange") + 
   scale_y_continuous(limits = c(0, .65))
 ```
 
-What do we see here? How has Maryland and Michigan State's season evolved against all the rest of the teams in college basketball?
+What do we see here? How have Maryland's and Illinois' seasons evolved against all the rest of the teams in college basketball?
 
 But how does that compare to the average? We can add that pretty easily by creating a new dataframe with it and add another geom_line.
 
@@ -128,7 +128,7 @@ average <- logs %>% group_by(Date) %>% summarise(mean_shooting=mean(TeamFGPCT))
 ggplot() + 
   geom_line(data=p5conf, aes(x=Date, y=TeamFGPCT, group=Team), color="grey") + 
   geom_line(data=umd, aes(x=Date, y=TeamFGPCT), color="red") + 
-  geom_line(data=msu, aes(x=Date, y=TeamFGPCT), color="green") + 
+  geom_line(data=ill, aes(x=Date, y=TeamFGPCT), color="orange") + 
   geom_line(data=average, aes(x=Date, y=mean_shooting), color="black") + 
-  scale_y_continuous(limits = c(0, .65))
+  scale_y_continuous(limits = c(0, .70))
 ```
