@@ -49,7 +49,7 @@ library(downloadthis)
 library(glue)
 
 dllink1 <- download_link(
-  link = "https://dwillis.github.io/sportsdatafiles/scoringoffense.csv",
+  link = "https://dwillis.github.io/sports-data-files/scoringoffense.csv",
   button_label = "Download csv file",
   button_type = "danger",
   has_icon = TRUE,
@@ -58,7 +58,7 @@ dllink1 <- download_link(
 )
 
 dllink2 <- download_link(
-  link = "https://dwillis.github.io/sportsdatafiles/totaloffense.csv",
+  link = "https://dwillis.github.io/sports-data-files/totaloffense.csv",
   button_label = "Download csv file",
   button_type = "danger",
   has_icon = TRUE,

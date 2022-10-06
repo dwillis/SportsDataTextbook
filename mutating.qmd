@@ -25,7 +25,7 @@ library(downloadthis)
 library(glue)
 
 dllink <- download_link(
-  link = "https://dwillis.github.io/sportsdatafiles/attendance.csv",
+  link = "https://dwillis.github.io/sports-data-files/attendance.csv",
   button_label = "Download csv file",
   button_type = "danger",
   has_icon = TRUE,
