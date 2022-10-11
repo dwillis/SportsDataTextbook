@@ -18,15 +18,15 @@ library(waffle)
 
 ## Making waffles with vectors
 
-Let's look at Maryland's football bowl game win over Virginia Tech last year. [Here's the box score](https://umterps.com/sports/football/stats/2021/virginia-tech/boxscore/12866), which we'll use for this part of the walkthrough.
+Let's look at Maryland's football game against Michigan State this season. [Here's the box score](https://umterps.com/sports/football/stats/2022/michigan-state/boxscore/10076), which we'll use for this part of the walkthrough.
 
 Maybe the easiest way to do waffle charts, at least at first, is to make vectors of your data and plug them in. To make a vector, we use the `c` or concatenate function.
 
-So let's look at offense. Rushing vs passing.
+So let's look at offense. Net rushing vs passing.
 
 ```{r}
-md <- c("Rushing"=206, "Passing"=275)
-vt <- c("Rushing"=122, "Passing"=137)
+md <- c("Rushing"=175, "Passing"=314)
+ms <- c("Rushing"=100, "Passing"=221)
 ```
 
 So what does the breakdown of the night look like?
@@ -46,16 +46,16 @@ waffle(
 Or, we could make this two teams in the same chart.
 
 ```{r}
-passing <- c("Maryland"=275, "Virginia Tech"=137)
+passing <- c("Maryland"=314, "Michigan State"=221)
 ```
 
 ```{r}
 waffle(
         passing, 
         rows = 10, 
-        title="Maryland vs Virginia Tech: passing", 
+        title="Maryland vs Michigan State: passing", 
         xlab="1 square = 1 yard", 
-        colors = c("red", "black")
+        colors = c("red", "green")
 )
 ```
 
@@ -69,20 +69,20 @@ iron(
         xlab="1 square = 1 yard", 
         colors = c("black", "red")
         ),
- waffle(vt, 
+ waffle(ms, 
         rows = 10, 
-        title="Virginia Tech's offense", 
+        title="Michigan State's offense", 
         xlab="1 square = 1 yard", 
-        colors = c("black", "red")
+        colors = c("black", "green")
         )
 )
 ```
 
-What do you notice about this chart? Notice how the squares aren't the same size? Well, Maryland out-gained Virginia Tech by a long way. So the squares aren't the same size because the numbers aren't the same. We can fix that by adding an unnamed padding number so the number of yards add up to the same thing. Let's make the total for everyone be 481, Maryland's total yards of offense. So to do that, we need to add a padding of 222 to Virginia Tech. REMEMBER: Don't name it or it'll show up in the legend.
+What do you notice about this chart? Notice how the squares aren't the same size? Well, Maryland out-gained Michigan State by a long way. So the squares aren't the same size because the numbers aren't the same. We can fix that by adding an unnamed padding number so the number of yards add up to the same thing. Let's make the total for everyone be 489, Maryland's total yards of offense. So to do that, we need to add a padding of 168 to Michigan State. REMEMBER: Don't name it or it'll show up in the legend.
 
 ```{r}
-md <- c("Rushing"=206, "Passing"=275)
-vt <- c("Rushing"=122, "Passing"=137, 222)
+md <- c("Rushing"=175, "Passing"=314)
+ms <- c("Rushing"=100, "Passing"=221, 168)
 ```
 
 Now, in our waffle iron, if we don't give that padding a color, we'll get an error. So we need to make it white. Which, given our white background, means it will disappear.
@@ -95,11 +95,11 @@ iron(
         xlab="1 square = 1 yard", 
         colors = c("black", "red")
         ),
- waffle(vt, 
+ waffle(ms, 
         rows = 10, 
-        title="Virginia Tech's offense", 
+        title="Michigan State's offense", 
         xlab="1 square = 1 yard",
-        colors = c("orange", "brown", "white")
+        colors = c("black", "green", "white")
         )
 )
 ```
@@ -114,13 +114,13 @@ iron(
         xlab="1 square = 1 yard", 
         colors = c("black", "red")
         ),
- waffle(vt/2, 
+ waffle(ms/2, 
         rows = 10, 
-        title="Virginia Tech's offense", 
+        title="Michigan State's offense", 
         xlab="1 square = 1 yard",
-        colors = c("orange", "brown", "white")
+        colors = c("black", "green", "white")
         )
 )
 ```
 
-News flash: Virginia Tech is changing its fight song to "Everybody Hurts" by REM.
+News flash: Michigan State is changing its fight song to "Everybody Hurts" by REM.
