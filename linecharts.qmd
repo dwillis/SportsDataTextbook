@@ -77,7 +77,7 @@ First, let's chart Maryland. Read carefully. First we set the data. Then we set 
 ggplot() + geom_line(data=umd, aes(x=Date, y=TeamFGPCT), color="red")
 ```
 
-Now, by using +, we can add Michigan State to it. REMEMBER COPY AND PASTE IS A THING. Nothing changes except what data you are using.
+Now, by using +, we can add Illinois to it. REMEMBER COPY AND PASTE IS A THING. Nothing changes except what data you are using.
 
 ```{r}
 ggplot() + 
