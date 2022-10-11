@@ -1,16 +1,16 @@
 # Clustering
 
-One common effort in sports is to classify teams and players -- who are this players peers? What teams are like this one? Who should we compare a player to? Truth is, most sports commentators use nothing more sophisticated that looking at a couple of stats or use the "eye test" to say a player is like this or that. 
+One common effort in sports is to classify teams and players -- who are this players peers? What teams are like this one? Who should we compare a player to? Truth is, most sports commentators use nothing more sophisticated that looking at a couple of stats or use the "eye test" to say a player is like this or that.
 
-There's better ways. 
+There's better ways.
 
-In this chapter, we're going to use a method that sounds advanced but it really quite simple called k-means clustering. It's based on the concept of the k-nearest neighbor algorithm. You're probably already scared. Don't be. 
+In this chapter, we're going to use a method that sounds advanced but it really quite simple called k-means clustering. It's based on the concept of the k-nearest neighbor algorithm. You're probably already scared. Don't be.
 
 Imagine two dots on a scatterplot. If you took a ruler out and measured the distance between those dots, you'd know how far apart they are. In math, that's called the Euclidean distance. It's just the space between them in numbers. Where k-nearest neighbor comes in, you have lots of dots and you want measure the distance between all of them. What does k-means clustering do? It lumps them into groups based on the average distance between them. Players who are good on offense but bad on defense are over here, good offense good defense are over here. And using the Euclidean distance between them, we can decide who is in and who is out of those groups.
 
-For this exercise, I want to look at Jalen Smith, who played two seasons at Maryland before decamping for the NBA. Had he stayed, he could have been among the all-time Terp greats. So who does Jalen Smith compare to? 
+For this exercise, I want to look at Jalen Smith, who played two seasons at Maryland before decamping for the NBA. Had he stayed, he could have been among the all-time Terp greats. So who does Jalen Smith compare to?
 
-To answer this, we'll use k-means clustering. 
+To answer this, we'll use k-means clustering.
 
 First thing we do is load some libraries and set a seed, so if we run this repeatedly, our random numbers are generated from the same base. If you don't have the cluster library, just add it on the console with `install.packages("cluster")`
 
@@ -47,30 +47,30 @@ players <- read_csv("data/players20.csv")
 
 To cluster this data properly, we have some work to do.
 
-First, it won't do to have players who haven't played, so we can use filter to find anyone with greater than 0 minutes played. Next, Jalen Smith is a forward, so let's just look at forwards. Third, we want to limit the data to things that make sense to look at for Smith -- things like shooting, rebounds, blocks, turnovers and points. 
+First, it won't do to have players who haven't played, so we can use filter to find anyone with greater than 0 minutes played. Next, Jalen Smith is a forward, so let's just look at forwards. Third, we want to limit the data to things that make sense to look at for Smith -- things like shooting, rebounds, blocks, turnovers and points.
 
 ```{r}
-playersselected <- players %>% 
-  filter(MP>0) %>% filter(Pos == "F") %>% 
-  select(Player, Team, Pos, MP, `FG%`, TRB, BLK, TOV, PTS) %>% 
-  na.omit() 
-```
-
-Now, k-means clustering doesn't work as well with data that can be on different scales. So comparing a percentage to a count metric -- shooting percentage to points -- would create chaos because shooting percentages are a fraction of 1 and points, depending on when they are in the season, could be quite large. So we have to scale each metric -- put them on a similar basis using the distance from the max value as our guide. Also, k-means clustering won't work with text data, so we need to create a dataframe that's just the numbers, but scaled. We can do that with another select, and using mutate_all with the scale function. The `na.omit()` means get rid of any blanks, because they too will cause errors. 
-
-```{r}
-playersscaled <- playersselected %>% 
-  select(MP, `FG%`, TRB, BLK, TOV, PTS) %>% 
-  mutate_all(scale) %>% 
+playersselected <- players %>%
+  filter(MP>0) %>% filter(Pos == "F") %>%
+  select(Player, Team, Pos, MP, `FG%`, TRB, BLK, TOV, PTS) %>%
   na.omit()
 ```
 
-With k-means clustering, we decide how many clusters we want. Most often, researchers will try a handful of different cluster numbers and see what works. But there are methods for finding the optimal number. One method is called the Elbow method. One implementation of this, [borrowed from the University of Cincinnati's Business Analytics program](https://uc-r.github.io/kmeans_clustering), does this quite nicely with a graph that will help you decide for yourself. 
-
-All you need to do in this code is change out the data frame -- `playersscaled` in this case -- and run it. 
+Now, k-means clustering doesn't work as well with data that can be on different scales. So comparing a percentage to a count metric -- shooting percentage to points -- would create chaos because shooting percentages are a fraction of 1 and points, depending on when they are in the season, could be quite large. So we have to scale each metric -- put them on a similar basis using the distance from the max value as our guide. Also, k-means clustering won't work with text data, so we need to create a dataframe that's just the numbers, but scaled. We can do that with another select, and using mutate_all with the scale function. The `na.omit()` means get rid of any blanks, because they too will cause errors.
 
 ```{r}
-# function to compute total within-cluster sum of square 
+playersscaled <- playersselected %>%
+  select(MP, `FG%`, TRB, BLK, TOV, PTS) %>%
+  mutate_all(scale) %>%
+  na.omit()
+```
+
+With k-means clustering, we decide how many clusters we want. Most often, researchers will try a handful of different cluster numbers and see what works. But there are methods for finding the optimal number. One method is called the Elbow method. One implementation of this, [borrowed from the University of Cincinnati's Business Analytics program](https://uc-r.github.io/kmeans_clustering), does this quite nicely with a graph that will help you decide for yourself.
+
+All you need to do in this code is change out the data frame -- `playersscaled` in this case -- and run it.
+
+```{r}
+# function to compute total within-cluster sum of square
 wss <- function(k) {
   kmeans(playersscaled, k, nstart = 10 )$tot.withinss
 }
@@ -82,12 +82,12 @@ k.values <- 1:15
 wss_values <- map_dbl(k.values, wss)
 
 plot(k.values, wss_values,
-       type="b", pch = 19, frame = FALSE, 
+       type="b", pch = 19, frame = FALSE,
        xlab="Number of clusters K",
        ylab="Total within-clusters sum of squares")
 ```
 
-The Elbow method -- so named because you're looking for the "elbow" where the line flattens out. In this case, it looks like a K of 8 is ideal. So let's try that. We're going to use the kmeans function, saving it to an object called k5. We just need to tell it our dataframe name, how many centers (k) we want, and we'll use a sensible default for how many different configurations to try. 
+The Elbow method -- so named because you're looking for the "elbow" where the line flattens out. In this case, it looks like a K of 8 is ideal. So let's try that. We're going to use the kmeans function, saving it to an object called k5. We just need to tell it our dataframe name, how many centers (k) we want, and we'll use a sensible default for how many different configurations to try.
 
 ```{r}
 k8 <- kmeans(playersscaled, centers = 8, nstart = 25)
@@ -99,17 +99,17 @@ Let's look at what we get.
 k8
 ```
 
-Interpreting this output, the very first thing you need to know is that **the cluster numbers are meaningless**. They aren't ranks. They aren't anything. After you have taken that on board, look at the cluster sizes at the top. Clusters 3 and 4 are pretty large compared to others. That's notable. Then we can look at the cluster means. For reference, 0 is going to be average. So group 1 is below average on minutes played. Groups 8 is slightly above, group 5 is well above. 
+Interpreting this output, the very first thing you need to know is that **the cluster numbers are meaningless**. They aren't ranks. They aren't anything. After you have taken that on board, look at the cluster sizes at the top. Clusters 3 and 4 are pretty large compared to others. That's notable. Then we can look at the cluster means. For reference, 0 is going to be average. So group 1 is below average on minutes played. Groups 8 is slightly above, group 5 is well above.
 
 So which group is Jalen Smith in? Well, first we have to put our data back together again. In K8, there is a list of cluster assignments in the same order we put them in, but recall we have no names. So we need to re-combine them with our original data. We can do that with the following:
 
 ```{r}
-playercluster <- data.frame(playersselected, k8$cluster) 
+playercluster <- data.frame(playersselected, k8$cluster)
 ```
 
-Now we have a dataframe called playercluster that has our player names and what cluster they are in. The fastest way to find Jalen Smith is to double click on the playercluster table in the environment and use the search in the top right of the table. Because this is based on some random selections of points to start the groupings, these may change from person to person, but Smith is in Group 2 in my data. 
+Now we have a dataframe called playercluster that has our player names and what cluster they are in. The fastest way to find Jalen Smith is to double click on the playercluster table in the environment and use the search in the top right of the table. Because this is based on some random selections of points to start the groupings, these may change from person to person, but Smith is in Group 2 in my data.
 
-We now have a dataset and can plot it like anything else. Let's get Cam Mack and then plot him against the rest of college basketball on rebounds versus minutes played. 
+We now have a dataset and can plot it like anything else. Let's get Jalen Smith and then plot him against the rest of college basketball on rebounds versus minutes played.
 
 ```{r}
 cm <- playercluster %>% filter(Player == "Jalen Smith")
@@ -120,12 +120,12 @@ cm
 So Jalen's in cluster 2, which if you look at our clusters, puts him in the cluster with all above average metrics. What does that look like? We know Jalen was a rebounding machine, so where do group 2 people grade out on rebounds?
 
 ```{r}
-ggplot() + 
-  geom_point(data=playercluster, aes(x=MP, y=TRB, color=k8.cluster)) + 
+ggplot() +
+  geom_point(data=playercluster, aes(x=MP, y=TRB, color=k8.cluster)) +
   geom_point(data=cm, aes(x=MP, y=TRB), color="red")
 ```
 
-Not bad, not bad. But who are Jalen Smith's peers? If we look at the numbers in Group 2, there's 495 of them. So let's limit them to just Big Ten guards. Unfortunately, my scraper didn't quite work and in the place of Conference is the coach's name. So I'm going to have to do this the hard way and make a list of Big Ten teams and filter on that. Then I'll sort by minutes played. 
+Not bad, not bad. But who are Jalen Smith's peers? If we look at the numbers in Group 2, there's 495 of them. So let's limit them to just Big Ten guards. Unfortunately, my scraper didn't quite work and in the place of Conference is the coach's name. So I'm going to have to do this the hard way and make a list of Big Ten teams and filter on that. Then I'll sort by minutes played.
 
 ```{r}
 big10 <- c("Nebraska Cornhuskers", "Iowa Hawkeyes", "Minnesota Golden Gophers", "Illinois Fighting Illini", "Northwestern Wildcats", "Wisconsin Badgers", "Indiana Hoosiers", "Purdue Boilermakers", "Ohio State Buckeyes", "Michigan Wolverines", "Michigan State Spartans", "Penn State Nittany Lions", "Rutgers Scarlet Knights", "Maryland Terrapins")
@@ -137,31 +137,31 @@ So there are the 4 forwards most like Jalen Smith in the Big Ten. Are they the b
 
 ## Advanced metrics
 
-How much does this change if we change the metrics? I used pretty standard box score metrics above. What if we did it using Player Efficiency Rating, True Shooting Percentage, Point Production, Assist Percentage, Win Shares Per 40 Minutes and Box Plus Minus (you can get definitions of all of them by [hovering over the stats on Nebraksa's stats page](https://www.sports-reference.com/cbb/schools/nebraska/2020.html)). 
+How much does this change if we change the metrics? I used pretty standard box score metrics above. What if we did it using Player Efficiency Rating, True Shooting Percentage, Point Production, Assist Percentage, Win Shares Per 40 Minutes and Box Plus Minus (you can get definitions of all of them by [hovering over the stats on Nebraksa's stats page](https://www.sports-reference.com/cbb/schools/nebraska/2020.html)).
 
-We'll repeat the process. Filter out players who don't play, players with stats missing, and just focus on those stats listed above. 
+We'll repeat the process. Filter out players who don't play, players with stats missing, and just focus on those stats listed above.
 
 ```{r}
-playersadvanced <- players %>% 
-  filter(MP>0) %>% 
-  filter(Pos == "F") %>% 
-  select(Player, Team, Pos, PER, `TS%`, PProd, `AST%`, `WS/40`, BPM) %>% 
-  na.omit() 
+playersadvanced <- players %>%
+  filter(MP>0) %>%
+  filter(Pos == "F") %>%
+  select(Player, Team, Pos, PER, `TS%`, PProd, `AST%`, `WS/40`, BPM) %>%
+  na.omit()
 ```
 
-Now to scale them. 
+Now to scale them.
 
 ```{r}
-playersadvscaled <- playersadvanced %>% 
-  select(PER, `TS%`, PProd, `AST%`, `WS/40`, BPM) %>% 
-  mutate_all(scale) %>% 
+playersadvscaled <- playersadvanced %>%
+  select(PER, `TS%`, PProd, `AST%`, `WS/40`, BPM) %>%
+  mutate_all(scale) %>%
   na.omit()
 ```
 
 Let's find the optimal number of clusters.
 
 ```{r}
-# function to compute total within-cluster sum of square 
+# function to compute total within-cluster sum of square
 wss <- function(k) {
   kmeans(playersadvscaled, k, nstart = 10 )$tot.withinss
 }
@@ -173,12 +173,12 @@ k.values <- 1:15
 wss_values <- map_dbl(k.values, wss)
 
 plot(k.values, wss_values,
-       type="b", pch = 19, frame = FALSE, 
+       type="b", pch = 19, frame = FALSE,
        xlab="Number of clusters K",
        ylab="Total within-clusters sum of squares")
 ```
 
-Looks like 4. 
+Looks like 4.
 
 ```{r}
 advk4 <- kmeans(playersadvscaled, centers = 4, nstart = 25)
@@ -193,7 +193,7 @@ advk4
 Looks like this time, cluster 1 is all below average and cluster 5 is all above. Which cluster is Jalen Smith in?
 
 ```{r}
-playeradvcluster <- data.frame(playersadvanced, advk4$cluster) 
+playeradvcluster <- data.frame(playersadvanced, advk4$cluster)
 ```
 
 ```{r}
@@ -202,17 +202,16 @@ jsadv <- playeradvcluster %>% filter(Player == "Jalen Smith")
 jsadv
 ```
 
-
-Cluster 4 on my dataset. So in this season, we can say he's in a big group of players who are all above average on these advanced metrics. 
+Cluster 4 on my dataset. So in this season, we can say he's in a big group of players who are all above average on these advanced metrics.
 
 Now who are his Big Ten peers?
 
 ```{r}
-playeradvcluster %>% 
-  filter(advk4.cluster == 4) %>% 
-  filter(Team %in% big10) %>% 
+playeradvcluster %>%
+  filter(advk4.cluster == 4) %>%
+  filter(Team %in% big10) %>%
   arrange(desc(PProd))
 
 ```
 
-Sorting on Points Produced, Cam Mack is third out of the 15 forwards in the Big Ten who land in Cluster 4. Seems advanced metrics rate Jalen Smith pretty highly.
+Sorting on Points Produced, Jalen Smith is third out of the 15 forwards in the Big Ten who land in Cluster 4. Seems advanced metrics rate Jalen Smith pretty highly.
