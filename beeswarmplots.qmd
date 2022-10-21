@@ -1,6 +1,6 @@
 # Beeswarm plots
 
-A beeswarm plot is sometimes called a column scatterplot. It's an effective way to show how individual things -- teams, players, etc. -- are distributed along a numberline. The column is a grouping -- say positions in basketball -- and the dots are players, and the dots cluster where the numbers are more common. So think of it like a histogram mixed with a scatterplot crossed with a bar chart. 
+A beeswarm plot is sometimes called a column scatterplot. It's an effective way to show how individual things -- teams, players, etc. -- are distributed along a numberline. The column is a grouping -- say positions in basketball -- and the dots are players, and the dots cluster where the numbers are more common. So think of it like a histogram mixed with a scatterplot crossed with a bar chart.
 
 An example will help.
 
@@ -16,13 +16,13 @@ library(ggbeeswarm)
 library(ggrepel)
 ```
 
-Another bit of setup: we need to set the seed for the random number generator. The library "jitters" the dots in the beeswarm randomly. If we don't set the seed, we'll get different results each time. Setting the seed means we get the same look. 
+Another bit of setup: we need to set the seed for the random number generator. The library "jitters" the dots in the beeswarm randomly. If we don't set the seed, we'll get different results each time. Setting the seed means we get the same look.
 
 ```{r}
 set.seed(1234)
 ```
 
-So let's look at last year's women's basketball team as a group of shooters. The team didn't have the kind of success that was envisioned -- we know that -- but what kind of a problem is it going to be that we're returning one regular starter (Diamond Miller) from it? 
+So let's look at last year's women's basketball team as a group of shooters. The team didn't have the kind of success that was envisioned -- we know that -- but what kind of a problem is it going to be that we're returning one regular starter (Diamond Miller) from it?
 
 ```{r}
 #| warning: false
@@ -68,7 +68,7 @@ If we include *all* players, we'll have too many dots. So let's narrow it down. 
 summary(activeplayers$fga)
 ```
 
-The median number of shots is 99, but we only really care about good ones. So let's use 197 attempts -- the third quartile -- as our cutoff. 
+The median number of shots is 99, but we only really care about good ones. So let's use 197 attempts -- the third quartile -- as our cutoff.
 
 ```{r}
 shooters <- activeplayers %>% filter(fga > 197)
@@ -80,11 +80,11 @@ Now we've got enough for a beeswarm plot. It works very much like you would expe
 ggplot() + geom_beeswarm(data=shooters, aes(x=position, y=tspct), color="grey")
 ```
 
-You can see that there's a lot fewer centers who have attempted more than 152 shots than guards, but then there's a lot more guards in college basketball than anything else. In the guards column, note that fat width of the swarm is between .5 and .6. So that means most guards who shoot more than 197 shots end up in that area. They're the average shooter at that level. You can see, some are better, some are worse. 
+You can see that there's a lot fewer centers who have attempted more than 152 shots than guards, but then there's a lot more guards in college basketball than anything else. In the guards column, note that fat width of the swarm is between .5 and .6. So that means most guards who shoot more than 197 shots end up in that area. They're the average shooter at that level. You can see, some are better, some are worse.
 
-So where are the Maryland players in that mix? 
+So where are the Maryland players in that mix?
 
-We'll filter players on Maryland who meet our criteria. 
+We'll filter players on Maryland who meet our criteria.
 
 ```{r}
 umd <- activeplayers %>% 
@@ -93,11 +93,11 @@ umd <- activeplayers %>%
   arrange(desc(tspct))
 ```
 
-Seven Cornhuskers took more than 197 shots. Number returning this season? Two.
+Seven Terps took more than 197 shots. Number returning this season? Two.
 
-But how good are they as true shooters?  
+But how good are they as true shooters?
 
-When you add another beeswarm, we need to pass another element in -- we need to tell it if we're grouping on the x value. Not sure why, but you'll get a warning if you don't. 
+When you add another beeswarm, we need to pass another element in -- we need to tell it if we're grouping on the x value. Not sure why, but you'll get a warning if you don't.
 
 ```{r}
 ggplot() + 
@@ -110,9 +110,10 @@ ggplot() +
     groupOnX=TRUE, 
     aes(x=position, y=tspct), color="red")
 ```
+
 One very good guard, and some good forwards. Who are they?
 
-This is where we can use ggrepel. Let's add a text layer and label the dots. 
+This is where we can use ggrepel. Let's add a text layer and label the dots.
 
 ```{r}
 ggplot() + 
@@ -129,13 +130,13 @@ ggplot() +
     aes(x=position, y=tspct, label=player))
 ```
 
-So Katie Benzan was our best shooter by true shooting percentage. Most of the rest were at or above average shooters for that volume of shooting, but Miller and Sellers are the returnees, and both were near average. 
+So Katie Benzan was our best shooter by true shooting percentage. Most of the rest were at or above average shooters for that volume of shooting, but Miller and Sellers are the returnees, and both were near average.
 
 ## A few other options
 
-The ggbeeswarm library has a couple of variations on the geom_beeswarm that may work better for your application. They are `geom_quasirandom` and `geom_jitter`. 
+The ggbeeswarm library has a couple of variations on the geom_beeswarm that may work better for your application. They are `geom_quasirandom` and `geom_jitter`.
 
-There's not a lot to change from our example to see what they do. 
+There's not a lot to change from our example to see what they do.
 
 ```{r}
 ggplot() + 
@@ -152,9 +153,9 @@ ggplot() +
     aes(x=position, y=tspct, label=player))
 ```
 
-Quasirandom spreads out the dots you see in beeswarm using -- you guessed it -- quasirandom spacing. 
+Quasirandom spreads out the dots you see in beeswarm using -- you guessed it -- quasirandom spacing.
 
-For `geom_jitter`, we need to remove the groupOnX value. Why? No clue. 
+For `geom_jitter`, we need to remove the groupOnX value. Why? No clue.
 
 ```{r}
 ggplot() + 
@@ -169,6 +170,6 @@ ggplot() +
     aes(x=position, y=tspct, label=player))
 ```
 
-`geom_jitter` spreads out the dots evenly across the width of the column, randomly deciding where in the line of the true shooting percentage they appear. 
+`geom_jitter` spreads out the dots evenly across the width of the column, randomly deciding where in the line of the true shooting percentage they appear.
 
-Which one is right for you? You're going to have to experiment and decide. This is the art in the art and a science. 
+Which one is right for you? You're going to have to experiment and decide. This is the art in the art and a science.
