@@ -1,16 +1,14 @@
 # Tables
 
-But not a table. A table with features. 
+But not a table. A table with features.
 
 Sometimes, the best way to show your data is with a table -- simple rows and columns. It allows a reader to compare whatever they want to compare a little easier than a graph where you've chosen what to highlight. The folks that made R Studio and the tidyverse have a neat package called `gt`.
 
-For this assignment, we'll need `gt` so go over to the console and run: 
+For this assignment, we'll need `gt` so go over to the console and run:
 
-```
-install.packages("gt")
-```
+    install.packages("gt")
 
-So what does all of these libraries do? Let's gather a few and use data of every men's basketball game between 2015-2020.
+So what does all of these libraries do? Let's gather a few and use data of every men's basketball game between 2015-2022.
 
 ```{r}
 #| warning: false
@@ -21,7 +19,7 @@ library(downloadthis)
 library(glue)
 
 dllink <- download_link(
-  link = "http://dwillis.github.io/sportsdatafiles/logs1520.csv",
+  link = "http://dwillis.github.io/sportsdatafiles/cbblogs1522.csv",
   button_label = "Download csv file",
   button_type = "danger",
   has_icon = TRUE,
@@ -44,35 +42,36 @@ library(gt)
 And the data.
 
 ```{r}
-logs <- read_csv("data/logs1520.csv")
+logs <- read_csv("data/cbblogs1522.csv")
 ```
 
-Let's ask this question: which college basketball team saw the greatest increase in three point attempts last season as a percentage of shots? The simplest way to calculate that is by percent change. 
+Let's ask this question: which college basketball team saw the greatest decrease in three point attempts per game between last season as a percentage of shots? The simplest way to calculate that is by percent change.
 
 We've got a little work to do, putting together ideas we've used before. What we need to end up with is some data that looks like this:
 
-`Team | 2018-2019 season threes | 2019-2020 season threes | pct change`
+`Team | 2020-2021 season threes | 2021-2022 season threes | pct change`
 
-To get that, we'll need to do some filtering to get the right seasons, some grouping and summarizing to get the right number, some pivoting to get it organized correctly so we can mutate the percent change. 
+To get that, we'll need to do some filtering to get the right seasons, some grouping and summarizing to get the right number, some pivoting to get it organized correctly so we can mutate the percent change.
 
 ```{r}
 threechange <- logs %>%
-  filter(season == "2018-2019" | season == "2019-2020") %>%
-  group_by(Team, Conference, season) %>%
+  filter(Season == "2020-2021" | Season == "2021-2022") %>%
+  group_by(Team, Conference, Season) %>%
   summarise(Total3PA = sum(Team3PA)) %>%
-  pivot_wider(names_from=season, values_from = Total3PA) %>%
-  mutate(PercentChange = (`2019-2020`-`2018-2019`)/`2018-2019`) %>%
-  arrange(desc(PercentChange)) %>% 
+  pivot_wider(names_from=Season, values_from = Total3PA) %>%
+  mutate(PercentChange = (`2021-2022`-`2020-2021`)/`2020-2021`) %>%
+  arrange(PercentChange) %>% 
   ungroup() %>%
-  top_n(10) # just want a top 10 list
+  slice_head(n=10) # just want a top 10 list, but can't use top_n!
 ```
-We've output tables to the screen a thousand times in this class with `head`, but `gt` makes them look decent with very little code. 
+
+We've output tables to the screen a thousand times in this class with `head`, but `gt` makes them look decent with very little code.
 
 ```{r}
 threechange %>% gt()
 ```
 
-So there you have it. Mississippi Valley State changed their team so much they took 51 percent more threes in 2019-20 from the season before. Where did Maryland come out? We ranked 49th in college basketball in terms of change from the season before.
+So there you have it. Toledo changed their team so much they took 25 percent fewer threes in 2021-22 from the season before. Where did Maryland come out? We ranked 21st in college basketball in terms of fewer threes from the season before.
 
 `gt` has a mountain of customization options. The good news is that it works in a very familiar pattern. We'll start with fixing headers. What we have isn't bad, but PercentChange isn't good either. Let's fix that.
 
@@ -83,6 +82,7 @@ threechange %>%
     PercentChange = "Percent Change"
   )
 ```
+
 Better. Note the pattern: Actual header name = "What we want to see". So if we wanted to change Team to School, we'd do this: `Team = "School"` inside the `cols_label` bits.
 
 Now we can start working with styling. The truth is most of your code in tables is going to be dedicated to styling specific things. The first thing we need: A headline and some chatter. They're required parts of a graphic, so they're a good place to start. We do that with `tab_header`
@@ -94,7 +94,7 @@ threechange %>%
     PercentChange = "Percent Change"
   ) %>%
   tab_header(
-    title = "Did Maryland Shoot More Threes in 2019-20?",
+    title = "Did Maryland Shoot Fewer Threes in 2021-22?",
     subtitle = "Yes, but it wasn't a big change. These 10 teams completely changed their offenses."
   )
 ```
@@ -108,13 +108,14 @@ threechange %>%
     PercentChange = "Percent Change"
   ) %>%
   tab_header(
-    title = "Did Maryland Shoot More Threes in 2019-20?",
+    title = "Did Maryland Shoot Fewer Threes in 2021-22?",
     subtitle = "Yes, but it wasn't a big change. These 10 teams completely changed their offenses."
   ) %>% tab_style(
     style = cell_text(color = "black", weight = "bold", align = "left"),
     locations = cells_title("title")
   )
 ```
+
 It's hard to see here, but the chatter below is also centered (it doesn't look like it because it fills the space). We can left align that too, but leave it normal weight (i.e. not bold).
 
 ```{r}
@@ -124,7 +125,7 @@ threechange %>%
     PercentChange = "Percent Change"
   ) %>%
   tab_header(
-    title = "Did Maryland Shoot More Threes in 2019-20?",
+    title = "Did Maryland Shoot Fewer Threes in 2021-22?",
     subtitle = "Yes, but it wasn't a big change. These 10 teams completely changed their offenses."
   ) %>% tab_style(
     style = cell_text(color = "black", weight = "bold", align = "left"),
@@ -134,7 +135,9 @@ threechange %>%
     locations = cells_title("subtitle")
   )
 ```
+
 The next item on the required elements list: Source and credit lines. In `gt`, those are called `tab_source_notes` and we can add them like this:
+
 ```{r}
 threechange %>% 
   gt() %>% 
@@ -142,7 +145,7 @@ threechange %>%
     PercentChange = "Percent Change"
   ) %>%
   tab_header(
-    title = "Did Maryland Shoot More Threes in 2019-20?",
+    title = "Did Maryland Shoot Fewer Threes in 2021-22?",
     subtitle = "Yes, but it wasn't a big change. These 10 teams completely changed their offenses."
   ) %>% tab_style(
     style = cell_text(color = "black", weight = "bold", align = "left"),
@@ -155,7 +158,9 @@ threechange %>%
     source_note = md("**By:** Derek Willis  |  **Source:** [Sports Reference](https://www.sports-reference.com/cbb/seasons/)")
   )
 ```
+
 We can do a lot with `tab_style`. For instance, we can make the headers bold and reduce the size a bit to reduce font congestion in the area.
+
 ```{r}
 threechange %>% 
   gt() %>% 
@@ -163,7 +168,7 @@ threechange %>%
     PercentChange = "Percent Change"
   ) %>%
   tab_header(
-    title = "Did Maryland Shoot More Threes in 2019-20?",
+    title = "Did Maryland Shoot Fewer Threes in 2021-22?",
     subtitle = "Yes, but it wasn't a big change. These 10 teams completely changed their offenses."
   ) %>% 
   tab_style(
@@ -185,7 +190,9 @@ threechange %>%
      )
    ) 
 ```
-Next up: There's a lot of lines in this that don't need to be there. `gt` has some tools to get rid of them easily and add in some other readability improvements. 
+
+Next up: There's a lot of lines in this that don't need to be there. `gt` has some tools to get rid of them easily and add in some other readability improvements.
+
 ```{r}
 threechange %>% 
   gt() %>% 
@@ -193,7 +200,7 @@ threechange %>%
     PercentChange = "Percent Change"
   ) %>%
   tab_header(
-    title = "Did Maryland Shoot More Threes in 2019-20?",
+    title = "Did Maryland Shoot Fewer Threes in 2021-22?",
     subtitle = "Yes, but it wasn't a big change. These 10 teams completely changed their offenses."
   ) %>%  
   tab_source_note(
@@ -217,7 +224,9 @@ threechange %>%
   opt_row_striping() %>% 
   opt_table_lines("none")
 ```
+
 We're in pretty good shape here, but look closer. What else makes this table sub-par? How about the formatting of the percent change? We can fix that with a formatter.
+
 ```{r}
 threechange %>% 
   gt() %>% 
@@ -225,7 +234,7 @@ threechange %>%
     PercentChange = "Percent Change"
   ) %>%
   tab_header(
-    title = "Did Maryland Shoot More Threes in 2019-20?",
+    title = "Did Maryland Shoot Fewer Threes in 2021-22?",
     subtitle = "Yes, but it wasn't a big change. These 10 teams completely changed their offenses."
   ) %>%  
   tab_source_note(
@@ -253,7 +262,8 @@ threechange %>%
     decimals = 1
   )
 ```
-Throughout the semester, we've been using color and other signals to highlight things. Let's pretend we're doing a project on Minnesota. Note they're the only Big Ten team on this list. With a little `tab_style` magic, we can change individual rows and add color. The last `tab_style` block here will first pass off the styles we want to use -- we're going to make the rows maroon and the text gold -- and then for locations we specify where with a simple filter. What that means is that any rows we can address with logic -- all rows with a value greater than X, for example -- we can change the styling. 
+
+Throughout the semester, we've been using color and other signals to highlight things. Let's pretend we're doing a project on Minnesota. Note they're the first Big Ten team on this list. With a little `tab_style` magic, we can change individual rows and add color. The last `tab_style` block here will first pass off the styles we want to use -- we're going to make the rows maroon and the text gold -- and then for locations we specify where with a simple filter. What that means is that any rows we can address with logic -- all rows with a value greater than X, for example -- we can change the styling.
 
 ```{r}
 threechange %>% 
@@ -262,7 +272,7 @@ threechange %>%
     PercentChange = "Percent Change"
   ) %>%
   tab_header(
-    title = "Did Maryland Shoot More Threes in 2019-20?",
+    title = "Did Maryland Shoot Fewer Threes in 2021-22?",
     subtitle = "Yes, but it wasn't a big change. These 10 teams completely changed their offenses."
   ) %>%  
   tab_source_note(
@@ -295,11 +305,12 @@ threechange %>%
       cell_text(color = "gold")
       ),
     locations = cells_body(
-      rows = Team == "Minnesota Golden Gophers")
+      rows = Team == "Minnesota")
   )
   
 ```
+
 Two things here:
 
-1. Dear God that color scheme is awful, which is fitting for a school that worships a lawn-wrecking varmint.
-2. We've arrived where we want to be: We've created a clear table that allows a reader to compare schools at will while also using color to draw attention to the thing we want to draw attention to. We've kept it simple so the color has impact.
+1.  Dear God that color scheme is awful, which is fitting for a school that worships a lawn-wrecking varmint.
+2.  We've arrived where we want to be: We've created a clear table that allows a reader to compare schools at will while also using color to draw attention to the thing we want to draw attention to. We've kept it simple so the color has impact.
