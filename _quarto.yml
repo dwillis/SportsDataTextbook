@@ -42,6 +42,7 @@ book:
     - finishingtouches.qmd
     - rvest.qmd
     - advancedrvest.qmd
+    - sportsreferencecsvs.qmd
     - blogging.qmd
     - checklist.qmd
     - usingpackages.qmd
