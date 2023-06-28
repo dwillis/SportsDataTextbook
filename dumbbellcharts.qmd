@@ -109,7 +109,7 @@ ggplot() +
   geom_dumbbell(
     data=errors, 
     aes(y=reorder(team, opp_errors), x=opp_errors, xend=total_errors),
-    size = 1,
+    linewidth = 1,
     color = "grey",
     colour_x = "green",
     colour_xend = "red") + 
@@ -125,8 +125,8 @@ Sticking with takeaways, lollipops are similar to bar charts in that they show m
 ```{r}
 ggplot() + 
   geom_lollipop(
-    data=turnovers, 
-    aes(y=Team, x=Takeaways), 
+    data=errors, 
+    aes(y=team, x=opp_errors), 
     horizontal = TRUE
     )
 ```
@@ -136,34 +136,34 @@ We can do better than this with a simple theme_minimal and some better labels.
 ```{r}
 ggplot() + 
   geom_lollipop(
-    data=turnovers, 
-    aes(y=reorder(Team, Takeaways), x=Takeaways), 
+    data=errors, 
+    aes(y=reorder(team, opp_errors), x=opp_errors), 
     horizontal = TRUE
     ) + theme_minimal() + 
-  labs(title = "Nebraska's defense improved, but needs more takeaways", y="Team")
+  labs(title = "Maryland, Rutgers force more errors", y="team")
 ```
 
 How about some layering?
 
 ```{r}
-nu <- turnovers %>% filter(Team == "Nebraska")
+md <- errors %>% filter(team == "Maryland Terrapins, Terps")
 ```
 
 ```{r}
 ggplot() + 
   geom_lollipop(
-    data=turnovers, 
-    aes(y=reorder(Team, Takeaways), x=Takeaways), 
+    data=errors, 
+    aes(y=reorder(team, opp_errors), x=opp_errors), 
     horizontal = TRUE
     ) + 
   geom_lollipop(
-    data=nu,
-    aes(y=Team, x=Takeaways),
+    data=md,
+    aes(y=team, x=opp_errors),
     horizontal = TRUE,
     color = "red"
   ) + 
   theme_minimal() + 
-  labs(title = "Nebraska's defense wasn't as bad as you think", y="Team")
+  labs(title = "Maryland forced the most errors among Big Ten teams", y="team")
 ```
 
 The headline says it all.
