@@ -43,7 +43,7 @@ library(tidyverse)
 
 The first thing we need to do is get some data to work with. We do that by reading it in. In our case, we're going to read data from a csv file -- a comma-separated values file.
 
-The CSV file we're going to read from is a [Basketball Reference](https://www.basketball-reference.com/leagues/NBA_2022_advanced.html) page of advanced metrics for NBA players this past season. The Sports Reference sites are a godsend of data, a trove of stuff, and we're going to use it a lot in this class.
+The CSV file we're going to read from is a [Basketball Reference](https://www.basketball-reference.com/leagues/NBA_2023_advanced.html) page of advanced metrics for NBA players this past season. The Sports Reference sites are a godsend of data, a trove of stuff, and we're going to use it a lot in this class.
 
 ```{r}
 #| warning: false
@@ -55,7 +55,7 @@ library(downloadthis)
 library(glue)
 
 dllink <- download_link(
-  link = "https://dwillis.github.io/sports-data-files/nbaadvancedplayers2122.csv",
+  link = "https://dwillis.github.io/sports-data-files/nbaadvancedplayers2223.csv",
   button_label = "Download csv file",
   button_type = "danger",
   has_icon = TRUE,
@@ -71,7 +71,7 @@ So step 2, after setting up our libraries, is most often going to be importing d
 
 The code looks *something* like this, but hold off copying it just yet:
 
-`nbaplayers <- read_csv("~/SportsData/nbaadvancedplayers2122.csv")`
+`nbaplayers <- read_csv("~/SportsData/nbaadvancedplayers2223.csv")`
 
 Let's unpack that.
 
@@ -169,7 +169,7 @@ nbaplayers %>%
   )
 ```
 
-So there's 679 players in the data. Let's look at shooting guards. The average center plays 872 minutes and the median is 622 minutes.
+So there's 679 players in the data. Let's look at centers. The average center plays 872 minutes and the median is 622 minutes.
 
 Why?
 
