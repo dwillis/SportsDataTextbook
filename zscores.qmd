@@ -26,7 +26,7 @@ library(downloadthis)
 library(glue)
 
 dllink <- download_link(
-  link = "https://dwillis.github.io/sports-data-files/wbb_game_logs_2022.csv",
+  link = "https://dwillis.github.io/sports-data-files/wbblogs23.csv",
   button_label = "Download csv file",
   button_type = "danger",
   has_icon = TRUE,
@@ -49,26 +49,26 @@ library(tidyverse)
 And load the data.
 
 ```{r}
-gamelogs <- read_csv("data/wbb_game_logs_2022.csv")
+gamelogs <- read_csv("data/wbblogs23.csv")
 ```
 
 The first thing we need to do is select some fields we think represent team quality and a few things to help us keep things straight. So I'm going to pick shooting percentage, rebounding and the opponent version of the same two:
 
 ```{r}
 teamquality <- gamelogs %>% 
-  select(conference, team, fg_pct, trb, opp_fg_pct, opp_trb)
+  select(Conference, Team, TeamFGPCT, TeamTotalRebounds, OpponentFGPCT, OpponentTotalRebounds)
 ```
 
-And since we have individual game data, we need to collapse this into one record for each team. We do that with ... group by.
+And since we have individual game data, we need to collapse this into one record for each team. We do that with ... group by and summarize.
 
 ```{r}
 teamtotals <- teamquality %>% 
-  group_by(conference, team) %>% 
+  group_by(Conference, Team) %>% 
   summarise(
-    FGAvg = mean(fg_pct), 
-    ReboundAvg = mean(trb), 
-    OppFGAvg = mean(opp_fg_pct),
-    OffRebAvg = mean(opp_trb)
+    FGAvg = mean(TeamFGPCT), 
+    ReboundAvg = mean(TeamTotalRebounds), 
+    OppFGAvg = mean(OpponentFGPCT),
+    OffRebAvg = mean(OpponentTotalRebounds)
     ) 
 ```
 
@@ -87,7 +87,7 @@ teamzscore <- teamtotals %>%
   )  
 ```
 
-So now we have a dataframe called `teamzscore` that has 1,317 basketball teams with Z scores. What does it look like?
+So now we have a dataframe called `teamzscore` that has 361 basketball teams with Z scores. What does it look like?
 
 ```{r}
 head(teamzscore)
@@ -101,30 +101,30 @@ So who are the best teams in the country?
 teamzscore %>% arrange(desc(TotalZscore))
 ```
 
-Don't sleep on Jackson State! If we look for Power Five schools, South Carolina and Stanford are at the top, which checks out.
+Don't sleep on Jackson State! If we look for Power Five schools, UConn and South Carolina are at the top, which checks out.
 
 But closer to home, how is Maryland doing.
 
 ```{r}
 teamzscore %>% 
-  filter(conference == "Big Ten") %>% 
+  filter(Conference == "Big Ten WBB") %>% 
   arrange(desc(TotalZscore)) %>%
-  select(team, TotalZscore)
+  select(Team, TotalZscore)
 ```
 
-So, as we can see, with our composite Z Score, Maryland is better than average but not great. But better than Ohio State. Notice how, by this measure, Michigan and Iowa are far ahead of most of the conference, with Rutgers a surprising fourth (mostly thanks to its defense and rebounding).
+So, as we can see, with our composite Z Score, Maryland is below average but not great. But better than Ohio State. Notice how, by this measure, Indiana and Iowa are far ahead of most of the conference, with Illinois a surprising third.
 
 We can limit our results to just Power Five conferences plus the Big East:
 
 ```{r}
-powerfive_plus_one <- c("SEC", "Big Ten", "Pac-12", "Big 12", "ACC", "Big East")
+powerfive_plus_one <- c("SEC WBB", "Big Ten WBB", "Pac-12 WBB", "Big 12 WBB", "ACC WBB", "Big East WBB")
 teamzscore %>% 
-  filter(conference %in% powerfive_plus_one) %>% 
+  filter(Conference %in% powerfive_plus_one) %>% 
   arrange(desc(TotalZscore)) %>%
-  select(team, TotalZscore)
+  select(Team, TotalZscore)
 ```
 
-This makes a certain amount of sense: three of the Final Four teams - South Carolina, Stanford and UConn are 1,2,3 in this list. Louisville, the fourth team, ranks 13th. Marquette is an interesting #9 here. It doesn't necessarily mean they were the ninth-best team, but given their competition they shot the ball and rebounded the ball very well.
+This makes a certain amount of sense: three of the Final Four teams - South Carolina, LSU and Iowa are in the top 10. Virginia Tech, the fourth team, ranks 13th. Kansas is an interesting #9 here. It doesn't necessarily mean they were the ninth-best team, but given their competition they shot the ball and rebounded the ball very well.
 
 ## Writing about z-scores
 

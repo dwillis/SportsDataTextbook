@@ -1,6 +1,6 @@
 # Residuals
 
-When looking at a linear model of your data, there's a measure you need to be aware of called residuals. The residual is the distance between what the model predicted and what the real outcome is. Take our model at the end of the correlation and regression chapter. Our model predicted Maryland's women soccer should have outscored Temple by 1.0375 goals last month. The match was a 1-1 draw. So our residual is -1.0375.
+When looking at a linear model of your data, there's a measure you need to be aware of called residuals. The residual is the distance between what the model predicted and what the real outcome is. Take our model at the end of the correlation and regression chapter. Our model predicted Maryland's women soccer should have outscored Temple by 1.0375 goals a year ago. The match was a 1-1 draw. So our residual is -1.0375.
 
 Residuals can tell you several things, but most important is if a linear model the right model for your data. If the residuals appear to be random, then a linear model is appropriate. If they have a pattern, it means something else is going on in your data and a linear model isn't appropriate.
 
@@ -17,7 +17,7 @@ library(downloadthis)
 library(glue)
 
 dllink <- download_link(
-  link = "https://dwillis.github.io/sports-data-files/cbblogs1521.csv",
+  link = "https://dwillis.github.io/sports-data-files/cbblogs1523.csv",
   button_label = "Download csv file",
   button_type = "danger",
   has_icon = TRUE,
@@ -38,7 +38,7 @@ library(tidyverse)
 ```
 
 ```{r}
-logs <- read_csv("data/cbblogs1521.csv")
+logs <- read_csv("data/cbblogs1523.csv")
 ```
 
 First, let's make the columns we'll need.
@@ -56,7 +56,7 @@ summary(fit)
 
 We've seen this output before, but let's review because if you are using scatterplots to make a point, you should do this. First, note the Min and Max residual at the top. A team has underperformed the model by 51 points (!), and a team has overperformed it by 68 points (!!). The median residual, where half are above and half are below, is just slightly below the fit line. Close here is good.
 
-Next: Look at the Adjusted R-squared value. What that says is that 66 percent of a team's scoring differential can be predicted by their FG percentage margin.
+Next: Look at the Adjusted R-squared value. What that says is that 67 percent of a team's scoring differential can be predicted by their FG percentage margin.
 
 Last: Look at the p-value. We are looking for a p-value smaller than .05. At .05, we can say that our correlation didn't happen at random. And, in this case, it REALLY didn't happen at random. But if you know a little bit about basketball, it doesn't surprise you that the more you shoot better than your opponent, the more you win by. It's an intuitive result.
 
@@ -126,11 +126,11 @@ summary(pfit)
 
 So from top to bottom:
 
--   Our min and max go from -94 to positive 102
--   Our adjusted R-squared is ... 0.0001726 Not much at all.
--   Our p-value is ... 0.0004783, which is less than than .05, so that's something.
+-   Our min and max go from -94 to positive 107
+-   Our adjusted R-squared is ... 0.000986. Not much at all.
+-   Our p-value is ... is less than than .05, so that's something.
 
-So what we can say about this model is that it's statistically significant, but doesn't really explain much. It's not meaningless, but on its own the total number of fouls doesn't go very far in explaining the point differential. Normally, we'd stop right here -- why bother going forward with a predictive model that isn't terribly predictive? But let's do it anyway. Oh, and see that "(3 observations deleted due to missingness)" bit? That means we need to lose some incomplete data again.
+So what we can say about this model is that it's statistically significant, but doesn't really explain much. It's not meaningless, but on its own the total number of fouls doesn't go very far in explaining the point differential. Normally, we'd stop right here -- why bother going forward with a predictive model that isn't terribly predictive? But let's do it anyway. Oh, and see that "(65 observations deleted due to missingness)" bit? That means we need to lose some incomplete data again.
 
 ```{r}
 fouls <- fouls %>% filter(!is.na(TotalFouls))
@@ -142,7 +142,7 @@ fouls$residuals <- residuals(pfit)
 fouls %>% arrange(desc(residuals)) %>% select(Team, Opponent, W_L, TeamScore, OpponentScore, TotalFouls, residuals)
 ```
 
-First, note all of the biggest misses here are all blowout games. The worst games of the season, the worst being McNeese State vs. Dallas Christian. The model missed that differential by ... 102 points. The margin of victory? 103 points. In other words, this model is not great! But let's look at it anyway.
+First, note all of the biggest misses here are all blowout games. The worst games of the season, the worst being Bryant vs. Thomas. The model missed that differential by ... 107 points. The margin of victory? 108 points. In other words, this model is not great! But let's look at it anyway.
 
 ```{r}
 #| echo: false
