@@ -49,29 +49,29 @@ If you want to see the first six rows -- handy to take a peek at your data -- yo
 head(attendance)
 ```
 
-The code to calculate percent change is pretty simple. Remember, with `summarize`, we used `n()` to count things. With `mutate`, we use very similar syntax to calculate a new value using other values in our dataset. So in this case, we're trying to do (new-old)/old, but we're doing it with fields. If we look at what we got when we did `head`, you'll see there's \`2019\` as the new data, and we'll use \`2018\` as the old data. So we're looking at one year. Then, to help us, we'll use arrange again to sort it, so we get the fastest growing school over one year.
+The code to calculate percent change is pretty simple. Remember, with `summarize`, we used `n()` to count things. With `mutate`, we use very similar syntax to calculate a new value using other values in our dataset. So in this case, we're trying to do (new-old)/old, but we're doing it with fields. If we look at what we got when we did `head`, you'll see there's \`2022\` as the new data, and we'll use \`2021\` as the old data. So we're looking at one year. Then, to help us, we'll use arrange again to sort it, so we get the fastest growing school over one year.
 
 ```{r}
 attendance %>% mutate(
-  change = (`2019` - `2018`)/`2018`
+  change = (`2022` - `2021`)/`2021`
 ) 
 ```
 What do we see right away? Do those numbers look like we expect them to? No. They're a decimal expressed as a percentage. So let's fix that by multiplying by 100. 
 
 ```{r}
 attendance %>% mutate(
-  change = ((`2019` - `2018`)/`2018`)*100
+  change = ((`2022` - `2021`)/`2021`)*100
 ) 
 ```
 Now, does this ordering do anything for us? No. Let's fix that with arrange. 
 
 ```{r}
 attendance %>% mutate(
-  change = ((`2019` - `2018`)/`2018`)*100
+  change = ((`2022` - `2021`)/`2021`)*100
 ) %>% arrange(desc(change))
 ```
 
-So who had the most growth in 2019 compared to the year before? Kansas.
+So who had the most growth in 2022 compared to the year before? Hawaii. But their figure, as well as that of FIU and San Diego St. and Tulane, are likely Covid-related. Heck, many of them are likely Covid-related. But how about Kansas?
 
 ## A more complex example
 
@@ -90,7 +90,7 @@ library(downloadthis)
 library(glue)
 
 dllink <- download_link(
-  link = "https://mattwaite.github.io/sportsdatafiles/players22.csv",
+  link = "https://mattwaite.github.io/sportsdatafiles/players23.csv",
   button_label = "Download csv file",
   button_type = "danger",
   has_icon = TRUE,
@@ -105,7 +105,7 @@ glue("<pre><p><strong>For this walkthrough:</strong></p><p>{dllink}</p></pre>")
 Import it like this:
 
 ```{r}
-players <- read_csv("data/players22.csv")
+players <- read_csv("data/players23.csv")
 ```
 
 The basic true shooting percentage formula is `(Points / (2*(FieldGoalAttempts + (.44 * FreeThrowAttempts)))) * 100`. Let's talk that through. Points divided by a lot. It's really field goal attempts plus 44 percent of the free throw attempts. Why? Because that's about what a free throw is worth, compared to other ways to score. After adding those things together, you double it. And after you divide points by that number, you multiply the whole lot by 100.
@@ -127,7 +127,7 @@ players %>%
   arrange(desc(trueshooting))
 ```
 
-You'll be forgiven if you did not hear about USC's shooting sensation Amar Ross. He played in one game, took one shot and actually hit it. It happened to be a three pointer, which is one more three pointer than I've hit in college basketball. So props to him. Does that mean he had the best true shooting season in college basketball in the 2021-22 season?
+You'll be forgiven if you did not hear about Oklahoma State's shooting sensation Weston Church. He played in seven games, took one shot and actually hit it. It happened to be a three pointer, which is one more three pointer than I've hit in college basketball. So props to him. Does that mean he had the best true shooting season in college basketball in the 2022-23 season?
 
 Not hardly.
 

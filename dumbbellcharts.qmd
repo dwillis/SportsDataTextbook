@@ -19,7 +19,7 @@ library(ggalt)
 
 ## Dumbbell plots
 
-For this, let's use college football game logs from last season.
+For this, let's use college volleyball game logs from this season.
 
 ```{r}
 #| warning: false
@@ -30,7 +30,7 @@ library(downloadthis)
 library(glue)
 
 dllink <- download_link(
-  link = "https://dwillis.github.io/sports-data-files/footballlogs21.csv",
+  link = "https://dwillis.github.io/sports-data-files/ncaa_womens_volleyball_matchstats_2022.csv",
   button_label = "Download csv file",
   button_type = "danger",
   has_icon = TRUE,
@@ -44,18 +44,20 @@ glue("<pre><p><strong>For this walkthrough:</strong></p><p>{dllink}</p></pre>")
 And load it.
 
 ```{r}
-logs <- read_csv("data/footballlogs21.csv")
+logs <- read_csv("data/ncaa_womens_volleyball_matchstats_2022.csv")
 ```
 
-For the first example, let's look at the difference between a team's giveaways -- turnovers lost -- versus takeaways, turnovers gained. To get this, we're going to add up all offensive turnovers and defensive turnovers for a team in a season and take a look at where they come out. To make this readable, I'm going to focus on the Big Ten.
+For the first example, let's look at the difference between a team's errors versus their opponents' errors. To get this, we're going to add up all errors and opponent errors for a team in a season and take a look at where they come out. To make this readable, I'm going to focus on the Big Ten.
 
 ```{r}
-turnovers <- logs %>%
-  group_by(Team, Conference) %>% 
+big10 <- c("Nebraska Cornhuskers", "Iowa Hawkeyes", "Minnesota Golden Gophers", "Illinois Fighting Illini", "Northwestern Wildcats", "Wisconsin Badgers", "Indiana Hoosiers", "Purdue Boilermakers", "Ohio State Buckeyes", "Michigan Wolverines", "Michigan State Spartans", "Penn State Nittany Lions", "Rutgers Scarlet Knights", "Maryland Terrapins, Terps")
+
+errors <- logs %>%
+  filter(team %in% big10) %>% 
+  group_by(team) %>% 
   summarise(
-    Giveaways = sum(TotalTurnovers), 
-    Takeaways = sum(DefTotalTurnovers)) %>%
-  filter(Conference == "Big Ten Conference")
+    total_errors = sum(errors), 
+    opp_errors = sum(defensive_errors))
 ```
 
 Now, the way that the `geom_dumbbell` works is pretty simple when viewed through what we've done before. There's just some tweaks.
@@ -67,20 +69,20 @@ Second: Our x is actually two things: x and xend. What you put in there will dec
 ```{r}
 ggplot() + 
   geom_dumbbell(
-    data=turnovers, 
-    aes(y=Team, x=Takeaways, xend=Giveaways)
+    data=errors, 
+    aes(y=team, x=total_errors, xend=opp_errors)
   )
 ```
 
-Well, that's a chart alright, but what dot is the giveaways and what are the takeaways? To fix this, we'll add colors.
+Well, that's a chart alright, but what dot is the team errors and what are the opponent errors? To fix this, we'll add colors.
 
-So our choice of colors here is important. We want giveaways to be seen as bad and takeaways to be seen as good. So lets try red for giveaways and green for takeaways. To make this work, we'll need to do three things: first, use the English spelling of color, so `colour`. The, uh, `colour` is the bar between the dots, the `x_colour` is the color of the x value dot and the `xend_colour` is the color of the xend dot. So in our setup, takeaways are x, they're good, so they're green.
+So our choice of colors here is important. We want team errors to be seen as bad and opponent errors to be seen as good. So lets try red for team errors and green for opponent errors To make this work, we'll need to do three things: first, use the English spelling of color, so `colour`. The, uh, `colour` is the bar between the dots, the `x_colour` is the color of the x value dot and the `xend_colour` is the color of the xend dot. So in our setup, defensive errors are x, they're good, so they're green.
 
 ```{r}
 ggplot() + 
   geom_dumbbell(
-    data=turnovers, 
-    aes(y=Team, x=Takeaways, xend=Giveaways),
+    data=errors, 
+    aes(y=team, x=opp_errors, xend=total_errors),
     colour = "grey",
     colour_x = "green",
     colour_xend = "red")
@@ -91,8 +93,8 @@ Better. Let's make two more tweaks. First, let's make the whole thing bigger wit
 ```{r}
 ggplot() + 
   geom_dumbbell(
-    data=turnovers, 
-    aes(y=Team, x=Takeaways, xend=Giveaways),
+    data=errors, 
+    aes(y=team, x=opp_errors, xend=total_errors),
     size = 1,
     color = "grey",
     colour_x = "green",
@@ -100,21 +102,21 @@ ggplot() +
   theme_minimal()
 ```
 
-And now we have a chart that tells a story -- got green on the right? That's good. A long distance between green and red? Better. But what if we sort it by good turnovers?
+And now we have a chart that tells a story -- got green on the right? That's good. A long distance between green and red? Better. But what if we sort it by good errors?
 
 ```{r}
 ggplot() + 
   geom_dumbbell(
-    data=turnovers, 
-    aes(y=reorder(Team, Takeaways), x=Takeaways, xend=Giveaways),
-    size = 1,
+    data=errors, 
+    aes(y=reorder(team, opp_errors), x=opp_errors, xend=total_errors),
+    linewidth = 1,
     color = "grey",
     colour_x = "green",
     colour_xend = "red") + 
   theme_minimal()
 ```
 
-Believe it or not, Iowa had the most takeaways in the Big Ten this season.
+Maryland's opponents have committed a lot of errors - that's good news for the Terps - but there's a clear gap between Maryland and the top teams in the conference when it comes to committing errors.
 
 ## Lollipop charts
 
@@ -123,8 +125,8 @@ Sticking with takeaways, lollipops are similar to bar charts in that they show m
 ```{r}
 ggplot() + 
   geom_lollipop(
-    data=turnovers, 
-    aes(y=Team, x=Takeaways), 
+    data=errors, 
+    aes(y=team, x=opp_errors), 
     horizontal = TRUE
     )
 ```
@@ -134,34 +136,34 @@ We can do better than this with a simple theme_minimal and some better labels.
 ```{r}
 ggplot() + 
   geom_lollipop(
-    data=turnovers, 
-    aes(y=reorder(Team, Takeaways), x=Takeaways), 
+    data=errors, 
+    aes(y=reorder(team, opp_errors), x=opp_errors), 
     horizontal = TRUE
     ) + theme_minimal() + 
-  labs(title = "Nebraska's defense improved, but needs more takeaways", y="Team")
+  labs(title = "Maryland, Rutgers force more errors", y="team")
 ```
 
 How about some layering?
 
 ```{r}
-nu <- turnovers %>% filter(Team == "Nebraska")
+md <- errors %>% filter(team == "Maryland Terrapins, Terps")
 ```
 
 ```{r}
 ggplot() + 
   geom_lollipop(
-    data=turnovers, 
-    aes(y=reorder(Team, Takeaways), x=Takeaways), 
+    data=errors, 
+    aes(y=reorder(team, opp_errors), x=opp_errors), 
     horizontal = TRUE
     ) + 
   geom_lollipop(
-    data=nu,
-    aes(y=Team, x=Takeaways),
+    data=md,
+    aes(y=team, x=opp_errors),
     horizontal = TRUE,
     color = "red"
   ) + 
   theme_minimal() + 
-  labs(title = "Nebraska's defense wasn't as bad as you think", y="Team")
+  labs(title = "Maryland forced the most errors among Big Ten teams", y="team")
 ```
 
 The headline says it all.
