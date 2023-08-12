@@ -1,6 +1,6 @@
 # Simulations
 
-In the 2017-2018 season, Nebraska's James Palmer Jr. (a DMV product, btw) took 139 three point attempts and made 43 of them for a .309 shooting percentage. A few weeks into the next season, he was 7 for 39 -- a paltry .179.
+In the 2021-22 season, Maryland guard Shyanne Sellers took 101 three point attempts and made 32 of them for a .317 shooting percentage. A few weeks into the next season, she was 5 for 20 -- a paltry .20.
 
 Is something wrong or is this just bad luck?
 
@@ -10,14 +10,14 @@ Luck is something that comes up a lot in sports. Is a team unlucky? Or a player?
 knitr::include_graphics(rep("images/simulations2.png"))
 ```
 
-Let's simulate 39 three point attempts 1000 times with his season long shooting percentage and see if this could just be random chance or something else.
+Let's simulate 20 three point attempts 1000 times with his season long shooting percentage and see if this could just be random chance or something else.
 
-We do this using a base R function called `rbinom` or binomial distribution. So what that means is there's a normally distributed chance that James Palmer Jr. is going to shoot above and below his career three point shooting percentage. If we randomly assign values in that distribution 1000 times, how many times will it come up 7, like this example?
+We do this using a base R function called `rbinom` or binomial distribution. So what that means is there's a normally distributed chance that Shyanne Sellers is going to shoot above and below her career three point shooting percentage. If we randomly assign values in that distribution 1000 times, how many times will it come up 5, like this example?
 
 ```{r}
 set.seed(1234)
 
-simulations <- rbinom(n = 1000, size = 39, prob = .309)
+simulations <- rbinom(n = 1000, size = 20, prob = .317)
 
 table(simulations)
 ```
@@ -28,11 +28,11 @@ How do we read this? The first row and the second row form a pair. The top row i
 knitr::include_graphics(rep("images/simulations1.png"))
 ```
 
-So what we see is given his season long shooting percentage, it's not out of the realm of randomness that with just 39 attempts for Palmer, he's only hit only 7. In 1000 simulations, it comes up 35 times. Is he below where he should be? Yes. Will he likely improve and soon? Unless something is very wrong, yes. And indeed, by the end of the season, he finished with a .313 shooting percentage from 3 point range. So we can say he was just unlucky.
+So what we see is given her season-long shooting percentage, it's not out of the realm of randomness that with just 20 attempts for Sellers, she's only hit 5. In 1000 simulations, it comes up 174 times. Is she below where she should be? Yes. Will she likely improve and soon? Unless something is very wrong, yes. And indeed, by the end of the season, she finished with a .347 shooting percentage from 3 point range. So we can say she was just unlucky.
 
 ## Cold streaks
 
-During the final regular-season game in the 2021-22 season, Maryland, shooting .326 on the season from behind the arc, went 1-15 in the first half. How strange is that?
+During the final regular-season game in the 2021-22 season, Maryland's men's team, shooting .326 on the season from behind the arc, went 1-15 in the first half. How strange is that?
 
 ```{r}
 set.seed(1234)
@@ -44,4 +44,4 @@ hist(simulations)
 table(simulations)
 ```
 
-Short answer: Pretty weird, but not totally unheard of. If you simulate 15 threes 1000 times, about 50 times it will result in a single made three-pointer. It's slightly more common that the team would hit 8 threes out of 15. So going that cold is not totally out of the realm of random chance, but it's pretty uncommon.
+Short answer: Pretty weird, but not totally unheard of. If you simulate 15 threes 1000 times, about 17 times it will result in a single made three-pointer. It's slightly more common that the team would hit 9 threes out of 15. So going that cold is not totally out of the realm of random chance, but it's pretty rare.
