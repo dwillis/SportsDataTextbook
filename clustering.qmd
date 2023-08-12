@@ -2,13 +2,13 @@
 
 One common effort in sports is to classify teams and players -- who are this players peers? What teams are like this one? Who should we compare a player to? Truth is, most sports commentators use nothing more sophisticated that looking at a couple of stats or use the "eye test" to say a player is like this or that.
 
-There's better ways.
+There are better ways.
 
 In this chapter, we're going to use a method that sounds advanced but it really quite simple called k-means clustering. It's based on the concept of the k-nearest neighbor algorithm. You're probably already scared. Don't be.
 
 Imagine two dots on a scatterplot. If you took a ruler out and measured the distance between those dots, you'd know how far apart they are. In math, that's called the Euclidean distance. It's just the space between them in numbers. Where k-nearest neighbor comes in, you have lots of dots and you want measure the distance between all of them. What does k-means clustering do? It lumps them into groups based on the average distance between them. Players who are good on offense but bad on defense are over here, good offense good defense are over here. And using the Euclidean distance between them, we can decide who is in and who is out of those groups.
 
-For this exercise, I want to look at Jalen Smith, who played two seasons at Maryland before decamping for the NBA. Had he stayed, he could have been among the all-time Terp greats. So who does Jalen Smith compare to?
+For this exercise, I want to look at Jalen Smith, who played two seasons at Maryland before decamping for the NBA. Had he stayed, he might have been among the all-time Terp greats. So who does Jalen Smith compare to?
 
 To answer this, we'll use k-means clustering.
 
@@ -28,7 +28,7 @@ library(downloadthis)
 library(glue)
 
 dllink <- download_link(
-  link = "https://mattwaite.github.io/sportsdatafiles/players20.csv",
+  link = "https://dwillis.github.io/sports-data-files/players20.csv",
   button_label = "Download csv file",
   button_type = "danger",
   has_icon = TRUE,
