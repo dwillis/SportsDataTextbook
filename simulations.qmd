@@ -45,3 +45,21 @@ table(simulations)
 ```
 
 Short answer: Pretty weird, but not totally unheard of. If you simulate 15 threes 1000 times, about 17 times it will result in a single made three-pointer. It's slightly more common that the team would hit 9 threes out of 15. So going that cold is not totally out of the realm of random chance, but it's pretty rare.
+
+## Streaky streaks
+
+In his freshman season, Maryland lacrosse player Brandon Erksa scored 26 goals, third-most on the team, and had a scoring percentage of .377. Early in the year he didn't score in four consecutive games. How likely is that? To do this, we'll use the same approach as before but with a twist:
+
+```{r}
+set.seed(1234)
+
+simulations <- rbinom(n = 1000, size = 1, prob = .377)
+
+four_in_a_row <- mean(simulations == 1 & lead(simulations, 1) == 1 & lead(simulations, 2) == 1 & lead(simulations, 3) == 1)
+
+odds <- 1/four_in_a_row
+```
+
+Let's parse that code. We set up our simulations as usual, with one change: the size is 1, so we've 
+
+If the odds are 50, that means it's "1 to 50 against" - something that's not likely to happen very often at all. Another way of saying that is there's a 1 in 51 chance of it happening. It's possible that Erksa has a repeat streak like that, but I wouldn't count on it.
