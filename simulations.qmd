@@ -60,6 +60,6 @@ four_in_a_row <- mean(simulations == 1 & lead(simulations, 1) == 1 & lead(simula
 odds <- 1/four_in_a_row
 ```
 
-Let's parse that code. We set up our simulations as usual, with one change: the size is 1, so we've 
+Let's parse that code. We set up our simulations as usual, with one change: the size is 1, so we're just seeing if the thing happens or not. And then, using `lead()` we can check if it does happen four times in a row in any of our simulations.
 
 If the odds are 50, that means it's "1 to 50 against" - something that's not likely to happen very often at all. Another way of saying that is there's a 1 in 51 chance of it happening. It's possible that Erksa has a repeat streak like that, but I wouldn't count on it.
