@@ -48,7 +48,7 @@ Short answer: Pretty weird, but not totally unheard of. If you simulate 15 three
 
 ## Streaky streaks
 
-In his freshman season, Maryland lacrosse player Brandon Erksa scored 26 goals, third-most on the team, and had a scoring percentage of .377. Early in the year he didn't score in four consecutive games. How likely is that? To do this, we'll use the same approach as before but with a twist:
+In his freshman season, Maryland lacrosse player [Braden Erksa](https://umterps.com/sports/mens-lacrosse/roster/braden-erksa/10805) scored 26 goals, third-most on the team, and had a scoring percentage of .377. Early in the year he didn't score in four consecutive games. How likely is that? To do this, we'll use the same approach as before but with a twist:
 
 ```{r}
 set.seed(1234)
