@@ -13,7 +13,7 @@ library(downloadthis)
 library(glue)
 
 dllink <- download_link(
-  link = "https://dwillis.github.io/sportsdatafiles/logs22.csv",
+  link = "https://dwillis.github.io/sportsdatafiles/logs23.csv",
   button_label = "Download csv file",
   button_type = "danger",
   has_icon = TRUE,
@@ -36,7 +36,7 @@ library(tidyverse)
 And the data.
 
 ```{r}
-games <- read_csv("data/logs22.csv")
+games <- read_csv("data/logs23.csv")
 ```
 
 What we have here is every game in college basketball this past season. The question we want to answer is this: Who were the best rebounders in the Big Ten? And what role did offensive and defensive rebounds play in making that happen?
@@ -48,6 +48,7 @@ We have game data, and we need season data. To get that, we need to do some grou
 ```{r}
 #| message: false
 games %>% 
+  filter(!is.na(TeamTotalRebounds)) %>% 
   group_by(Conference, Team) %>% 
   summarise(
     SeasonOffRebounds = sum(TeamOffRebounds),
@@ -59,7 +60,7 @@ games %>%
   select(
     -SeasonTotalRebounds
   ) %>% 
-  filter(Conference == "Big Ten")
+  filter(Conference == "Big Ten MBB")
 ```
 
 By looking at this, we can see we got what we needed. We have 14 teams and numbers that look like season totals for two types of rebounds. Save that to a new dataframe.
@@ -67,6 +68,7 @@ By looking at this, we can see we got what we needed. We have 14 teams and numbe
 ```{r}
 #| message: false
 games %>% 
+  filter(!is.na(TeamTotalRebounds)) %>% 
   group_by(Conference, Team) %>% 
   summarise(
     SeasonOffRebounds = sum(TeamOffRebounds),
@@ -78,7 +80,7 @@ games %>%
   select(
     -SeasonTotalRebounds
   ) %>% 
-  filter(Conference == "Big Ten") -> rebounds
+  filter(Conference == "Big Ten MBB") -> rebounds
 ```
 
 Now, the problem we have is that ggplot wants long data and this data is wide. So we need to use `tidyr` to make it long, just like we did in the transforming data chapter.
@@ -125,4 +127,4 @@ ggplot() +
   coord_flip()
 ```
 
-And just like that ... Purdue comes out on top? Huh. And Maryland is a solid #5. 
+And just like that ... Purdue, the team with the best record in the league, comes out on top. Maryland is tenth, which seems worse than its record would indicate. Penn State is an interesting semi-outlier here. Why? 
