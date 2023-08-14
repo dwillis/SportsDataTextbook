@@ -11,7 +11,7 @@ library(downloadthis)
 library(glue)
 
 dllink <- download_link(
-  link = "https://dwillis.github.io/sports-data-files/wbb_game_logs_2022.csv",
+  link = "https://dwillis.github.io/sports-data-files/wbblogs23.csv",
   button_label = "Download csv file",
   button_type = "danger",
   has_icon = TRUE,
@@ -33,57 +33,68 @@ library(lubridate)
 And load your data.
 
 ```{r}
-logs <- read_csv("data/wbb_game_logs_2022.csv")
+logs <- read_csv("data/wbblogs23.csv")
 ```
 
 ## Does November basketball matter?
 
 So let's test the notion of November Basketball Doesn't Matter. What matters in basketball? Let's start simple: Wins.
 
+Sports Reference’s win columns are weird, so we need to scan through them and find W and L and we’ll give them numbers using case_when. I'll also filter out post-season tournament games.
+
+```{r}
+winlosslogs <- logs %>% 
+  filter(Date < '2023-03-15') %>% 
+  mutate(winloss = case_when(
+    grepl("W", W_L) ~ 1, 
+    grepl("L", W_L) ~ 0)
+) 
+```
+
 We can group by date and conference and sum up the wins. How many wins by day does each conference get?
 
 ```{r}
-dates <- logs %>% group_by(date, conference) %>% summarise(wins = sum(win))
+dates <- winlosslogs %>% group_by(Date, Conference) %>% summarise(wins = sum(winloss))
 ```
 
 Earlier, we did stacked bar charts. We have what we need to do that now.
 
 ```{r}
-ggplot() + geom_bar(data=dates, aes(x=date, weight=wins, fill=conference)) + theme_minimal()
+ggplot() + geom_bar(data=dates, aes(x=Date, weight=wins, fill=Conference)) + theme_minimal()
 ```
 
 Eeek. This is already looking not great. But to make it a circular bar chart, we add `coord_polar()` to our chart.
 
 ```{r}
-ggplot() + geom_bar(data=dates, aes(x=date, weight=wins, fill=conference)) + theme_minimal() + coord_polar()
+ggplot() + geom_bar(data=dates, aes(x=Date, weight=wins, fill=Conference)) + theme_minimal() + coord_polar()
 ```
 
 Based on that, the day is probably too thin a slice, and there's way too many conferences in college basketball. Let's group this by months and filter out all but the power five conferences.
 
 ```{r}
-p5 <- c("SEC", "Big Ten", "Pac-12", "Big 12", "ACC")
+p5 <- c("SEC WBB", "Big Ten WBB", "Pac-12 WBB", "Big 12 WBB", "ACC WBB")
 ```
 
 To get months, we're going to use a function in the library `lubridate` called `floor_date`, which combine with mutate will give us a field of just months.
 
 ```{r}
-wins <- logs %>% mutate(month = floor_date(date, unit="months")) %>% group_by(month, conference) %>% summarise(wins=sum(win)) %>% filter(conference %in% p5) 
+wins <- winlosslogs %>% mutate(month = floor_date(Date, unit="months")) %>% group_by(month, Conference) %>% summarise(wins=sum(winloss)) %>% filter(Conference %in% p5) 
 ```
 
 Now we can use wins to make our circular bar chart of wins by month in the Power Five.
 
 ```{r}
-ggplot() + geom_bar(data=wins, aes(x=month, weight=wins, fill=conference)) + theme_minimal() + coord_polar()
+ggplot() + geom_bar(data=wins, aes(x=month, weight=wins, fill=Conference)) + theme_minimal() + coord_polar()
 ```
 
 Yikes. That looks a lot like a broken pie chart. So months are too thick of a slice. Let's use weeks in our floor date to see what that gives us.
 
 ```{r}
-wins <- logs %>% mutate(week = floor_date(date, unit="weeks")) %>% group_by(week, conference) %>% summarise(wins=sum(win)) %>% filter(conference %in% p5) 
+wins <- winlosslogs %>% mutate(week = floor_date(Date, unit="weeks")) %>% group_by(week, Conference) %>% summarise(wins=sum(winloss)) %>% filter(Conference %in% p5) 
 ```
 
 ```{r}
-ggplot() + geom_bar(data=wins, aes(x=week, weight=wins, fill=conference)) + theme_minimal() + coord_polar()
+ggplot() + geom_bar(data=wins, aes(x=week, weight=wins, fill=Conference)) + theme_minimal() + coord_polar()
 ```
 
 That looks better. But what does it say? Does November basketball matter? What this is saying is ... yeah, it kinda does. The reason? Lots of wins get piled up in November and December, during non-conference play. So if you are a team with NCAA tournament dreams, you need to win games in November to make sure your tournament resume is where it needs to be come March. Does an individual win or loss matter? Probably not. But your record in November does.
@@ -97,55 +108,54 @@ So here is the problem we have:
 
 First we need to populate `opponent` based on the whatever is not the `team`. Then what we have to do is invert the process that we've done before. We need to group by the opponent and we need to invert the wins and losses. A win in the win column is a win for the `team`. That means each loss in the win column is a WIN for the opponent.
 
-Once we invert, the data looks very similar to what we've done before. One other thing: I noticed there's some tournament games in here, so the filter at the end strips them out.
+Once we invert, the data looks very similar to what we've done before. One other thing: I noticed there's some tournament games in here, so the filter at the end strips them out like we did before.
 
 ```{r}
-logs <- logs %>% mutate(opponent = case_when(
-  team == home_team_name ~ away_team_name,
-  team == away_team_name ~ home_team_name
-))
-
-oppwinlosslogs <- logs %>% mutate(winloss = case_when(
-  grepl("W", win) ~ 0, 
-  grepl("L", win) ~ 1)
-) %>% filter(date < "2022-03-14")
+oppwinlosslogs <- logs %>% 
+  mutate(winloss = case_when(
+    grepl("W", W_L) ~ 0, 
+    grepl("L", W_L) ~ 1)
+) %>% 
+  filter(Date < "2023-03-15")
 ```
 
 So now we have a dataframe called oppwinlosslogs that has an inverted winloss column. So now we can group by the Opponent and sum the wins and it will tell us how many games the Opponent won. We can also count the wins and get a winning percentage.
 
 ```{r}
-oppwinlosslogs %>% group_by(opponent) %>% summarise(games=n(), wins=sum(win)) %>% mutate(winpct = wins/games) -> opprecord
+oppwinlosslogs %>% group_by(Opponent) %>% summarise(games=n(), wins=sum(winloss)) %>% mutate(winpct = wins/games) -> opprecord
 ```
 
-Now we have a dataframe of 1,316 opponent winning records. Wait, what? There's like \~350 teams in major college basketball, so why 1,316? If you look through it, there's a bunch of teams playing lower level teams. Given that they are lower level, they're likely cannon fodder and will lose the game, and we're going to filter them out in a minute.
+Now we have a dataframe of 577 opponent winning records. Wait, what? There's like \~350 teams in major college basketball, so why 577? If you look through it, there's a bunch of teams playing lower level teams. Given that they are lower level, they're likely cannon fodder and will lose the game, and we're going to filter them out in a minute.
 
 Now we can join the opponent winning percentage to our winlosslogs data so we can answer our question about quality wins.
 
 ```{r}
-winlosslogs <- logs %>% mutate(winloss = case_when(
-  grepl("W", win) ~ 1, 
-  grepl("L", win) ~ 0)
-) %>% filter(date < "2022-03-13")
+winlosslogs <- logs %>% 
+  mutate(winloss = case_when(
+    grepl("W", W_L) ~ 1, 
+    grepl("L", W_L) ~ 0)
+) %>% 
+  filter(Date < "2023-03-15")
 ```
 
 ```{r}
-winlosslogs %>% left_join(opprecord, by=("opponent")) -> winswithopppct
+winlosslogs %>% left_join(opprecord, by=("Opponent")) -> winswithopppct
 ```
 
 Now that we have a table called winswithopppct, we can filter out non-power 5 teams and teams that won less than 60 percent of their games and run the same calculations in the book.
 
 ```{r}
-p5 <- c("SEC", "Big Ten", "Pac-12", "Big 12", "ACC")
+p5 <- c("SEC WBB", "Big Ten WBB", "Pac-12 WBB", "Big 12 WBB", "ACC WBB")
 ```
 
 ```{r}
-winswithopppct %>% filter(winpct > .6) %>% mutate(week = floor_date(date, unit="weeks")) %>% group_by(week, conference) %>% summarise(wins=sum(win)) %>% filter(conference %in% p5) -> qualitywins
+winswithopppct %>% filter(winpct > .6) %>% mutate(week = floor_date(Date, unit="weeks")) %>% group_by(week, Conference) %>% summarise(wins=sum(winloss)) %>% filter(Conference %in% p5) -> qualitywins
 ```
 
 Now with our dataframe called qualitywins, we can chart it again.
 
 ```{r}
-ggplot() + geom_bar(data=qualitywins, aes(x=week, weight=wins, fill=conference)) + theme_minimal() + coord_polar()
+ggplot() + geom_bar(data=qualitywins, aes(x=week, weight=wins, fill=Conference)) + theme_minimal() + coord_polar()
 ```
 
 Look at this chart and compare it to the first one.
