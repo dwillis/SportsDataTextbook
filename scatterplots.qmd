@@ -6,9 +6,9 @@ So how do we tell if a team that wins 10-1 is _better_ than a team that wins 2-1
 
 This is what we're going to start to answer today. And we'll do it with scatterplots and regressions. Scatterplots are very good at showing **relationships between two numbers**.
 
+To demonstrate this, we'll look at college field hockey from the 2022 season, and we'll see how scoring and wins are related.
 
-
-First, we need libraries and every college basketball game from the 2019-2020 season. Why that season? Because I did this with the COVID season and everything was wonky and made no sense. To make it make sense, you had to do a ton of twisting and turning and that was pointless. **What we're interested in is less about a specific team and more about a general point: Are these numbers related and by how much? What can they tell you about your team in general?**
+First, we need libraries and every college field hockey game from the last season. **What we're interested in is less about a specific team and more about a general point: Are these numbers related and by how much? What can they tell you about your team in general?**
 
 ```{r echo=FALSE, class.output="bg-info", results="asis",  message=FALSE,  warning=FALSE}
 library(downloadthis)
@@ -35,104 +35,97 @@ library(tidyverse)
 And the data.
 
 ```{r}
-logs <- read_csv("data/logs1520.csv")
+logs <- read_csv("data/fieldhockey22.csv")
 ```
+This data is game-level, and we need to create a dataframe of all teams and their season stats. How much, team to team, does a thing matter? That's the question you're going to answer. 
 
-To do this, we need all teams and their season stats. How much, team to team, does a thing matter? That's the question you're going to answer. 
+In our case, we want to know how much does scoring relate to wins? How much difference can we explain in wins by knowing how many goals a team scored? We're going to total up the number of goals each team scored and their season wins in one swoop.
 
-In our case, we want to know how much do three point shots made influence wins? How much difference can we explain in wins by knowing how many threes the other team made against you? We're going to total up the number of threes each team allowed and their season wins in one swoop.
-
-To do this, we need to use conditional logic -- `case_when` in this case -- to determine if the team won or lost the game. In this case, we'll create a new column called `winloss`. Case when statements can be read like this: When This is True, Do This. This bit of code -- which you can use in a lot of contexts in this class -- uses the `grepl` function to look for the letter W in the W_L column and, if it finds it, makes winloss 1. If it finds an L, it makes it 0. Sum your winloss column and you have your season win total. The reason we have to use `grepl` to find W or L is because Sports Reference will record overtime wins differently than regular wins. Same with losses. 
+To do this, we need to use conditional logic -- `case_when` in this case -- to determine if the team won or lost the game. In this case, we'll create a new column called `winloss`. Case when statements can be read like this: When This is True, Do This. This bit of code -- which you can use in a lot of contexts in this class -- uses the `grepl` function to look for the letter W in the result column and, if it finds it, makes winloss 1. If it finds an L, it makes it 0. Sum your winloss column and you have your season win total.
 
 ```{r}
 winlosslogs <- logs %>% 
   mutate(
     winloss = case_when(
-      grepl("W", W_L) ~ 1, 
-      grepl("L", W_L) ~ 0)
+      grepl("W", result) ~ 1, 
+      grepl("L", result) ~ 0)
 )
 ```
 
-Now we can get a dataframe together that gives us the total wins for each team, and the total three point shots made. We'll call that new dataframe `threedef`.
+Then we can create our aggregate dataframe by adding up the wins and goals:
 
 ```{r}
-threedef <- winlosslogs %>% 
-  group_by(Team, season) %>% 
+goals_wins <- winlosslogs %>% 
+  group_by(team) %>% 
   summarise(
-    Wins = sum(winloss), 
-    TotalOpp3P = sum(Opponent3P)
+    wins = sum(winloss), 
+    total_goals = sum(goals)
     ) %>% na.omit()
 ```
 
-Now let's look at the scatterplot. With a scatterplot, we put what predicts the thing on the X axis, and the thing being predicted on the Y axis. In this case, X is our three pointers given up, y is our wins.
+Now let's look at the scatterplot. With a scatterplot, we put what predicts the thing on the X axis, and the thing being predicted on the Y axis. In this case, X is our goals, y is our wins.
 
 ```{r}
-ggplot() + geom_point(data=threedef, aes(x=TotalOpp3P, y=Wins))
+ggplot() + geom_point(data=goals_wins, aes(x=total_goals, y=wins))
 ```
 
-Let's talk about this. This seems kind of random, but clustered around the middle. There's not really a clear pattern here. But can we get a better sense of this? Yes, by adding another geom -- `geom_smooth`. It's identical to our `geom_point`, but we add a method to the end, which in this case we're using the linear method or `lm`.
+Let's talk about this. Ok, there's really a clear pattern here - as goals increase, so do wins, generally. But can we get a better sense of this? Yes, by adding another geom -- `geom_smooth`. It's identical to our `geom_point`, but we add a method to the end, which in this case we're using the linear method or `lm`.
 
 ```{r}
 ggplot() + 
-  geom_point(data=threedef, aes(x=TotalOpp3P, y=Wins)) +
-  geom_smooth(data=threedef, aes(x=TotalOpp3P, y=Wins), method="lm")
+  geom_point(data=goals_wins, aes(x=total_goals, y=wins)) +
+  geom_smooth(data=goals_wins, aes(x=total_goals, y=wins), method="lm")
 ```
 
-A straight line across is bad. It means there's no pattern here. The numbers don't suggest anything. The dots are very spread out. Which is a clue that you should be asking a question here: how strong of a relationship is this? How much can threes given up explain wins? Can we put some numbers to this?
+A line climbing from left to right is good. It means there's a solid positive relationship here. The numbers don't suggest anything. Still, it's worth asking: can we know exactly how strong of a relationship is this? How much can goals scored explain wins? Can we put some numbers to this?
 
 Of course we can. We can apply a linear model to this -- remember Chapter 9? We're going to create an object called fit, and then we're going to put into that object a linear model -- `lm` -- and the way to read this is "wins are predicted by opponent threes". Then we just want the summary of that model.
 
 ```{r}
-fit <- lm(Wins ~ TotalOpp3P, data = threedef)
+fit <- lm(wins ~ total_goals, data = goals_wins)
 summary(fit)
 ```
 
 Remember from Chapter 9: There's just a few things you really need.
 
-The first thing: R-squared. In this case, the Adjusted R-squared value is -0.0004098, which we can interpret as the number of threes the opponent makes predicts about a teeny tiny percent of the variance in wins. Which sounds not great.
+The first thing: R-squared. In this case, the Adjusted R-squared value is 0.7555, which we can interpret as the number of goals a team scores predicts about 75 percent of the variance in wins. Pretty good!
 
-Second: The P-value. We want anything less than .05. If it's above .05, the difference between them is not statistically significant -- it's probably explained by random chance. In our case, we have 0.7106. Is that more than .05? Yes. Yes it is. So this is random. There's no relationship between the number of threes the opponent makes and the number of wins a team has.
+Second: The P-value. We want anything less than .05. If it's above .05, the difference between them is not statistically significant -- it's probably explained by random chance. In our case, we have 0.00000000000000022, so this isn't random chance. Which makes sense, because it's harder to win when you don't score.
 
-Normally, we'd stop here, but let's look at the third element: The coefficient. In this case, the coefficient for TeamOpp3P is -0.001400. What this model predicts, given that and the intercept of 17.199150, is this: Every team starts with about 17 wins. For every 100 three pointers the other team makes, you lose .14 games off that total. So if you give up 100 threes in a season, you'll be a 17 win team. Give up 200, you're closer to a 16 win team, and so on. How am I doing that? Remember your algebra and y = mx + b. In this case, y is the wins, m is the coefficient, x is the number of threes given up and b is the intercept. 
+Normally, we'd stop here, but let's look at the third element: The coefficient. In this case, the coefficient for total_goals is 0.26671. What this model predicts, given that and the intercept of -1.14326, is this: For every goal you score, you add about .26 towards your wins total. So if you score 50 goals in a season, you'll be a 12-win team. Score 80, you're closer to a 20-win team, and so on. How am I doing that? Remember your algebra and y = mx + b. In this case, y is the wins, m is the coefficient, x is the number of goals and b is the intercept. 
 
-Let's use Maryland as an example. They had 227 threes scored on them in the 2019-2020 season. 
+Let's use Maryland as an example. They scored 81 goals last season.
 
-y = -0.001400 * 227 + 17.199150 or 16.8 wins. 
+y = 0.26671 * 81 + -1.14326 or 20.4 wins
 
-How many wins did Maryland have? 24. 
+How many wins did Maryland have? 19. 
 
-What does that mean? It means that Maryland OVERPERFORMED according to this model. But our R-squared is so small that even if this weren't random, it would be largely pointless. Put another way: more than 99 percent of the difference in wins between teams is predicted by something else.
-
-Where is Maryland on the plot? We know we can use layering for that. 
+What does that mean? It means that Maryland slightly under-performed, according to this model, but not by much. Seems like goals is a pretty good predictor for Maryland. Where is Maryland on the plot? We know we can use layering for that. 
 
 ```{r}
-umd <- threedef %>% filter(Team == "Maryland Terrapins")
+umd <- goals_wins %>% filter(team == "Maryland Terrapins, Terps")
 ```
 
 ```{r}
 ggplot() + 
-  geom_point(data=threedef, aes(x=TotalOpp3P, y=Wins)) +
-  geom_smooth(data=threedef, aes(x=TotalOpp3P, y=Wins), method="lm") +
-  geom_point(data=umd, aes(x=TotalOpp3P, y=Wins), color="red")
+  geom_point(data=goals_wins, aes(x=total_goals, y=wins)) +
+  geom_smooth(data=goals_wins, aes(x=total_goals, y=wins), method="lm") +
+  geom_point(data=umd, aes(x=total_goals, y=wins), color="red")
 ```
 
-## Let's see it work
+Maryland's not the most interesting team on this plot, though.
 
-One thing we do know is related is shooting percentage. Shoot better, win games. Simple. But how well does that work?
+## Let's see it fail
 
-We could just average together each team's shooting night, but this isn't the same thing as the season shooting average. It's the average of shooting percentages. To get the season average, we have to sum attempts and makes and do the math ourselves. Averaging the percentages will get us close, but be careful when you do things like this that you're describing your number correctly.
-
-Let's do this the hard -- read: correct -- way. 
+Scatterplots also are useful for shooting down the hottest of takes. What about fouls? Are they related to wins in field hockey?
 
 ```{r}
-shooting <- winlosslogs %>% 
-  group_by(Team, season) %>% 
+fouls_wins <- winlosslogs %>% 
+  group_by(team) %>% 
   summarise(
-    Wins = sum(winloss), 
-    Shots = sum(TeamFGA),
-    Makes = sum(TeamFG)
+    wins = sum(winloss),
+    total_fouls = sum(fouls)
     ) %>% 
-  mutate(AvgShootingPct = Makes/Shots) %>% 
   na.omit()
 ```
 
@@ -140,23 +133,24 @@ Now we can chart it and see what our relationship looks like.
 
 ```{r}
 ggplot() + 
-  geom_point(data=shooting, aes(x=AvgShootingPct, y=Wins)) +
-  geom_smooth(data=shooting, aes(x=AvgShootingPct, y=Wins), method="lm")
+  geom_point(data=fouls_wins, aes(x=total_fouls, y=wins)) +
+  geom_smooth(data=fouls_wins, aes(x=total_fouls, y=wins), method="lm")
 ```
 
-This is what a positive relationship looks like -- sloping up and to the right. The better you shoot, the more you win. If it were reversed -- the better you shot, the fewer wins you got, the line would start at the top left and go down to the right. The direction of the line indicates the relationship between the numbers. 
+The downward slope from left to right indicates a negative relationship - the more fouls a team commits, the fewer wins it has. But the line here isn't very steep at all, and you can see the dots spread widely around the plot. So there's some kind of relationship, but how strong is it?
 
 Let's get our linear regression stats. 
 
 ```{r}
-shootfit <- lm(Wins ~ AvgShootingPct, data = shooting)
-summary(shootfit)
+foulsfit <- lm(wins ~ total_fouls, data = fouls_wins)
+summary(foulsfit)
 ```
-
-The p-value isn't random. The adjusted R-squared is pushing 40 percent. We've got something here. Let's use our coefficients to look at Maryland's 2019-2020 season (not the COVID season, because all the numbers are super weird in that season).
+The p-value is a fair bit above 0.05, so the impact of fouls to wins (or losses) could just be random. The adjusted R-squared is all of 1 percent. We've do not have something here. Let's use our coefficients to look at Maryland's 2022-23 season.
 
 ```{r}
-(153.942 * .419) + -50.733 
+(-0.004753 * 12) + 10.101065
 ```
 
-So this model says that based only on Maryland's shooting percentage, they should have won 13 or 14 games. They won 24. So per our model, Maryland overperformed. Obviously there's room for improvement in the model here, but you can see the power in scatterplots + regression.
+This model says that based only on Maryland's fouls, they should have won 10 games. They won 19. Maybe not a great model for many teams.
+
+The power in combining scatterplots + regression is that we can answer two questions: is there a relationship, and how meaningful is it?
