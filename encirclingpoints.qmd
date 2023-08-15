@@ -43,6 +43,8 @@ And while we're loading it, let's filter out anyone who hasn't played.
 
 ```{r}
 players <- read_csv("data/wbb_players_2022.csv") %>% filter(mp > 0)
+
+players <- read_csv("~/code/hhs-snapshots/data/player_totals_20230417.csv") %>% filter(mp > 0)
 ```
 
 We've done this before, but let's make a standard scatterplot of minutes and points. 
@@ -102,7 +104,7 @@ This takes a little bit of finessing, but a shape of .5 means the line will have
 ggplot() + 
   geom_point(data=players, aes(x=mp, y=pts), color="grey") + 
   geom_point(data=topscorers, aes(x=mp, y=pts), color="black") + 
-  geom_text(data=topscorers, aes(x=mp, y=pts, label=player), hjust = 0, vjust=1) +
+  geom_text(data=topscorers, aes(x=mp, y=pts, label=full_name), hjust = 0, vjust=1) +
   geom_encircle(data=topscorers, aes(x=mp, y=pts), s_shape=.5, expand=.03, colour="red")
 ```
 
@@ -114,7 +116,7 @@ ggplot() +
   geom_point(data=topscorers, aes(x=mp, y=pts), color="black") + 
   geom_encircle(data=topscorers, aes(x=mp, y=pts), s_shape=.5, expand=.03, colour="red") +
   geom_text(aes(x=725, y=700, label="Top scorers")) + 
-  labs(title="Four top scorers are Wooden Award candidates", subtitle="Big scorers Caitlin Clark, NaLyssa Smith, Ayoka Lee and Aneesah Morrow among 15 finalists", x="Minutes", y="Points") + 
+  labs(title="Top scorers are Wooden Award candidates", subtitle="Big scorers Maddy Siegrist, Caitlin Clark, Angel Reese and Aneesah Morrow among 15 finalists", x="Minutes", y="Points") + 
   theme_minimal() + 
   theme(
     plot.title = element_text(size = 16, face = "bold"),
