@@ -8,7 +8,7 @@ For this assignment, we'll need `gt` so go over to the console and run:
 
     install.packages("gt")
 
-So what does all of these libraries do? Let's gather a few and use data of every men's basketball game between 2015-2022.
+So what does all of these libraries do? Let's gather a few and use data of every men's basketball game between 2015-2023.
 
 ```{r}
 #| warning: false
@@ -19,7 +19,7 @@ library(downloadthis)
 library(glue)
 
 dllink <- download_link(
-  link = "http://dwillis.github.io/sportsdatafiles/cbblogs1522.csv",
+  link = "http://dwillis.github.io/sportsdatafiles/cbblogs1523.csv",
   button_label = "Download csv file",
   button_type = "danger",
   has_icon = TRUE,
@@ -42,24 +42,25 @@ library(gt)
 And the data.
 
 ```{r}
-logs <- read_csv("data/cbblogs1522.csv")
+logs <- read_csv("data/cbblogs1523.csv")
 ```
 
 Let's ask this question: which college basketball team saw the greatest decrease in three point attempts per game between last season as a percentage of shots? The simplest way to calculate that is by percent change.
 
 We've got a little work to do, putting together ideas we've used before. What we need to end up with is some data that looks like this:
 
-`Team | 2020-2021 season threes | 2021-2022 season threes | pct change`
+`Team | 2021-2022 season threes | 2022-2023 season threes | pct change`
 
 To get that, we'll need to do some filtering to get the right seasons, some grouping and summarizing to get the right number, some pivoting to get it organized correctly so we can mutate the percent change.
 
 ```{r}
 threechange <- logs %>%
-  filter(Season == "2020-2021" | Season == "2021-2022") %>%
-  group_by(Team, Conference, Season) %>%
+  filter(Season == "2021-2022" | Season == "2022-2023") %>%
+  group_by(Team, Season) %>%
   summarise(Total3PA = sum(Team3PA)) %>%
   pivot_wider(names_from=Season, values_from = Total3PA) %>%
-  mutate(PercentChange = (`2021-2022`-`2020-2021`)/`2020-2021`) %>%
+  filter(!is.na(`2022-2023`)) %>% 
+  mutate(PercentChange = (`2022-2023`-`2021-2022`)/`2021-2022`) %>%
   arrange(PercentChange) %>% 
   ungroup() %>%
   slice_head(n=10) # just want a top 10 list, but can't use top_n!
@@ -71,7 +72,7 @@ We've output tables to the screen a thousand times in this class with `head`, bu
 threechange %>% gt()
 ```
 
-So there you have it. Toledo changed their team so much they took 25 percent fewer threes in 2021-22 from the season before. Where did Maryland come out? We ranked 21st in college basketball in terms of fewer threes from the season before.
+So there you have it. Long Island changed their team so much they took 44 percent fewer threes in 2022-23 from the season before. Where did Maryland come out? We ranked pretty low in college basketball in terms of fewer threes from the season before, because the Terps actually took 61 more.
 
 `gt` has a mountain of customization options. The good news is that it works in a very familiar pattern. We'll start with fixing headers. What we have isn't bad, but PercentChange isn't good either. Let's fix that.
 
@@ -95,7 +96,7 @@ threechange %>%
   ) %>%
   tab_header(
     title = "Did Maryland Shoot Fewer Threes in 2021-22?",
-    subtitle = "Yes, but it wasn't a big change. These 10 teams completely changed their offenses."
+    subtitle = "No, the Terps shot more. But these 10 teams completely changed their offenses."
   )
 ```
 
@@ -109,7 +110,7 @@ threechange %>%
   ) %>%
   tab_header(
     title = "Did Maryland Shoot Fewer Threes in 2021-22?",
-    subtitle = "Yes, but it wasn't a big change. These 10 teams completely changed their offenses."
+    subtitle = "No, the Terps shot more. But these 10 teams completely changed their offenses."
   ) %>% tab_style(
     style = cell_text(color = "black", weight = "bold", align = "left"),
     locations = cells_title("title")
@@ -126,7 +127,7 @@ threechange %>%
   ) %>%
   tab_header(
     title = "Did Maryland Shoot Fewer Threes in 2021-22?",
-    subtitle = "Yes, but it wasn't a big change. These 10 teams completely changed their offenses."
+    subtitle = "No, the Terps shot more. But these 10 teams completely changed their offenses."
   ) %>% tab_style(
     style = cell_text(color = "black", weight = "bold", align = "left"),
     locations = cells_title("title")
@@ -146,7 +147,7 @@ threechange %>%
   ) %>%
   tab_header(
     title = "Did Maryland Shoot Fewer Threes in 2021-22?",
-    subtitle = "Yes, but it wasn't a big change. These 10 teams completely changed their offenses."
+    subtitle = "No, the Terps shot more. But these 10 teams completely changed their offenses."
   ) %>% tab_style(
     style = cell_text(color = "black", weight = "bold", align = "left"),
     locations = cells_title("title")
@@ -169,7 +170,7 @@ threechange %>%
   ) %>%
   tab_header(
     title = "Did Maryland Shoot Fewer Threes in 2021-22?",
-    subtitle = "Yes, but it wasn't a big change. These 10 teams completely changed their offenses."
+    subtitle = "No, the Terps shot more. But these 10 teams completely changed their offenses."
   ) %>% 
   tab_style(
     style = cell_text(color = "black", weight = "bold", align = "left"),
@@ -201,7 +202,7 @@ threechange %>%
   ) %>%
   tab_header(
     title = "Did Maryland Shoot Fewer Threes in 2021-22?",
-    subtitle = "Yes, but it wasn't a big change. These 10 teams completely changed their offenses."
+    subtitle = "No, the Terps shot more. But these 10 teams completely changed their offenses."
   ) %>%  
   tab_source_note(
     source_note = md("**By:** Derek Willis  |  **Source:** [Sports Reference](https://www.sports-reference.com/cbb/seasons/)")
@@ -235,7 +236,7 @@ threechange %>%
   ) %>%
   tab_header(
     title = "Did Maryland Shoot Fewer Threes in 2021-22?",
-    subtitle = "Yes, but it wasn't a big change. These 10 teams completely changed their offenses."
+    subtitle = "No, the Terps shot more. But these 10 teams completely changed their offenses."
   ) %>%  
   tab_source_note(
     source_note = md("**By:** Derek Willis  |  **Source:** [Sports Reference](https://www.sports-reference.com/cbb/seasons/)")
@@ -263,7 +264,7 @@ threechange %>%
   )
 ```
 
-Throughout the semester, we've been using color and other signals to highlight things. Let's pretend we're doing a project on Minnesota. Note they're the first Big Ten team on this list. With a little `tab_style` magic, we can change individual rows and add color. The last `tab_style` block here will first pass off the styles we want to use -- we're going to make the rows maroon and the text gold -- and then for locations we specify where with a simple filter. What that means is that any rows we can address with logic -- all rows with a value greater than X, for example -- we can change the styling.
+Throughout the semester, we've been using color and other signals to highlight things. Let's pretend we're doing a project on Syracuse. With a little `tab_style` magic, we can change individual rows and add color. The last `tab_style` block here will first pass off the styles we want to use -- we're going to make the rows maroon and the text gold -- and then for locations we specify where with a simple filter. What that means is that any rows we can address with logic -- all rows with a value greater than X, for example -- we can change the styling.
 
 ```{r}
 threechange %>% 
@@ -273,7 +274,7 @@ threechange %>%
   ) %>%
   tab_header(
     title = "Did Maryland Shoot Fewer Threes in 2021-22?",
-    subtitle = "Yes, but it wasn't a big change. These 10 teams completely changed their offenses."
+    subtitle = "No, the Terps shot more. But these 10 teams completely changed their offenses."
   ) %>%  
   tab_source_note(
     source_note = md("**By:** Derek Willis  |  **Source:** [Sports Reference](https://www.sports-reference.com/cbb/seasons/)")
@@ -301,16 +302,16 @@ threechange %>%
   ) %>%
   tab_style(
     style = list(
-      cell_fill(color = "maroon"),
-      cell_text(color = "gold")
+      cell_fill(color = "blue"),
+      cell_text(color = "orange")
       ),
     locations = cells_body(
-      rows = Team == "Minnesota")
+      rows = Team == "Syracuse")
   )
   
 ```
 
 Two things here:
 
-1.  Dear God that color scheme is awful, which is fitting for a school that worships a lawn-wrecking varmint.
+1.  Dear God that color scheme is awful, which is fitting for a school that has a non-rhyming mascot.
 2.  We've arrived where we want to be: We've created a clear table that allows a reader to compare schools at will while also using color to draw attention to the thing we want to draw attention to. We've kept it simple so the color has impact.
