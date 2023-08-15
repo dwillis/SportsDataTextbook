@@ -31,7 +31,7 @@ library(downloadthis)
 library(glue)
 
 dllink <- download_link(
-  link = "https://dwillis.github.io/sports-data-files/footballlogs21.csv",
+  link = "https://dwillis.github.io/sports-data-files/footballlogs22.csv",
   button_label = "Download csv file",
   button_type = "danger",
   has_icon = TRUE,
@@ -45,7 +45,7 @@ glue("<pre><p><strong>For this walkthrough:</strong></p><p>{dllink}</p></pre>")
 And load it.
 
 ```{r}
-logs <- read_csv("data/footballlogs21.csv")
+logs <- read_csv("data/footballlogs22.csv")
 ```
 
 To do this, I've got some work to do. First, I need to mutate the outcomes of the games into 1s and 0s so I can add up the wins. We've done this before, so this won't be new to you, just adjusted slightly from basketball data.
@@ -150,8 +150,8 @@ ggplot() +
     data=bigten, 
     aes(x=OffensiveYPP, y=DefensiveYPP, size=TotalWins), 
     color="red") + 
-  geom_vline(xintercept = 5.863151) + 
-  geom_hline(yintercept = 5.448228)
+  geom_vline(xintercept = 5.700174) + 
+  geom_hline(yintercept = 5.55143)
 ```
 
 Now, let's add another new geom for us, using a new library called `ggrepel`, which will help us label the dots without overwriting other labels. So we'll have to install that in the console:
@@ -175,8 +175,8 @@ ggplot() +
     data=bigten, 
     aes(x=OffensiveYPP, y=DefensiveYPP, size=TotalWins), 
     color="red") + 
-  geom_vline(xintercept = 5.863151) + 
-  geom_hline(yintercept = 5.448228) +
+  geom_vline(xintercept = 5.700174) + 
+  geom_hline(yintercept = 5.55143) +
   geom_text_repel(
     data=bigten, 
     aes(x=OffensiveYPP, y=DefensiveYPP, label=Team)
@@ -197,8 +197,8 @@ ggplot() +
     data=bigten, 
     aes(x=OffensiveYPP, y=DefensiveYPP, size=TotalWins), 
     color="red") + 
-  geom_vline(xintercept = 5.863151) + 
-  geom_hline(yintercept = 5.448228) +
+  geom_vline(xintercept = 5.700174) + 
+  geom_hline(yintercept = 5.55143) + 
   geom_text_repel(
     data=bigten, 
     aes(x=OffensiveYPP, y=DefensiveYPP, label=Team)
