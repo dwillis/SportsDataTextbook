@@ -12,55 +12,24 @@ Here's our requirements:
 
 ## Setup
 
-With those requirements in mind, we're going to use a library called Blogdown, which creates blog posts from R Markdown files, similar to what you've been working with in this book.
+With those requirements in mind, we're going to use a library called Quarto, which creates blog posts from files that are very similar to the R Markdown files you've been working with in this book.
 
 It installs how you think it should. Go into the console and run this:
 
 ```{r}
 #| eval: false
-install.packages('blogdown') 
+install.packages('quarto') 
 ```
 
-After that, run this:
-
-```{r}
-#| eval: false
-blogdown::install_hugo()
-```
-
-After that, we're ready to start making a blog. To do that, go to File \> New Project and select New Directory (or Version Control if you know what you're doing).
-
-```{r}
-#| echo: false
-knitr::include_graphics(rep("images/blog1.png"))
-```
-
-In the Project Type view, you may have to scroll down to find "Website using blogdown" but that's your choice. Mine will probably look different than yours, but below is what the line you're looking for looks like.
-
-```{r}
-#| echo: false
-knitr::include_graphics(rep("images/blog2.png"))
-```
+After that, we're ready to start making a blog. To do that, go to File \> New Project and select New Directory, and follow the instructions [here](https://quarto.org/docs/websites/website-blog.html). In the Project Type view, you may have to scroll down to find "Quarto blog" but that's your choice.
 
 And now we've come to our first decision point.
 
 First, name the directory you're going to put this into. Keep it simple. Blog is fine. Then decide where on your computer you're going to put it. Put it somewhere you're going to remember. Don't put it on your Desktop. Put it in a folder. Remember what folder because you're going to need this later.
 
-Now for the big decision: What theme to use. There's four choices, but the default theme is the most fully documented. If you want to use another theme, you'll be better off creating two projects: the one you're going to publish, and the lithium theme you can steal stuff from.
+Now for the big decision: What theme to use. There's four choices, but the default theme is the most fully documented.
 
-Here's the easiest themes to work with:
-
--   [yihui/hugo-lithium](https://GitHub.com/yihui/hugo-lithium)
--   [yihui/hugo-prose](https://GitHub.com/yihui/hugo-prose)
--   [yihui/hugo-ivy](https://GitHub.com/yihui/hugo-ivy)
--   [yihui/hugo-xmin](https://GitHub.com/yihui/hugo-xmin)
-
-```{r}
-#| echo: false
-knitr::include_graphics(rep("images/blog3.png"))
-```
-
-When you hit Create Project, you should get an R Studio screen. You might have a file open called config.yaml. If you don't, open it (you can use the files pane in the bottom right). This file will look different depending on which theme you used. This configuration file needs to have a few things in it. This is the config.yaml for my website, but you should use it as a guide for what yours will need:
+When you hit Create Project, you should get an R Studio screen. You might have a file open called _quarto.yaml. If you don't, open it (you can use the files pane in the bottom right). This file will look different depending on which theme you used. This configuration file needs to have a few things in it. This is the config.yaml for my website, but you should use it as a guide for what yours will need:
 
     baseurl: https://dwillis.github.io/
     languageCode: en-us
