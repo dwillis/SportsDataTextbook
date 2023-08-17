@@ -38,7 +38,7 @@ library(tidyverse)
 library(ggrepel)
 ```
 
-Here's the data we'll use:
+Here's the data we'll use: college football team scoring from 2009-2018.
 
 ```{r}
 #| warning: false
@@ -283,7 +283,7 @@ iron(
    il/10, 
    rows = 2, 
    xlab="Illinois\n1 square = 10 yards", 
-   colors = c("black", "red", "white")) + 
+   colors = c("orange", "blue", "white")) + 
    labs(caption="Source: NCAA | Graphic by Derek Willis")
 ) 
 ```
