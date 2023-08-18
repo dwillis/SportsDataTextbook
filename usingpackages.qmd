@@ -41,7 +41,7 @@ The first thing to do is [read the documentation](https://cfbfastr.sportsdataver
 
 ```{r}
 maryland <- cfbd_pbp_data(
- 2023,
+ 2022,
   week=1, 
   season_type = "regular",
   team = "Maryland",
@@ -54,27 +54,27 @@ There's not an easy way to get all of a single team's games. A way to do it that
 ```{r}
 #| message: false
 #| warning: false
-wk1 <- cfbd_pbp_data(2023, week=1, season_type = "regular", team = "Maryland", epa_wpa = TRUE)
+wk1 <- cfbd_pbp_data(2022, week=1, season_type = "regular", team = "Maryland", epa_wpa = TRUE)
 Sys.sleep(2)
-wk2 <- cfbd_pbp_data(2023, week=2, season_type = "regular", team = "Maryland", epa_wpa = TRUE)
+wk2 <- cfbd_pbp_data(2022, week=2, season_type = "regular", team = "Maryland", epa_wpa = TRUE)
 Sys.sleep(2)
-wk3 <- cfbd_pbp_data(2023, week=3, season_type = "regular", team = "Maryland", epa_wpa = TRUE)
+wk3 <- cfbd_pbp_data(2022, week=3, season_type = "regular", team = "Maryland", epa_wpa = TRUE)
 Sys.sleep(2)
-wk4 <- cfbd_pbp_data(2023, week=4, season_type = "regular", team = "Maryland", epa_wpa = TRUE)
+wk4 <- cfbd_pbp_data(2022, week=4, season_type = "regular", team = "Maryland", epa_wpa = TRUE)
 Sys.sleep(2)
-wk5 <- cfbd_pbp_data(2023, week=5, season_type = "regular", team = "Maryland", epa_wpa = TRUE)
+wk5 <- cfbd_pbp_data(2022, week=5, season_type = "regular", team = "Maryland", epa_wpa = TRUE)
 Sys.sleep(2)
-wk6 <- cfbd_pbp_data(2023, week=6, season_type = "regular", team = "Maryland", epa_wpa = TRUE)
+wk6 <- cfbd_pbp_data(2022, week=6, season_type = "regular", team = "Maryland", epa_wpa = TRUE)
 Sys.sleep(2)
-wk8 <- cfbd_pbp_data(2023, week=8, season_type = "regular", team = "Maryland", epa_wpa = TRUE)
+wk8 <- cfbd_pbp_data(2022, week=8, season_type = "regular", team = "Maryland", epa_wpa = TRUE)
 Sys.sleep(2)
-wk9 <- cfbd_pbp_data(2023, week=9, season_type = "regular", team = "Maryland", epa_wpa = TRUE)
+wk9 <- cfbd_pbp_data(2022, week=9, season_type = "regular", team = "Maryland", epa_wpa = TRUE)
 Sys.sleep(2)
-wk10 <- cfbd_pbp_data(2023, week=10, season_type = "regular", team = "Maryland", epa_wpa = TRUE)
+wk10 <- cfbd_pbp_data(2022, week=10, season_type = "regular", team = "Maryland", epa_wpa = TRUE)
 Sys.sleep(2)
-wk11 <- cfbd_pbp_data(2023, week=11, season_type = "regular", team = "Maryland", epa_wpa = TRUE)
+wk11 <- cfbd_pbp_data(2022, week=11, season_type = "regular", team = "Maryland", epa_wpa = TRUE)
 Sys.sleep(2)
-wk12 <- cfbd_pbp_data(2023, week=12, season_type = "regular", team = "Maryland", epa_wpa = TRUE)
+wk12 <- cfbd_pbp_data(2022, week=12, season_type = "regular", team = "Maryland", epa_wpa = TRUE)
 
 umplays <- bind_rows(wk1, wk2, wk3, wk4, wk5, wk6, wk8, wk9, wk10, wk11, wk12)
 ```
@@ -109,7 +109,7 @@ So, who is Maryland's single season points champion over the last six seasons?
 
 ```{r}
 progressr::with_progress({
-  wbb_player_box <- wehoop::load_wbb_player_box(2018:2023)
+  wbb_player_box <- wehoop::load_wbb_player_box(2018:2022)
 })
 ```
 
