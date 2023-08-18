@@ -14,6 +14,13 @@ Let's simulate 20 three point attempts 1000 times with his season long shooting 
 
 We do this using a base R function called `rbinom` or binomial distribution. So what that means is there's a normally distributed chance that Shyanne Sellers is going to shoot above and below her career three point shooting percentage. If we randomly assign values in that distribution 1000 times, how many times will it come up 5, like this example?
 
+First, we'll load the tidyverse
+
+```{r}
+library(tidyverse)
+```
+
+
 ```{r}
 set.seed(1234)
 
