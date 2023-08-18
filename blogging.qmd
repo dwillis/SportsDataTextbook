@@ -1,4 +1,4 @@
-# Building your own blog with blogdown
+# Building your own blog with Quarto
 
 If you listen to the [Measurables Podcast](https://www.measurablespod.com/podcast) for about two episodes, you'll detect a pattern. The host asks each guest how they got started in sports analytics. To a one, they'll say they found public data and started blogging about their analysis of it. For nearly every single guest, this is their path into the field. They started messing around with data in a toolset, found something interesting and wrote a post about what they found and how they found it. Other analysts noticed it, or a hiring manager liked what they read, and the rest is history, as they say.
 
@@ -105,7 +105,7 @@ So let's create a post.
 Using the Files pane, you can create a new folder, name it and inside that create an `index.qmd` file. But that seems kinda repetitive. So that's install a library that will make that task easier. We'll be installing it directly from GitHub:
 
 ```{r}
-install.packages('remotes')
+install.packages('remotes', repos = "http://cran.us.r-project.org")
 remotes::install_github("smach/newpost", build_vignettes = TRUE)
 ```
 
@@ -117,7 +117,7 @@ library(newpost)
 
 From here, we can create a new post by editing and copying this into the console:
 
-```{r}
+```
 newpost("this is a test", description="does this work?", author="put your name here")
 ```
 
