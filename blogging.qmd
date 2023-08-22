@@ -12,42 +12,87 @@ Here's our requirements:
 
 ## Setup
 
-With those requirements in mind, we're going to use a library called Quarto, which creates blog posts from files that are very similar to the R Markdown files you've been working with in this book.
+With those requirements in mind, we're going to use a library called Quarto, which supercharges R Markdown to make documents, websites, blogs and books. It's new, and growing, and you can do a lot with it. 
 
-It installs how you think it should. Go into the console and run this:
+You'll first go to [Quarto's website](https://quarto.org/docs/get-started/) and wait just one moment before you do anything. 
 
-```{r}
-#| eval: false
-install.packages('quarto') 
-```
+Before you install Quarto, you should close R Studio. So close R Studio, install it, restart R Studio and come back to this tutorial. Then install Quarto.
 
-After that, we're ready to start making a blog. To do that, go to File \> New Project and select New Directory, and follow the instructions [here](https://quarto.org/docs/websites/website-blog.html). In the Project Type view, you may have to scroll down to find "Quarto blog" but that's your choice.
+After that, we're ready to start making a blog. To do that, go to File \> New Project and select New Directory, and follow the instructions [here](https://quarto.org/docs/websites/website-blog.html). In the Project Type view, you may have to scroll down to find "Quarto blog" but that's the choice you want.
 
 And now we've come to our first decision point.
 
-First, name the directory you're going to put this into. Keep it simple. Blog is fine. Then decide where on your computer you're going to put it. Put it somewhere you're going to remember. Don't put it on your Desktop. Put it in a folder. Remember what folder because you're going to need this later. Choose "None" as your engine and check the "Open in new session" box. Do NOT create a new repository at this point, then create the project. That should open another RStudio instance.
+First, name the directory you're going to put this into. Keep it simple. Blog is fine. Then decide where on your computer you're going to put it. Put it somewhere you're going to remember. Don't put it on your Desktop. Put it in a folder. Remember what folder because you're going to need this later. Choose "None" as your engine and check the "Open in new session" box. Do NOT create a new repository at this point, then create the project.
 
-Now for the big decision: What theme to use. There are [lots of choices](https://quarto.org/docs/websites/website-blog.html#themes), and the default is called `cosmo`.
+When you hit Create Project, you should get an R Studio screen. You might have two files open -- _quarto.yml and index.qmd. If you don't, open them (you can use the files pane in the bottom right). The important one for now is _quarto.yml. This file will look different depending on some choices you make. 
 
-When you hit Create Project, you should get an R Studio screen. You might have a file open called _quarto.yaml. If you don't, open it (you can use the files pane in the bottom right). This file will look different depending on which theme you used. This configuration file needs to have a few things in it. This is the _quarto.yml for my website, but you should use it as a guide for what yours will need:
+The choices you need to make: 
 
-    project:
-      type: website
+* The website title should be yours.
+* The Github account (more on this soon) and Twitter handles should be yours.
+* If you want a custom favicon logo, you'll have to include one. You can ignore this for a while. 
+* You should pick a [not-default theme](https://quarto.org/docs/websites/website-blog.html#themes). If you want to have themes for light and dark mode, the code below handles that. If you want just one theme, the default code you get in your _quarto.yml file does that. 
+* Add the execute: freeze bits below to your file. This way, your code only executes when you change it. This will become more important later when you have multiple posts.
 
-    website:
-      title: "Sports Blog"
-      navbar:
-        right:
-          - about.qmd
-          - icon: github
-          href: https://github.com/dwillis
-          - icon: twitter
-          href: https://twitter.com/derekwillis
-    format:
-      html:
-        theme: cosmo
-        css: styles.css
+```
+project:
+  type: website
 
+website:
+  title: "Derek's Collection of Miscellany"
+  description: "A blog about random fiddling with code and data."
+  navbar:
+    right:
+      - about.qmd
+      - icon: github
+        href: https://github.com/dwillis
+      - icon: twitter
+        href: https://twitter.com/derekwillis
+  favicon: logo.png
+  
+format:
+  html:
+    theme:
+      light: litera
+      dark: cyborg
+    css: styles.css
+
+editor: source
+
+execute:
+  freeze: auto
+```
+
+## Creating a post
+
+Under the files tab on the lower right, you'll see a folder named posts. In there, you'll find two folders with sample posts in them. There's not much to them, but they're useful to look at before we delete them. 
+
+To create a post, you're going to first create a folder for it. **The folder name matters because it's going to be part of your url.** For this to work your folder name has to do a couple of things: 
+
+* Contain only lowercase letters and dashes instead of spaces. So My Awesome Post will not work. It should be my-awesome-post. 
+* Contain words that are in your post, and would be something people would search for. If your post is about Maryland women's run into the NCAA Tournament, make sure your post title and folder name contains those words. 
+* In other words, **you need to think about what your post is about before you make this folder**. Can you change it later? Yes. But the sooner you start focusing on a topic the better. 
+
+After you have created the folder, go to the button next to the create folder button and create a Quarto Document. Name that document index.qmd. **DO NOT NAME IT CAPITAL I INDEX. IT'S LOWER CASE I.**
+
+At the top, you will have something called a yaml header, which are things that set up the page. They are quite simple to figure out. Here is an example you should copy and edit for all of your posts. 
+
+```
+---
+title: "CHANGE THIS TO BE THE TITLE OF YOUR POST"
+author: "THIS IS YOUR NAME"
+date: '2023-XX-XX'
+categories: [lowercaseword, lowercaseword, lowercaseword]
+image: "image.png"
+format: 
+  html:
+    code-fold: true
+---
+```
+
+For us, the cold-fold bit is important, and it is not standard. This will allow users to see your code that makes your graphics, without displaying it. Users can decide if they want to see the code. 
+
+Now that you have a folder and an index.qmd file with a proper yaml header, you're ready to write your post. This document works just the same as any .qmd file we've worked with all semester. Create text between code blocks, and your code blocks will execute to produce graphics. 
 
 ## Seeing your site
 
@@ -59,81 +104,6 @@ You can use the Render button in your editor to do that, and if you want to see 
 #| echo: false
 knitr::include_graphics(rep("images/quartoblogpreview.png"))
 ```
-
-## Editing files
-
-You'll be working with the same Quarto files (.qmd) that we've been working with all semester. Same structure as the exercise files, just with some metadata at the top of each post - title, date, etc. Each of your files is a blog post that will reside in the `posts` directory:
-
-
-```{r}
-#| echo: false
-knitr::include_graphics(rep("images/quartopost.png"))
-```
-
-But there are other files associated with your blog. Let's start with editing the about.qmd file.
-
-At the top, you will have something called a yaml header, which are things that set up the page. They are quite simple to figure out. Here's the yaml header it generates. Here's mine; you can change yours to update the Twitter and GitHub values.
-
-		---
-		title: "About"
-		image: profile.jpg
-		about:
-		  template: jolla
-		  links:
-			- icon: twitter
-			  text: Twitter
-			  href: https://twitter.com/derekwillis
-			- icon: github
-			  text: Github
-			  href: https://github.com/dwillis
-		---
-
-Change yours, then change the text below the yaml header, and then save it. Click on the Render button and then check out the result in the Viewer tab on the right.
-
-## Creating a new post
-
-You'll notice in your `posts` folder that there are multiple posts. Depending on your theme, you might just have folders in post, and you might have some markdown files. They work mostly the same way.
-
-The magic here is how you name them. You'll want to give the folders containing your posts a clean, meaningful name. The reason for that is that urls matter for Google. Clean urls with meaningful information in them rank higher.
-
-So in `posts`, you'll see the folders are named similarly -- the headline of your post in all lower case with dashes instead of spaces. So if I were writing a post called "I love sports data", the slug version of that would be i-love-sports-data. Inside each folder is a file called `index.qmd` - that's where your actual post will go.
-
-**NOTE: CAPITALIZATION MATTERS. AS IN, DON'T.** You don't see capitals in URLs, so don't use them.
-
-So let's create a post. 
-
-Using the Files pane, you can create a new folder, name it and inside that create an `index.qmd` file. But that seems kinda repetitive. So that's install a library that will make that task easier. We'll be installing it directly from GitHub:
-
-```{r}
-install.packages('remotes', repos = "http://cran.us.r-project.org")
-remotes::install_github("smach/newpost", build_vignettes = TRUE)
-```
-
-Now, let's load our library:
-
-```{r}
-library(newpost)
-```
-
-From here, we can create a new post by editing and copying this into the console:
-
-```
-newpost("this is a test", description="does this work?", author="put your name here")
-```
-
-You should see a new folder in your `posts` directory with today's date followed by "this-is-a-test", and inside will be an index.qmd file. So you'll want to give some thought to the names of your posts, although you can change them after you make one.
-
-The first thing you'll see in the index.qmd file is the yaml header. Typically, if we've filled out the previous block correctly, we should be good. But if you need to fix something, you can do it here.
-
-    ---
-    title: "this-is-a-test"
-    author: "Derek Willis"
-    description: "does this work?"
-    date: "2023-08-18"
-    categories: []
-    ---
-
-Below the yaml header? That's up to you. Go do some of that writing stuff you do, and you can mix code and words just like we've done with the exercises.
 
 ## Publishing your site
 
