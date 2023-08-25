@@ -102,15 +102,15 @@ What if we wanted to know how many players there were by position? To do that by
 
 `dplyr` has a **group by** function in it that does just this. A massive amount of data analysis involves grouping like things together at some point. So it's a good place to start.
 
-So to do this, we'll take our dataset and we'll introduce a new operator: %\>%. The best way to read that operator, in my opinion, is to interpret that as "and then do this."
+So to do this, we'll take our dataset and we'll introduce a new operator: |>. The best way to read that operator, in my opinion, is to interpret that as "and then do this."
 
 After we group them together, we need to count them. We do that first by saying we want to summarize our data (a count is a part of a summary). To get a summary, we have to tell it what we want. So in this case, we want a count. To get that, let's create a thing called total and set it equal to n(), which is `dplyr`s way of counting something.
 
 Here's the code. You should run it and then describe the output.
 
 ```{r}
-nbaplayers %>%
-  group_by(Pos) %>%
+nbaplayers |>
+  group_by(Pos) |>
   summarise(
     total = n()
   )
@@ -122,14 +122,14 @@ So let's walk through that. We start with our dataset -- `nbaplayers` -- and the
 
 In this case, we wanted to group together positions, signified by the field name Pos. After we group the data, we need to count them up. In dplyr, we use `summarize` [which can do more than just count things](http://dplyr.tidyverse.org/reference/summarise.html). Inside the parentheses in summarize, we set up the summaries we want. In this case, we just want a count of the positions: `total = n(),` says create a new field, called `total` and set it equal to `n()`, which might look weird, but it's common in stats. The number of things in a dataset? Statisticians call in n. There are n number of players in this dataset. So `n()` is a function that counts the number of things there are.
 
-And when we run that, we get a list of positions with a count next to them. But it's not in any order. So we'll add another And Then Do This %\>% and use `arrange`. Arrange does what you think it does -- it arranges data in order. By default, it's in ascending order -- smallest to largest. But if we want to know the position with the most players, we need to sort it in descending order. That looks like this:
+And when we run that, we get a list of positions with a count next to them. But it's not in any order. So we'll add another And Then Do This |> and use `arrange`. Arrange does what you think it does -- it arranges data in order. By default, it's in ascending order -- smallest to largest. But if we want to know the position with the most players, we need to sort it in descending order. That looks like this:
 
 ```{r}
-nbaplayers %>%
-  group_by(Pos) %>%
+nbaplayers |>
+  group_by(Pos) |>
   summarise(
     total = n()
-  ) %>% arrange(desc(total))
+  ) |> arrange(desc(total))
 ```
 
 **Answer** NAME A COMPLICATING FACTOR CONTAINED IN THE RESULT & HOW YOU WOULD RESOLVE IT.
@@ -139,11 +139,11 @@ So the most common position in the NBA? Shooting guard, followed by center (alth
 We can, if we want, group by more than one thing. Which team has the most of a single position? To do that, we can group by the team -- called Tm in the data -- and position, or Pos in the data:
 
 ```{r}
-nbaplayers %>%
-  group_by(Tm, Pos) %>%
+nbaplayers |>
+  group_by(Tm, Pos) |>
   summarise(
     total = n()
-  ) %>% arrange(desc(total))
+  ) |> arrange(desc(total))
 ```
 
 So wait, what team is TOT?
@@ -161,8 +161,8 @@ Sticking with our NBA player data, we can calculate any number of measures insid
 Let's look just a the number of minutes each position gets.
 
 ```{r}
-nbaplayers %>%
-  group_by(Pos) %>%
+nbaplayers |>
+  group_by(Pos) |>
   summarise(
     count = n(),
     mean_minutes = mean(MP),
@@ -177,7 +177,7 @@ Why?
 Let's let sort help us.
 
 ```{r}
-nbaplayers %>% arrange(desc(MP))
+nbaplayers |> arrange(desc(MP))
 ```
 
 The player with the most minutes on the floor is a small forward. So that means there's Mikal Bridges rolling up 2,963 minutes in a season, and then there's Philly sensation Michael Foster Jr. Never heard of Michael Foster Jr.? Might be because he logged a single minute in one game this season.
@@ -193,14 +193,14 @@ There's a ton of things we can do in summarize -- we'll work with more of them a
 Which position in the NBA plays the most minutes? And what is the highest and lowest minute total for that position? And how wide is the spread between minutes? We can find that with `sum` to add up the minutes to get the total minutes, `min` to find the minimum minutes, `max` to find the maximum minutes and `sd` to find the standard deviation in the numbers. Replace the parts surrounded by * in the codeblock below and then run it.
 
 ```{r}
-nbaplayers %>% 
-  group_by(Pos) %>% 
+nbaplayers |> 
+  group_by(Pos) |> 
   summarise(
     total = sum(*COLUMN*), 
     avgminutes = mean(MP), 
     minminutes = *function*(*COLUMN*),
     maxminutes = *function*(*COLUMN*),
-    stdev = sd(*COLUMN*)) %>% arrange(desc(total))
+    stdev = sd(*COLUMN*)) |> arrange(desc(total))
 ```
 
 So again, no surprise, shooting guards spend the most minutes on the floor in the NBA. They average 951 minutes, but we noted why that's trouble. The minimum is a one-minute wonder, max is some team failing at load management, and the standard deviation is a measure of how spread out the data is. In this case, not the highest spread among positions, but pretty high. So you know you've got some huge minutes players and a bunch of bench players.
