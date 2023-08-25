@@ -105,7 +105,7 @@ What if we wanted to know how many players there were by position? To do that by
 
 `dplyr` has a **group by** function in it that does just this. A massive amount of data analysis involves grouping like things together at some point. So it's a good place to start.
 
-So to do this, we'll take our dataset and we'll introduce a new operator: |>. The best way to read that operator, in my opinion, is to interpret that as "and then do this."
+So to do this, we'll take our dataset and we'll introduce a new operator: \|\>. The best way to read that operator, in my opinion, is to interpret that as "and then do this."
 
 After we group them together, we need to count them. We do that first by saying we want to summarize our data (a count is a part of a summary). To get a summary, we have to tell it what we want. So in this case, we want a count. To get that, let's create a thing called total and set it equal to n(), which is `dplyr`s way of counting something.
 
@@ -123,7 +123,7 @@ So let's walk through that. We start with our dataset -- `nbaplayers` -- and the
 
 In this case, we wanted to group together positions, signified by the field name Pos. After we group the data, we need to count them up. In dplyr, we use `summarize` [which can do more than just count things](http://dplyr.tidyverse.org/reference/summarise.html). Inside the parentheses in summarize, we set up the summaries we want. In this case, we just want a count of the positions: `total = n(),` says create a new field, called `total` and set it equal to `n()`, which might look weird, but it's common in stats. The number of things in a dataset? Statisticians call in n. There are n number of players in this dataset. So `n()` is a function that counts the number of things there are.
 
-And when we run that, we get a list of positions with a count next to them. But it's not in any order. So we'll add another And Then Do This |> and use `arrange`. Arrange does what you think it does -- it arranges data in order. By default, it's in ascending order -- smallest to largest. But if we want to know the position with the most players, we need to sort it in descending order. That looks like this:
+And when we run that, we get a list of positions with a count next to them. But it's not in any order. So we'll add another And Then Do This \|\> and use `arrange`. Arrange does what you think it does -- it arranges data in order. By default, it's in ascending order -- smallest to largest. But if we want to know the position with the most players, we need to sort it in descending order. That looks like this:
 
 ```{r}
 nbaplayers |>
