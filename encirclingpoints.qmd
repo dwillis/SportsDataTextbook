@@ -42,7 +42,7 @@ glue("<pre><p><strong>For this walkthrough:</strong></p><p>{dllink}</p></pre>")
 And while we're loading it, let's filter out anyone who hasn't played. 
 
 ```{r}
-players <- read_csv("https://raw.githubusercontent.com/dwillis/hhs-snapshots/main/data/player_totals_20230417.csv") %>% filter(mp > 0)
+players <- read_csv("https://raw.githubusercontent.com/dwillis/hhs-snapshots/main/data/player_totals_20230417.csv") |> filter(mp > 0)
 ```
 
 We've done this before, but let's make a standard scatterplot of minutes and points. 
@@ -56,7 +56,7 @@ So we can see right away that there are some dots at the very top that we'd want
 Like we have done in the past, let's make a dataframe of top scorers. We'll set the cutoff at 700 points in a season. 
 
 ```{r}
-topscorers <- players %>% filter(pts > 700)
+topscorers <- players |> filter(pts > 700)
 ```
 
 And like we've done in the past, we can add it to the chart with another geom_point. We'll make all the players grey, we'll make all the top scorers black.
@@ -134,7 +134,7 @@ Let's grab the top three point attempt takers on the 2022-23 Maryland roster. As
 
 ```{r}
 players23 <- read_csv("data/players23.csv")
-mdtop <- players23 %>% filter(Team == "Maryland Terrapins") %>% top_n(3, `3PA`)
+mdtop <- players23 |> filter(Team == "Maryland Terrapins") |> top_n(3, `3PA`)
 ```
 
 And just like above, we can plug in our players geom, our mdtop dataframe into another geom, then encircle that dataframe. Slap some headlines and annotations on it and here's what we get:

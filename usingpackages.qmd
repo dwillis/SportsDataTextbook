@@ -84,12 +84,12 @@ The sys.sleep bits just pauses for two seconds before running the next block. Si
 Now you're ready to look at heartbreak. How do we define heartbreak? How about like this: you first have to lose the game, it comes in the third or fourth quarter, it involves a play (i.e. not a timeout), and it results in the biggest drop in win probability.
 
 ```{r}
-umplays %>% 
-  filter(pos_team == "Maryland" & wk > 4 & play_type != "Timeout") %>% 
-  filter(period == 3 | period == 4) %>% 
-  mutate(HeartbreakLevel = wp_before - wp_after) %>% 
-  arrange(desc(HeartbreakLevel)) %>% 
-  top_n(5, wt=HeartbreakLevel) %>%
+umplays |> 
+  filter(pos_team == "Maryland" & wk > 4 & play_type != "Timeout") |> 
+  filter(period == 3 | period == 4) |> 
+  mutate(HeartbreakLevel = wp_before - wp_after) |> 
+  arrange(desc(HeartbreakLevel)) |> 
+  top_n(5, wt=HeartbreakLevel) |>
   select(period, clock.minutes, def_pos_team, play_type, play_text)
 ```
 
@@ -120,12 +120,12 @@ If you look at the wbb_player_box data we now have, we have each player in each 
 ```{r}
 #| message: false
 #| warning: false
-wbb_player_box %>% 
-  filter(team_short_display_name == "Maryland", !is.na(points)) %>% 
-  group_by(athlete_display_name, season) %>% 
-  summarise(totalPoints = sum(as.numeric(points))) %>% 
-  arrange(desc(totalPoints)) %>%
-  ungroup() %>%
+wbb_player_box |> 
+  filter(team_short_display_name == "Maryland", !is.na(points)) |> 
+  group_by(athlete_display_name, season) |> 
+  summarise(totalPoints = sum(as.numeric(points))) |> 
+  arrange(desc(totalPoints)) |>
+  ungroup() |>
   top_n(10, wt=totalPoints)
   
 ```

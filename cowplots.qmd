@@ -46,22 +46,22 @@ attendance <- read_csv("data/attendance.csv")
 Making a quick percent change.
 
 ```{r}
-attendance <- attendance %>% mutate(change = ((`2022`-`2021`)/`2021`)*100)
+attendance <- attendance |> mutate(change = ((`2022`-`2021`)/`2021`)*100)
 ```
 
 Let's chart the top 10 and bottom 10 of college football ticket growth ... and shrinkage.
 
 ```{r}
-top10 <- attendance %>% top_n(10, wt=change)
-bottom10 <- attendance %>% top_n(10, wt=-change)
+top10 <- attendance |> top_n(10, wt=change)
+bottom10 <- attendance |> top_n(10, wt=-change)
 ```
 
 Take a look at that top10 dataframe: FIU and Hawaii probably shouldn't be in here because their attendance figures vary so wildly. Let's treat them as special cases and remove them for comparison's sake.
 
 ```{r}
-attendance <- attendance %>% filter(`2021` > 0, change < 350)
-top10 <- attendance %>% top_n(10, wt=change)
-bottom10 <- attendance %>% top_n(10, wt=-change)
+attendance <- attendance |> filter(`2021` > 0, change < 350)
+top10 <- attendance |> top_n(10, wt=change)
+bottom10 <- attendance |> top_n(10, wt=-change)
 ```
 
 
@@ -128,8 +128,8 @@ plot_grid(bar1, bar2)
 What's missing here? Color. Our eyes aren't drawn to anything (except maybe the top and bottom). So we need to help that. A bar chart without context or color to draw attention to something isn't much of a bar chart. Same with a line chart -- if your line chart has one line, no context, no color, it's going to fare poorly.
 
 ```{r}
-lo <- bottom10 %>% filter(Institution == "Louisiana")
-sd <- top10 %>% filter(Institution == "San Diego St.")
+lo <- bottom10 |> filter(Institution == "Louisiana")
+sd <- top10 |> filter(Institution == "San Diego St.")
 ```
 
 ```{r}

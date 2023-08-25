@@ -42,7 +42,7 @@ logs <- read_csv("data/cbblogs1523.csv")
 One way to show how successful a basketball team was for a game is to show the differential between the team's score and the opponent's score. Score a lot more than the opponent = good, score a lot less than the opponent = bad. And, relatively speaking, the more the better. So let's create that differential. Let's add in net rebounds. And because we'll need it later, let's add the turnover margin.
 
 ```{r}
-logs <- logs %>% mutate(
+logs <- logs |> mutate(
   Differential = TeamScore - OpponentScore, 
   NetRebounds = TeamTotalRebounds - OpponentTotalRebounds,
   TurnoverMargin = TeamTurnovers - OpponentTurnovers)
@@ -83,7 +83,7 @@ library(Hmisc)
 We can pass in every numeric value to the Hmisc library and get a correlation matrix out of it, but since we have a large number of values -- and many of them character values -- we should strip that down and reorder them. So that's what I'm doing here. I'm saying give me all the columns with numeric values, except for Game, and then show me the differential, net yards, turnover margin and then everything else.
 
 ```{r}
-simplelogs <- logs %>% select_if(is.numeric) %>% select(-Game) %>% select(Differential, NetRebounds, TurnoverMargin, TeamFGPCT, TeamTotalRebounds, OpponentFGPCT, OpponentTotalRebounds)
+simplelogs <- logs |> select_if(is.numeric) |> select(-Game) |> select(Differential, NetRebounds, TurnoverMargin, TeamFGPCT, TeamTotalRebounds, OpponentFGPCT, OpponentTotalRebounds)
 ```
 
 Before we proceed, what we're looking to do is follow the Differential column down, looking for correlation values near 1 or -1. Correlations go from -1, meaning perfect negative correlation, to 0, meaning no correlation, to 1, meaning perfect positive correlation. So we're looking for numbers near 1 or -1 for their predictive value. BUT: We then need to see if that value is also highly correlated with something else. If it is, we have a decision to make.
@@ -118,8 +118,8 @@ How does this apply in the real world? Let's pretend for a minute that you are K
 So if our goal is to predict a conference champion team, we need to know what those teams did. Here's the regular season conference champions in this dataset.
 
 ```{r}
-logs %>% 
-  filter(Team == "Michigan" & Season == '2020-2021' | Team == "Wisconsin" & Season == '2019-2020' | Team == "Michigan State" & Season == '2018-2019' | Team == "Michigan State" & Season == '2017-2018' | Team == 'Illinois' & Season == '2021-2022' | Team == 'Purdue' & Season == '2022-2023') %>% 
+logs |> 
+  filter(Team == "Michigan" & Season == '2020-2021' | Team == "Wisconsin" & Season == '2019-2020' | Team == "Michigan State" & Season == '2018-2019' | Team == "Michigan State" & Season == '2017-2018' | Team == 'Illinois' & Season == '2021-2022' | Team == 'Purdue' & Season == '2022-2023') |> 
   summarise(
     meanNetRebounds = mean(NetRebounds),
     meanTurnoverMargin = mean(TurnoverMargin),
@@ -140,10 +140,10 @@ So a team with those numbers is going to average scoring 7 more points per game 
 How does that compare to Maryland in 2022-23 season?
 
 ```{r}
-logs %>% 
+logs |> 
   filter(
     Team == "Maryland" & Season == '2022-2023'
-    ) %>% 
+    ) |> 
   summarise(
     meanNetRebounds = mean(NetRebounds),
     meanTurnoverMargin = mean(TurnoverMargin),
@@ -159,10 +159,10 @@ logs %>%
 By this model, it predicted we would average outscoring our opponents by 2.1 points over that season. The reality?
 
 ```{r}
-logs %>% 
+logs |> 
      filter(
          Team == "Maryland" & Season == '2022-2023'
-     ) %>% summarise(avg_score = mean(TeamScore), avg_opp = mean(OpponentScore))
+     ) |> summarise(avg_score = mean(TeamScore), avg_opp = mean(OpponentScore))
 ```
 
 We outscored them by about 6 points on average, so maybe this isn't the best model, or suggests that perhaps Maryland found a way to be successful outside of these parameters. What would you change?

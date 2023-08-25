@@ -43,8 +43,8 @@ So let's test the notion of November Basketball Doesn't Matter. What matters in 
 Sports Reference’s win columns are weird, so we need to scan through them and find W and L and we’ll give them numbers using case_when. I'll also filter out post-season tournament games.
 
 ```{r}
-winlosslogs <- logs %>% 
-  filter(Date < '2023-03-15') %>% 
+winlosslogs <- logs |> 
+  filter(Date < '2023-03-15') |> 
   mutate(winloss = case_when(
     grepl("W", W_L) ~ 1, 
     grepl("L", W_L) ~ 0)
@@ -54,7 +54,7 @@ winlosslogs <- logs %>%
 We can group by date and conference and sum up the wins. How many wins by day does each conference get?
 
 ```{r}
-dates <- winlosslogs %>% group_by(Date, Conference) %>% summarise(wins = sum(winloss))
+dates <- winlosslogs |> group_by(Date, Conference) |> summarise(wins = sum(winloss))
 ```
 
 Earlier, we did stacked bar charts. We have what we need to do that now.
@@ -78,7 +78,7 @@ p5 <- c("SEC WBB", "Big Ten WBB", "Pac-12 WBB", "Big 12 WBB", "ACC WBB")
 To get months, we're going to use a function in the library `lubridate` called `floor_date`, which combine with mutate will give us a field of just months.
 
 ```{r}
-wins <- winlosslogs %>% mutate(month = floor_date(Date, unit="months")) %>% group_by(month, Conference) %>% summarise(wins=sum(winloss)) %>% filter(Conference %in% p5) 
+wins <- winlosslogs |> mutate(month = floor_date(Date, unit="months")) |> group_by(month, Conference) |> summarise(wins=sum(winloss)) |> filter(Conference %in% p5) 
 ```
 
 Now we can use wins to make our circular bar chart of wins by month in the Power Five.
@@ -90,7 +90,7 @@ ggplot() + geom_bar(data=wins, aes(x=month, weight=wins, fill=Conference)) + the
 Yikes. That looks a lot like a broken pie chart. So months are too thick of a slice. Let's use weeks in our floor date to see what that gives us.
 
 ```{r}
-wins <- winlosslogs %>% mutate(week = floor_date(Date, unit="weeks")) %>% group_by(week, Conference) %>% summarise(wins=sum(winloss)) %>% filter(Conference %in% p5) 
+wins <- winlosslogs |> mutate(week = floor_date(Date, unit="weeks")) |> group_by(week, Conference) |> summarise(wins=sum(winloss)) |> filter(Conference %in% p5) 
 ```
 
 ```{r}
@@ -111,18 +111,18 @@ First we need to populate `opponent` based on the whatever is not the `team`. Th
 Once we invert, the data looks very similar to what we've done before. One other thing: I noticed there's some tournament games in here, so the filter at the end strips them out like we did before.
 
 ```{r}
-oppwinlosslogs <- logs %>% 
+oppwinlosslogs <- logs |> 
   mutate(winloss = case_when(
     grepl("W", W_L) ~ 0, 
     grepl("L", W_L) ~ 1)
-) %>% 
+) |> 
   filter(Date < "2023-03-15")
 ```
 
 So now we have a dataframe called oppwinlosslogs that has an inverted winloss column. So now we can group by the Opponent and sum the wins and it will tell us how many games the Opponent won. We can also count the wins and get a winning percentage.
 
 ```{r}
-oppwinlosslogs %>% group_by(Opponent) %>% summarise(games=n(), wins=sum(winloss)) %>% mutate(winpct = wins/games) -> opprecord
+oppwinlosslogs |> group_by(Opponent) |> summarise(games=n(), wins=sum(winloss)) |> mutate(winpct = wins/games) -> opprecord
 ```
 
 Now we have a dataframe of 577 opponent winning records. Wait, what? There's like \~350 teams in major college basketball, so why 577? If you look through it, there's a bunch of teams playing lower level teams. Given that they are lower level, they're likely cannon fodder and will lose the game, and we're going to filter them out in a minute.
@@ -130,16 +130,16 @@ Now we have a dataframe of 577 opponent winning records. Wait, what? There's lik
 Now we can join the opponent winning percentage to our winlosslogs data so we can answer our question about quality wins.
 
 ```{r}
-winlosslogs <- logs %>% 
+winlosslogs <- logs |> 
   mutate(winloss = case_when(
     grepl("W", W_L) ~ 1, 
     grepl("L", W_L) ~ 0)
-) %>% 
+) |> 
   filter(Date < "2023-03-15")
 ```
 
 ```{r}
-winlosslogs %>% left_join(opprecord, by=("Opponent")) -> winswithopppct
+winlosslogs |> left_join(opprecord, by=("Opponent")) -> winswithopppct
 ```
 
 Now that we have a table called winswithopppct, we can filter out non-power 5 teams and teams that won less than 60 percent of their games and run the same calculations in the book.
@@ -149,7 +149,7 @@ p5 <- c("SEC WBB", "Big Ten WBB", "Pac-12 WBB", "Big 12 WBB", "ACC WBB")
 ```
 
 ```{r}
-winswithopppct %>% filter(winpct > .6) %>% mutate(week = floor_date(Date, unit="weeks")) %>% group_by(week, Conference) %>% summarise(wins=sum(winloss)) %>% filter(Conference %in% p5) -> qualitywins
+winswithopppct |> filter(winpct > .6) |> mutate(week = floor_date(Date, unit="weeks")) |> group_by(week, Conference) |> summarise(wins=sum(winloss)) |> filter(Conference %in% p5) -> qualitywins
 ```
 
 Now with our dataframe called qualitywins, we can chart it again.

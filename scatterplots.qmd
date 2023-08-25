@@ -44,7 +44,7 @@ In our case, we want to know how much does scoring relate to wins? How much diff
 To do this, we need to use conditional logic -- `case_when` in this case -- to determine if the team won or lost the game. In this case, we'll create a new column called `winloss`. Case when statements can be read like this: When This is True, Do This. This bit of code -- which you can use in a lot of contexts in this class -- uses the `grepl` function to look for the letter W in the result column and, if it finds it, makes winloss 1. If it finds an L, it makes it 0. Sum your winloss column and you have your season win total.
 
 ```{r}
-winlosslogs <- logs %>% 
+winlosslogs <- logs |> 
   mutate(
     winloss = case_when(
       grepl("W", result) ~ 1, 
@@ -55,12 +55,12 @@ winlosslogs <- logs %>%
 Then we can create our aggregate dataframe by adding up the wins and goals:
 
 ```{r}
-goals_wins <- winlosslogs %>% 
-  group_by(team) %>% 
+goals_wins <- winlosslogs |> 
+  group_by(team) |> 
   summarise(
     wins = sum(winloss), 
     total_goals = sum(goals)
-    ) %>% na.omit()
+    ) |> na.omit()
 ```
 
 Now let's look at the scatterplot. With a scatterplot, we put what predicts the thing on the X axis, and the thing being predicted on the Y axis. In this case, X is our goals, y is our wins.
@@ -103,7 +103,7 @@ How many wins did Maryland have? 19.
 What does that mean? It means that Maryland slightly under-performed, according to this model, but not by much. Seems like goals is a pretty good predictor for Maryland. Where is Maryland on the plot? We know we can use layering for that. 
 
 ```{r}
-umd <- goals_wins %>% filter(team == "Maryland Terrapins, Terps")
+umd <- goals_wins |> filter(team == "Maryland Terrapins, Terps")
 ```
 
 ```{r}
@@ -120,12 +120,12 @@ Maryland's not the most interesting team on this plot, though.
 Scatterplots also are useful for shooting down the hottest of takes. What about fouls? Are they related to wins in field hockey?
 
 ```{r}
-fouls_wins <- winlosslogs %>% 
-  group_by(team) %>% 
+fouls_wins <- winlosslogs |> 
+  group_by(team) |> 
   summarise(
     wins = sum(winloss),
     total_fouls = sum(fouls)
-    ) %>% 
+    ) |> 
   na.omit()
 ```
 

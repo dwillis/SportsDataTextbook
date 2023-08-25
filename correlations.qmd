@@ -54,7 +54,7 @@ But is there one?
 We're going create a new dataframe called newcorrelations that takes our data that we imported and adds a column called `differential` which is the difference between `goals` and `defensive_goals`, and then we'll use correlations to see how related those two things are.
 
 ```{r}
-newcorrelations <- correlations %>% 
+newcorrelations <- correlations |> 
   mutate(
     differential = goals - defensive_goals
     )
@@ -63,7 +63,7 @@ newcorrelations <- correlations %>%
 In R, there is a `cor` function, and it works much the same as `mean` or `median`. So we want to see if `differential` is correlated with `fouls`, which is the yards of penalties a team gets in a game. We do that by referencing `differential` and `fouls` and specifying we want a `pearson` correlation. The number we get back is the correlation coefficient.
 
 ```{r}
-newcorrelations %>% summarise(correlation = cor(differential, fouls, method="pearson"))
+newcorrelations |> summarise(correlation = cor(differential, fouls, method="pearson"))
 ```
 
 So on a scale of -1 to 1, where 0 means there's no relationship at all and 1 or -1 means a perfect relationship, fouls and whether or not the team scores more goals than it gives up are at 0.02543571. You could say they're 2.5 percent related toward the positive -- more fouls, the higher your differential. Another way to say it? They're 97.5 percent not related.
@@ -71,7 +71,7 @@ So on a scale of -1 to 1, where 0 means there's no relationship at all and 1 or 
 What about the number of yellow cards instead of fouls? Do more aggressive defensive teams also score more?
 
 ```{r}
-newcorrelations %>% 
+newcorrelations |> 
   summarise(correlation = cor(differential, yellow_cards, method="pearson"))
 ```
 
@@ -115,7 +115,7 @@ So instead of looking at fouls, let's make a new metric: shots on goal. Can we p
 First, let's look at the correlation coefficent.
 
 ```{r}
-newcorrelations %>% 
+newcorrelations |> 
   summarise(correlation = cor(differential, so_g, method="pearson"))
 ```
 
