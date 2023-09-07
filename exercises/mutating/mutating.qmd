@@ -79,59 +79,29 @@ Who had the most growth in 2022 compared to the year before? What could account 
 
 **Answer** YOUR ANSWER HERE
 
-## A more complex example
+## Back to women's soccer
 
-There's metric in basketball that's easy to understand -- shooting percentage. It's the number of shots made divided by the number of shots attempted. Simple, right? Except it's a little too simple. Because what about three point shooters? They tend to be more vailable because the three point shot is worth more. What about players who get to the line? In shooting percentage, free throws are nowhere to be found.
-
-Basketball nerds, because of these weaknesses, have created a new metric called [True Shooting Percentage](https://en.wikipedia.org/wiki/True_shooting_percentage). True shooting percentage takes into account all aspects of a players shooting to determine who the real shooters are.
-
-Using `dplyr` and `mutate`, we can calculate true shooting percentage. So let's look at a new dataset, one of every college basketball player's season stats in 2022-23 season. It's a dataset of 5,688 players, and we've got 59 variables -- one of them is True Shooting Percentage, but we're going to ignore that.
-
-```{r}
-#| warning: false
-#| message: false
-#| results: asis
-#| echo: false 
-library(downloadthis)
-library(glue)
-
-dllink <- download_link(
-  link = "https://dwillis.github.io/sportsdatafiles/players23.csv",
-  button_label = "Download csv file",
-  button_type = "danger",
-  has_icon = TRUE,
-  icon = "fa fa-save",
-  self_contained = FALSE
-)
-
-glue("<pre><p><strong>For this walkthrough:</strong></p><p>{dllink}</p></pre>")
-
-```
+Let's turn back to the women's soccer match data from this season.
 
 Import it like this:
 
 ```{r}
-players <- read_csv("data/players23.csv")
+matches_2023 <- read_csv("https://raw.githubusercontent.com/dwillis/NCAAWomensSoccerData/main/data/ncaa_womens_soccer_matchstats_2023.csv")
 ```
 
-The basic true shooting percentage formula is `(Points / (2*(FieldGoalAttempts + (.44 * FreeThrowAttempts)))) * 100`. Let's talk that through. Points divided by a lot. It's really field goal attempts plus 44 percent of the free throw attempts. Why? Because that's about what a free throw is worth, compared to other ways to score. After adding those things together, you double it. And after you divide points by that number, you multiply the whole lot by 100.
-
-In our data, we need to be able to find the fields so we can complete the formula. To do that, one way is to use the Environment tab in R Studio. In the Environment tab is a listing of all the data you've imported, and if you click the triangle next to it, it'll list all the field names, giving you a bit of information about each one.
-
-So what does True Shooting Percentage look like in code?
-
-Let's think about this differently. Who had the best true shooting season last year?
+Previously we calculated totals for shots attempted and shots on goal for each time. Now let's do shots on goal and goals, using group_by() and summarize(), and then we'll use mutate to add a percentage to that and see what stands out.
 
 ```{r}
-players |>
-  mutate(trueshooting = (PTS/(2*(FGA + (.44*FTA))))*100) |>
-  arrange(desc(trueshooting))
+matches_2023 |> 
+  group_by(REPLACE WITH GROUP_BY) |> 
+  summarise(
+    total_on_goal = REPLACE WITH FORMULA,
+    total_goals = REPLACE WITH FORMULA
+  ) |> 
+  mutate(percent = REPLACE WITH FORMULA) |> 
+  arrange(desc(percent))
 ```
 
-You'll be forgiven if you did not hear about Oklahoma State's shooting sensation Weston Church. He played in seven games, took one shot and actually hit it. It happened to be a three pointer, which is one more three pointer than I've hit in college basketball. So props to him. Does that mean he had the best true shooting season in college basketball in the 2022-23 season?
-
-Not hardly.
-
-How would you get to a more meaningful answer? No code here, just words describing your strategy:
+What stands out to you here? Describe that below. Would you narrow down the results to certain teams based on the data? If so, do that in the code and explain why you did it below. Finally, what's the most interesting result to you that could be a story?
 
 **Answer** YOUR ANSWER HERE
