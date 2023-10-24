@@ -1,14 +1,14 @@
 # Bubble charts
 
-Here is the real talk: Bubble charts are hard. The reason they are hard is not because of the code, or the complexity or anything like that. They're a scatterplot with magnitude added -- the size of the dot in the scatterplot has meaning. The hard part is seeing when a bubble chart works and when it doesn't. 
+Here is the real talk: Bubble charts are hard. The reason they are hard is not because of the code, or the complexity or anything like that. They're a scatterplot with magnitude added -- the size of the dot in the scatterplot has meaning. The hard part is seeing when a bubble chart works and when it doesn't.
 
 If you want to see it work spectacularly well, [watch a semi-famous Ted Talk](https://www.youtube.com/watch?v=hVimVzgtD6w) by Hans Rosling from 2006 where bubble charts were the centerpiece. It's worth watching. It'll change your perspective on the world. No seriously. It will.
 
-And since then, people have wanted bubble charts. And we're back to the original problem: They're hard. There's a finite set of circumstances where they work. 
+And since then, people have wanted bubble charts. And we're back to the original problem: They're hard. There's a finite set of circumstances where they work.
 
-First, I'm going to show you an example of them not working to illustrate the point. 
+Here's one: placing players or teams into groups based on performance.
 
-I'm going to load up my libraries. 
+I'm going to load up my libraries.
 
 ```{r}
 #| warning: false
@@ -16,11 +16,11 @@ I'm going to load up my libraries.
 library(tidyverse)
 ```
 
-So for this example, I want to look at where Big Ten teams compare to the rest of college football last season. Is the Big Ten's reputation for tough games and defenses earned? Can we see patterns in good team vs bad teams? 
+So for this example, I want to look at where Big Ten teams compare to the rest of college football last season. Is the Big Ten's reputation for tough games and defenses earned? Can we see patterns in good team vs bad teams?
 
-I'm going to create a scatterplot with offensive yards per play on the X axis and defensive yards per play on the y axis. We can then divide the grid into four quadrants. Teams with high yards per offensive play and low defensive yards per play are teams with good offenses and good defenses. The opposite means bad defense, bad offense. Then, to drive the point home, I'm going to make the dot the size of the total wins on the season -- the bubble in my bubble charts. 
+I'm going to create a scatterplot with offensive yards per play on the X axis and defensive yards per play on the y axis. We can then divide the grid into four quadrants. Teams with high yards per offensive play and low defensive yards per play are teams with good offenses and good defenses. The opposite means bad defense, bad offense. Then, to drive the point home, I'm going to make the dot the size of the total wins on the season -- the bubble in my bubble charts.
 
-We'll use last season's college football games. 
+We'll use last season's college football games.
 
 ```{r}
 #| warning: false
@@ -59,7 +59,7 @@ winlosslogs <- logs |>
 )
 ```
 
-Now I have some more work to do. My football logs data has the yards per play of each game, and I could average those together and get something very close to what I'm going to do, but averaging each games yards per play is not the same thing as calculating it, so we're going to calculate it. 
+Now I have some more work to do. My football logs data has the yards per play of each game, and I could average those together and get something very close to what I'm going to do, but averaging each games yards per play is not the same thing as calculating it, so we're going to calculate it.
 
 ```{r}
 winlosslogs |> 
@@ -75,7 +75,7 @@ winlosslogs |>
     DefensiveYPP = DefensiveYards/DefensivePlays) -> ypp
 ```
 
-A bubble chart is just a scatterplot with one additional element in the aesthetic -- a size. Here's the scatterplot version. 
+A bubble chart is just a scatterplot with one additional element in the aesthetic -- a size. Here's the scatterplot version.
 
 ```{r}
 ggplot() + 
@@ -84,7 +84,7 @@ ggplot() +
     )
 ```
 
-Looks kind of random, eh? In this case, that's not that bad because we're not claiming a relationship. We're saying the location on the chart has meaning. So, do teams on the bottom right -- good offense, good defense -- win more games? 
+Looks kind of random, eh? In this case, that's not that bad because we're not claiming a relationship. We're saying the location on the chart has meaning. So, do teams on the bottom right -- good offense, good defense -- win more games?
 
 Let's add the size element.
 
@@ -96,7 +96,7 @@ ggplot() +
     )
 ```
 
-What does this chart tell you? We can see a general pattern that there are more big dots on the bottom right than the upper left. But we can make this more readable by adding an alpha element outside the aesthetic -- alpha in this case is transparency -- and we can manually change the size of the dots by adding `scale_size` and a `range`. 
+What does this chart tell you? We can see a general pattern that there are more big dots on the bottom right than the upper left. But we can make this more readable by adding an alpha element outside the aesthetic -- alpha in this case is transparency -- and we can manually change the size of the dots by adding `scale_size` and a `range`.
 
 ```{r}
 ggplot() + 
@@ -126,7 +126,7 @@ ggplot() +
     color="red")
 ```
 
-Let's add some things to this chart to help us out. First, let's add lines that show us the average of all teams for those two metrics. So first, we need to calculate those. Because I have grouped data, it's going to require me to ungroup it so I can get just the total average of those two numbers. 
+Let's add some things to this chart to help us out. First, let's add lines that show us the average of all teams for those two metrics. So first, we need to calculate those. Because I have grouped data, it's going to require me to ungroup it so I can get just the total average of those two numbers.
 
 ```{r}
 ypp |> 
@@ -137,7 +137,7 @@ ypp |>
     )
 ```
 
-Now we can use those averages to add two more geoms -- geom_vline and geom_hline, for vertical lines and horizontal lines. 
+Now we can use those averages to add two more geoms -- geom_vline and geom_hline, for vertical lines and horizontal lines.
 
 ```{r}
 ggplot() + 
@@ -156,7 +156,7 @@ ggplot() +
 
 Now, let's add another new geom for us, using a new library called `ggrepel`, which will help us label the dots without overwriting other labels. So we'll have to install that in the console:
 
-`install.packages("ggrepel")
+\`install.packages("ggrepel")
 
 ```{r}
 library(ggrepel)
@@ -182,9 +182,10 @@ ggplot() +
     aes(x=OffensiveYPP, y=DefensiveYPP, label=Team)
   )
 ```
+
 Well, what do you know about that? Maryland was ... really a mixed bag this season.
 
-All that's left is some labels and some finishing touches. 
+All that's left is some labels and some finishing touches.
 
 ```{r}
 ggplot() + 
@@ -211,4 +212,3 @@ ggplot() +
     panel.grid.minor = element_blank()
     )
 ```
-
