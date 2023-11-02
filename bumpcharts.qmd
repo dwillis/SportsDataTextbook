@@ -1,6 +1,6 @@
 # Bump charts
 
-The point of a bump chart is to show how the ranking of something changed over time -- you could do this with the top 25 in football or basketball. I've seen it done with European soccer league standings over a season. 
+The point of a bump chart is to show how the ranking of something changed over time -- you could do this with the top 25 in football or basketball. I've seen it done with European soccer league standings over a season.
 
 The requirements are that you have a row of data for a team, in that week, with their rank.
 
@@ -13,7 +13,7 @@ library(tidyverse)
 library(ggbump)
 ```
 
-Let's use the 2020-21 college football playoff rankings: 
+Let's use the 2020-21 college football playoff rankings:
 
 ```{r}
 #| warning: false
@@ -24,7 +24,7 @@ library(downloadthis)
 library(glue)
 
 dllink <- download_link(
-  link = "https://dwillis.github.io/sports-data-files/cfbranking22.csv",
+  link = "https://thescoop.org/sports-data-files/cfbranking22.csv",
   button_label = "Download csv file",
   button_type = "danger",
   has_icon = TRUE,
@@ -34,7 +34,6 @@ dllink <- download_link(
 
 glue("<pre><p><strong>For this walkthrough:</strong></p><p>{dllink}</p></pre>")
 ```
-
 
 ```{r}
 rankings <- read_csv("data/cfbranking22.csv")
@@ -54,9 +53,9 @@ ggplot() +
     data=rankings, aes(x=Week, y=Rank, color=Team))
 ```
 
-Well, it's a start. 
+Well, it's a start.
 
-The warning that you're seeing is that there's three teams last season who made one appearance on the college football playoff rankings and disappeared. Some fans would bite your arm off for that. Alas. We should eliminate them and thin up our chart a little. Let's just take teams that finished in the top 10. We're going to use a neat filter trick for this that you learned earlier using %in%. 
+The warning that you're seeing is that there's three teams last season who made one appearance on the college football playoff rankings and disappeared. Some fans would bite your arm off for that. Alas. We should eliminate them and thin up our chart a little. Let's just take teams that finished in the top 10. We're going to use a neat filter trick for this that you learned earlier using %in%.
 
 ```{r}
 top10 <- rankings |> filter(Week == 15 & Rank <= 10)
@@ -64,7 +63,7 @@ top10 <- rankings |> filter(Week == 15 & Rank <= 10)
 newrankings <- rankings |> filter(Team %in% top10$Team)
 ```
 
-Now you have something called newrankings that shows how teams who finished in the top 10 at the end of the season ended up there. And every team who finished in the top 10 in week 17 had been in the rankings more than once in the 5 weeks before. 
+Now you have something called newrankings that shows how teams who finished in the top 10 at the end of the season ended up there. And every team who finished in the top 10 in week 17 had been in the rankings more than once in the 5 weeks before.
 
 ```{r}
 ggplot() + 
@@ -100,7 +99,8 @@ ggplot() +
   scale_y_reverse() 
 ```
 
-Another step. But the legend is annoying. And trying to find which red is Alabama vs Ohio State is hard. So what if we labeled each dot at the beginning and end? We can do that with some clever usage of geom_text and a little dplyr filtering inside the data step. We filter out the first and last weeks, then use hjust -- horizontal justification -- to move them left or right. 
+Another step. But the legend is annoying. And trying to find which red is Alabama vs Ohio State is hard. So what if we labeled each dot at the beginning and end? We can do that with some clever usage of geom_text and a little dplyr filtering inside the data step. We filter out the first and last weeks, then use hjust -- horizontal justification -- to move them left or right.
+
 ```{r}
 ggplot() + 
   geom_bump(data=newrankings, aes(x=Week, y=Rank, color=Team)) + 
@@ -151,10 +151,9 @@ ggplot() +
   scale_y_reverse() 
 ```
 
-And the last thing: anyone else annoyed at 7.5th place on the left? We can fix that too by specifying the breaks in scale_y_reverse. We can do that with the x axis as well, but since we haven't reversed it, we do that in `scale_x_continuous` with the same breaks. Also: forgot my source and credit line. 
+And the last thing: anyone else annoyed at 7.5th place on the left? We can fix that too by specifying the breaks in scale_y\_reverse. We can do that with the x axis as well, but since we haven't reversed it, we do that in `scale_x_continuous` with the same breaks. Also: forgot my source and credit line.
 
-One last thing: Let's change the width of the chart to make the names fit. We can do that by adding `fig.width=X` in the `{r}` setup in your block. So something like this: 
-
+One last thing: Let's change the width of the chart to make the names fit. We can do that by adding `fig.width=X` in the `{r}` setup in your block. So something like this:
 
 ```{r fig.width=9}
 ggplot() + 
@@ -176,4 +175,3 @@ ggplot() +
   scale_x_continuous(breaks=c(13,14,15,16,17)) + 
   scale_y_reverse(breaks=c(1,2,3,4,5,6,7,8,9,10,11,12,13,14,15))
 ```
-
