@@ -9,7 +9,7 @@ The more fundamental question that this course will empower you to answer is thi
 To get into these and other questions, we'll use a lot of different tools and techniques, but this class rests on three pillars:
 
 1.  Simple, easy to understand statistics ...
-2.  ... extracted using simple code ...
+2.  ... produced using simple code ...
 3.  ... visualized simply to reveal new and interesting things in sports.
 
 Do you need to be a math whiz to read this book? No. I'm not one either. What we're going to look at is pretty basic, but that's also why it's so powerful.
@@ -24,7 +24,7 @@ This book is all in the R statistical language. To follow along, you'll do the f
 
 1.  Install the R language on your computer. Go to the [R Project website](https://www.r-project.org/), click download R and select a mirror closest to your location. Then download the version for your computer.
 
-2.  Install [R Studio Desktop](https://www.rstudio.com/products/rstudio/#Desktop). The free version is great.
+2.  Install [RStudio Desktop](https://posit.co/download/rstudio-desktop/). The free version is great.
 
 Going forward, you'll see passages like this:
 
@@ -32,14 +32,14 @@ Going forward, you'll see passages like this:
 install.packages("tidyverse")
 ```
 
-Don't do it now, but that is code that you'll need to run in your R Studio. When you see that, you'll know what to do.
+Don't do it now, but that is code that you'll need to run in your RStudio. When you see that, you'll know what to do: click the green arrow.
 
 ## About this book
 
-This book is the collection of class materials for the Fall 2023 JOUR479X course in the Philip Merrill College of Journalism at the University of Maryland. There's some things you should know about it:
+This book is the collection of class materials for the Fall 2024 JOUR479X course in the Philip Merrill College of Journalism at the University of Maryland. There's some things you should know about it:
 
 -   It is free for students.
 -   The topics will remain the same but the text is going to be constantly tinkered with.
--   What is the work of the author is copyright Derek Willis 2023 & Matt Waite 2019.
+-   What is the work of the author is copyright Derek Willis 2024 & Matt Waite 2019-2023.
 -   The text is [Attribution-NonCommercial-ShareAlike 4.0 International](https://creativecommons.org/licenses/by-nc-sa/4.0/) Creative Commons licensed. That means you can share it and change it, but only if you share your changes with the same license and it cannot be used for commercial purposes. I'm not making money on this so you can't either.
 -   As such, the whole book -- authored in Quarto -- is [open sourced on Github](https://github.com/dwillis/SportsDataTextbook). Pull requests welcomed!
