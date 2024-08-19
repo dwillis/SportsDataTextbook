@@ -92,7 +92,7 @@ library(downloadthis)
 library(glue)
 
 dllink <- download_link(
-  link = "https://dwillis.github.io/sports-data-files/players23.csv",
+  link = "https://dwillis.github.io/sports-data-files/players24.csv",
   button_label = "Download csv file",
   button_type = "danger",
   has_icon = TRUE,
@@ -107,7 +107,7 @@ glue("<pre><p><strong>For this walkthrough:</strong></p><p>{dllink}</p></pre>")
 Import it like this:
 
 ```{r}
-players <- read_csv("data/players23.csv")
+players <- read_csv("data/players24.csv")
 ```
 
 The basic true shooting percentage formula is `(Points / (2*(FieldGoalAttempts + (.44 * FreeThrowAttempts)))) * 100`. Let's talk that through. Points divided by a lot. It's really field goal attempts plus 44 percent of the free throw attempts. Why? Because that's about what a free throw is worth, compared to other ways to score. After adding those things together, you double it. And after you divide points by that number, you multiply the whole lot by 100.
@@ -124,7 +124,7 @@ players |>
   arrange(desc(trueshooting))
 ```
 
-You'll be forgiven if you did not hear about Oklahoma State's shooting sensation Weston Church. He played in seven games, took one shot and actually hit it. It happened to be a three pointer, which is one more three pointer than I've hit in college basketball. So props to him. Does that mean he had the best true shooting season in college basketball in the 2022-23 season?
+You'll be forgiven if you did not hear about Winthrop's shooting sensation Henry Harrison. He played in seven games, took three shots and actually hit them all. They all happened to be three pointers, which is three more three pointer than I've hit in college basketball. So props to him. Does that mean he had the best true shooting season in college basketball in the 2023-24 season?
 
 Not hardly.
 

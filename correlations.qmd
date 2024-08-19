@@ -66,7 +66,7 @@ In R, there is a `cor` function, and it works much the same as `mean` or `median
 newcorrelations |> summarise(correlation = cor(differential, fouls, method="pearson"))
 ```
 
-So on a scale of -1 to 1, where 0 means there's no relationship at all and 1 or -1 means a perfect relationship, fouls and whether or not the team scores more goals than it gives up are at 0.02702439. You could say they're 2.7 percent related toward the positive -- more fouls, the higher your differential. Another way to say it? They're 97.3 percent not related.
+So on a scale of -1 to 1, where 0 means there's no relationship at all and 1 or -1 means a perfect relationship, fouls and whether or not the team scores more goals than it gives up are at 0.02071133 You could say they're 2.0 percent related toward the positive -- more fouls, the higher your differential. Another way to say it? They're 98 percent not related.
 
 What about the number of yellow cards instead of fouls? Do more aggressive defensive teams also score more?
 
@@ -77,7 +77,7 @@ newcorrelations |>
 
 So wait, what does this all mean?
 
-It means that when you look at every game in college soccer, the number of goals and yellow cards have a negative impact on the score difference between your team and the other team. But the relationship is barely anything at all. Like 89+ percent plus not related. So neither fouls nor yellow cards have much of any relationship with the difference in goal-scoring.
+It means that when you look at every game in college soccer, the number of goals and yellow cards have a negative impact on the score difference between your team and the other team. But the relationship is barely anything at all. Like 91+ percent plus not related. So neither fouls nor yellow cards have much of any relationship with the difference in goal-scoring.
 
 Normally, at this point, you'd quit while you were ahead. A correlation coefficient that shows there's no relationship between two things means stop. It's pointless to go on. But let's put this fully to rest.
 
@@ -94,9 +94,9 @@ summary(fit)
 
 There's three things we need here:
 
-1.  First we want to look at the p-value. It's at the bottom right corner of the output. In the case of fouls, the p-value is 0.1474. The threshold we're looking for here is .05. If it's less than .05, then the relationship is considered to be *statistically significant*. Significance here does not mean it's a big deal. It means it's not random. That's it. Just that. Not random. So in our case, the relationship between fouls and a team's aggregate point differential are **not statistically significant**. The differences in score difference and fouls could be completely random. This is another sign we should just stop with this.
-2.  Second, we look at the Adjusted R-squared value. It's right above the p-value. Adjusted R-squared is a measure of how much of the difference between teams aggregate point values can be explained by fouls. Our correlation coefficient said they're 2.7 percent related to each other, but fouls' ability to explain the difference between teams? About 0.0003825 percent. That's ... not much. It's really nothing. Again, we should quit.
-3.  The third thing we can look at, and we only bother if the first two are meaningful, is the coefficients. In the middle, you can see the (Intercept) is -0.12509 and the fouls coefficient is 0.01900. Remember high school algebra? Remember learning the equation of a line? Remember swearing that learning `y=mx+b` is stupid because you'll never need it again? Surprise. It's useful again. In this case, we could try to predict a team's score differential in a game -- will they score more than they give up -- by using `y=mx+b`. In this case, y is the aggregate score, m is 0.01900 and b is -0.12509. So we would multiply a teams total fouls by 0.01900 and then add -0.12509 to it. The result would tell you what the total aggregate score in the game would be, according to our model. Chance that you're even close with this? Almost none. Did I say we should quit? Yeah.
+1.  First we want to look at the p-value. It's at the bottom right corner of the output. In the case of fouls, the p-value is 0.09849. The threshold we're looking for here is .05. If it's less than .05, then the relationship is considered to be *statistically significant*. Significance here does not mean it's a big deal. It means it's not random. That's it. Just that. Not random. So in our case, the relationship between fouls and a team's aggregate point differential are **not statistically significant**. The differences in score difference and fouls could be completely random. This is another sign we should just stop with this.
+2.  Second, we look at the Adjusted R-squared value. It's right above the p-value. Adjusted R-squared is a measure of how much of the difference between teams aggregate point values can be explained by fouls. Our correlation coefficient said they're 2 percent related to each other, but fouls' ability to explain the difference between teams? About 0.0002719 percent. That's ... not much. It's really nothing. Again, we should quit.
+3.  The third thing we can look at, and we only bother if the first two are meaningful, is the coefficients. In the middle, you can see the (Intercept) is -0.09788 and the fouls coefficient is 0.01304. Remember high school algebra? Remember learning the equation of a line? Remember swearing that learning `y=mx+b` is stupid because you'll never need it again? Surprise. It's useful again. In this case, we could try to predict a team's score differential in a game -- will they score more than they give up -- by using `y=mx+b`. In this case, y is the aggregate score, m is 0.01304 and b is -0.09788. So we would multiply a teams total fouls by 0.01304 and then add -0.09788 to it. The result would tell you what the total aggregate score in the game would be, according to our model. Chance that you're even close with this? Almost none. Did I say we should quit? Yeah.
 
 So fouls are totally meaningless to the outcome of a game.
 
@@ -119,7 +119,7 @@ newcorrelations |>
   summarise(correlation = cor(differential, so_g, method="pearson"))
 ```
 
-Answer: 68 percent. Not a perfect relationship, but pretty good. But how meaningful is that relationship and how predictive is it?
+Answer: 63 percent. Not a perfect relationship, but pretty good. But how meaningful is that relationship and how predictive is it?
 
 ```{r}
 net <- lm(differential ~ so_g, data = newcorrelations)
@@ -128,12 +128,12 @@ summary(net)
 
 First we check p-value: 0.00000000000000022. That's sixteen zeros between the decimal and 22. Is that less than .05? Uh, yeah. So this is really, really, really not random. But anyone who has watched a game of soccer knows this is true. It makes intuitive sense.
 
-Second, Adjusted R-squared: 0.4642. So we can predict a 46 percent of the difference in the score differential by simply looking at the shots on goal the team has.
+Second, Adjusted R-squared: 0.3953. So we can predict about 39 percent of the difference in the score differential by simply looking at the shots on goal the team has.
 
-Third, the coefficients: In this case, our `y=mx+b` formula looks like `y = 0.445467x + -2.530441`. So if we were applying this, let's look at Maryland's 3-3 draw against Navy on August 24. Maryland's shots on goal in that game? 11. What does our model say the point differential should have been?
+Third, the coefficients: In this case, our `y=mx+b` formula looks like `y = 0.399685x + -2.275609`. So if we were applying this, let's look at Maryland's 3-3 draw against Navy on August 24, 2023. Maryland's shots on goal in that game? 11. What does our model say the point differential should have been?
 
 ```{r}
-(0.445467*11)+-2.530441 
+(0.399685*11)+-2.275609 
 ```
 
-So by our model, Maryland should have won by two goals. Some games are closer than others. But when you can explain 46 percent of the difference, this is the kind of result you get. What would improve the model? Using more data to start. And using more inputs.
+So by our model, Maryland should have won by two goals. Some games are closer than others. But when you can explain 39 percent of the difference, this is the kind of result you get. What would improve the model? Using more data to start. And using more inputs.

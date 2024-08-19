@@ -55,7 +55,7 @@ To do that, we use `pivot_longer` because we're making wide data long. Since all
 attendance |> pivot_longer(cols = starts_with("20"), names_to = "Year", values_to = "Attendance")
 ```
 
-We've gone from 149 rows to more than 1,000, but that's expected when we have 10 years for each team.
+We've gone from 149 rows to more than 1,600, but that's expected when we have 10+ years for each team.
 
 ## Making long data wide
 
@@ -99,7 +99,7 @@ Now that we have long data for just Maryland, we can chart it.
 ggplot(maryland, aes(x=Year, y=Attendance, group=1)) + 
   geom_line() + 
   scale_y_continuous(labels = scales::comma) + 
-  labs(x="Year", y="Attendance", title="Ups and Downs, But Mostly Downs", subtitle="A short-lived rebound after the pandemic didn't stick.", caption="Source: NCAA | By Derek Willis", color = "Outcome") +
+  labs(x="Year", y="Attendance", title="Maryland Football Attendance Climbs Under Locksley", subtitle="Heading back to the 300,000 mark?", caption="Source: NCAA | By Derek Willis", color = "Outcome") +
   theme_minimal() + 
   theme(
     plot.title = element_text(size = 16, face = "bold"),
