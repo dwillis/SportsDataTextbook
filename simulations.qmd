@@ -1,18 +1,18 @@
 # Simulations
 
-In the 2021-22 season, Maryland guard Shyanne Sellers took 101 three point attempts and made 32 of them for a .317 shooting percentage. A few weeks into the next season, she was 5 for 20 -- a paltry .20.
+On Feb. 21, 2023, fans of Maryland women's basketball got a show from Brinae Alexander. The graduate transfer guard hit 6 of 9 three-pointers in a 96-68 destruction of Iowa (Caitlin Clark scored 18, her second-lowest output of the season). It was glorious.
 
-Is something wrong or is this just bad luck?
+But how *rare* was it? Did Alexander get lucky that night?
 
-Luck is something that comes up a lot in sports. Is a team unlucky? Or a player? One way we can get to this, we can get to that is by simulating things based on their typical percentages. Simulations work by choosing random values within a range based on a distribution. The most common distribution is the normal or binomial distribution. The normal distribution is where the most cases appear around the mean, 66 percent of cases are within one standard deviation from the mean, and the further away from the mean you get, the more rare things become.
+Luck is something that comes up a lot in sports. Is a team lucky? Or a player? One way we can get to this, we can get to that is by simulating things based on their typical percentages. Simulations work by choosing random values within a range based on a distribution. The most common distribution is the normal or binomial distribution. The normal distribution is where the most cases appear around the mean, 66 percent of cases are within one standard deviation from the mean, and the further away from the mean you get, the more rare things become.
 
 ```{r, echo=FALSE}
 knitr::include_graphics(rep("images/simulations2.png"))
 ```
 
-Let's simulate 20 three point attempts 1000 times with his season long shooting percentage and see if this could just be random chance or something else.
+Let's simulate 10 three point attempts (0-9 makes) 1000 times with Alexander's season long shooting percentage and see if this could just be random chance or something else.
 
-We do this using a base R function called `rbinom` or binomial distribution. So what that means is there's a normally distributed chance that Shyanne Sellers is going to shoot above and below her career three point shooting percentage. If we randomly assign values in that distribution 1000 times, how many times will it come up 5, like this example?
+We do this using a base R function called `rbinom` or binomial distribution. So what that means is there's a normally distributed chance that Brinae Alexander is going to shoot above and below her season three point shooting percentage. If we randomly assign values in that distribution 1000 times, how many times will it come up 6, like this example?
 
 First, we'll load the tidyverse
 
@@ -20,11 +20,10 @@ First, we'll load the tidyverse
 library(tidyverse)
 ```
 
-
 ```{r}
 set.seed(1234)
 
-simulations <- rbinom(n = 1000, size = 20, prob = .317)
+simulations <- rbinom(n = 1000, size = 10, prob = .439)
 
 table(simulations)
 ```
@@ -35,7 +34,7 @@ How do we read this? The first row and the second row form a pair. The top row i
 knitr::include_graphics(rep("images/simulations1.png"))
 ```
 
-So what we see is given her season-long shooting percentage, it's not out of the realm of randomness that with just 20 attempts for Sellers, she's only hit 5. In 1000 simulations, it comes up 174 times. Is she below where she should be? Yes. Will she likely improve and soon? Unless something is very wrong, yes. And indeed, by the end of the season, she finished with a .347 shooting percentage from 3 point range. So we can say she was just unlucky.
+So what we see is given her season-long shooting percentage, it's not out of the realm of randomness that she'd make 6 of those 9 attempts. In 1000 simulations, it comes up 130 times. So more than one time in 10, Brinae Alexander will go 6-9 from deep. More likely, she'd hit 4 or 5 of those attempts.
 
 ## Cold streaks
 
@@ -53,20 +52,40 @@ table(simulations)
 
 Short answer: Pretty weird, but not totally unheard of. If you simulate 15 threes 1000 times, about 17 times it will result in a single made three-pointer. It's slightly more common that the team would hit 9 threes out of 15. So going that cold is not totally out of the realm of random chance, but it's pretty rare.
 
-## Streaky streaks
+## The hottest of streaks
 
-In his freshman season, Maryland lacrosse player [Braden Erksa](https://umterps.com/sports/mens-lacrosse/roster/braden-erksa/10805) scored 26 goals, third-most on the team, and had a scoring percentage of .377. Early in the year he didn't score in four consecutive games. How likely is that? To do this, we'll use the same approach as before but with a twist:
+Last season, [Terps baseball player Sam Hojnar](https://umterps.com/sports/baseball/roster/sam-hojnar/12369) hit two home runs in consecutive games. He hit 16 HRs for the season in 233 at-bats, so his home run probability per at-bat was just under seven percent. We'll use that and the number of games (56) to calculate the odds that he'd hit two home runs in each of two consecutive games.
 
 ```{r}
-set.seed(1234)
+# Hojnar's statistics
+home_runs <- 16
+games <- 56
+at_bats <- 233
 
-simulations <- rbinom(n = 1000, size = 1, prob = .377)
+# Calculate probabilities
+home_run_prob_per_at_bat <- home_runs / at_bats
+avg_at_bats_per_game <- at_bats / games
 
-four_in_a_row <- mean(simulations == 1 & lead(simulations, 1) == 1 & lead(simulations, 2) == 1 & lead(simulations, 3) == 1)
+# Set simulation parameters
+num_simulations <- 100000
 
-odds <- 1/four_in_a_row
+# Run simulation
+set.seed(1234)  # For reproducibility
+
+simulation_results <- tibble(
+  sim = 1:num_simulations,
+  game1 = rbinom(num_simulations, round(avg_at_bats_per_game), home_run_prob_per_at_bat),
+  game2 = rbinom(num_simulations, round(avg_at_bats_per_game), home_run_prob_per_at_bat)
+) |>
+  mutate(two_hr_each_game = game1 == 2 & game2 == 2)
+
+# Calculate probability
+probability <- simulation_results |>
+  summarise(prob = mean(two_hr_each_game)) |>
+  pull(prob)
+
+# Print results
+cat("Estimated probability of hitting exactly two home runs in each of two consecutive games:", format(round(probability, 6), scientific = FALSE))
 ```
 
-Let's parse that code. We set up our simulations as usual, with one change: the size is 1, so we're just seeing if the thing happens or not. And then, using `lead()` we can check if it does happen four times in a row in any of our simulations.
-
-If the odds are 50, that means it's "1 to 50 against" - something that's not likely to happen very often at all. Another way of saying that is there's a 1 in 51 chance of it happening. It's possible that Erksa has a repeat streak like that, but I wouldn't count on it.
+Let's parse that code. We set up our simulations as usual, with one change: because this already seems like a pretty rare event, we're running 100,000 simulations, and we have to calculate the odds for two games, not one. Then we're looking for results where the number of home runs in both games is two. The `simulation_results` dataframe shows that 70 times out of 100,000 Hojnar would hit two home runs in consecutive games, based on his own performance. That's very, very, very unlikely, and quite a hot streak.
