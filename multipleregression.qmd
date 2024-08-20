@@ -64,7 +64,7 @@ model1 <- lm(Differential ~ NetRebounds + TurnoverMargin, data=logs)
 summary(model1)
 ```
 
-First things first: What is the adjusted R-squared?
+First things first: What is the adjusted R-squared? This model predicts about 61 percent of the differential.
 
 Second: what is the p-value and is it less than .05?
 
@@ -119,7 +119,7 @@ So if our goal is to predict a conference champion team, we need to know what th
 
 ```{r}
 logs |> 
-  filter(Team == "Michigan" & Season == '2020-2021' | Team == "Wisconsin" & Season == '2019-2020' | Team == "Michigan State" & Season == '2018-2019' | Team == "Michigan State" & Season == '2017-2018' | Team == 'Illinois' & Season == '2021-2022' | Team == 'Purdue' & Season == '2022-2023') |> 
+  filter(Team == "Michigan" & Season == '2020-2021' | Team == "Wisconsin" & Season == '2019-2020' | Team == "Michigan State" & Season == '2018-2019' | Team == "Michigan State" & Season == '2017-2018' | Team == 'Illinois' & Season == '2021-2022' | Team == 'Purdue' & Season == '2022-2023' | Team == 'Purdue' & Season == '2023-2024') |> 
   summarise(
     meanNetRebounds = mean(NetRebounds),
     meanTurnoverMargin = mean(TurnoverMargin),
@@ -132,17 +132,17 @@ Now it's just plug and chug.
 
 ```{r}
 # (netrebounds estimate * meanNetRebounds) + (turnover margin estimate * meanTurnoverMargin) + (TeamFGPCT estimate * meanTeamFGPCT) + (OpponentFGPCT estimate * meanOpponentFGPCT) + Intercept
-(0.654800*6.05) + (-1.310579*0.6333333) + (90.805990*0.4543167) + (-91.351310*0.4107167) + 0.287665
+(0.657726*9.645933) + (-1.313064*1.933014) + (91.403110*0.4780766) + (-91.650923*0.3981818) + 0.233954
 ```
 
-So a team with those numbers is going to average scoring 7 more points per game than their opponent. Not a ton, but hey, the Big Ten has been a competitive conference lately.
+So a team with those numbers is going to average scoring 11 more points per game than their opponent. Not a ton, but hey, the Big Ten has been a competitive conference lately.
 
-How does that compare to Maryland in 2022-23 season?
+How does that compare to Maryland in 2023-24 season?
 
 ```{r}
 logs |> 
   filter(
-    Team == "Maryland" & Season == '2022-2023'
+    Team == "Maryland" & Season == '2023-2024'
     ) |> 
   summarise(
     meanNetRebounds = mean(NetRebounds),
@@ -153,16 +153,16 @@ logs |>
 ```
 
 ```{r}
-(0.654800*1.685714) + (-1.310579*0.9142857) + (90.805990*0.4517714) + (-91.351310*0.428) + 0.287665
+(0.657726*1.277778) + (-0.3055556*1.933014) + (91.403110*0.4133056) + (-91.650923*0.4171944) + 0.233954
 ```
 
-By this model, it predicted we would average outscoring our opponents by 2.1 points over that season. The reality?
+By this model, it predicted we would, on average, barely outscore our opponents over that season. The reality?
 
 ```{r}
 logs |> 
      filter(
-         Team == "Maryland" & Season == '2022-2023'
+         Team == "Maryland" & Season == '2023-2024'
      ) |> summarise(avg_score = mean(TeamScore), avg_opp = mean(OpponentScore))
 ```
 
-We outscored them by about 6 points on average, so maybe this isn't the best model, or suggests that perhaps Maryland found a way to be successful outside of these parameters. What would you change?
+We outscored them by about 3 points on average, so maybe this isn't the best model, or suggests that perhaps Maryland found a way to be successful outside of these parameters. What would you change?

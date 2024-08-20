@@ -1,10 +1,10 @@
 # Residuals
 
-When looking at a linear model of your data, there's a measure you need to be aware of called residuals. The residual is the distance between what the model predicted and what the real outcome is. Take our model at the end of the correlation and regression chapter. Our model predicted Maryland's women soccer should have outscored Temple by 1.0375 goals a year ago. The match was a 1-1 draw. So our residual is -1.0375.
+When looking at a linear model of your data, there's a measure you need to be aware of called residuals. The residual is the distance between what the model predicted and what the real outcome is. Take our model at the end of the correlation and regression chapter. Our model predicted Maryland's women soccer should have outscored Navy by 2.12 goals a year ago. The match was a 3-3 draw. So our residual is -2.12.
 
 Residuals can tell you several things, but most important is if a linear model the right model for your data. If the residuals appear to be random, then a linear model is appropriate. If they have a pattern, it means something else is going on in your data and a linear model isn't appropriate.
 
-Residuals can also tell you who is underperforming and overperforming the model. And the more robust the model -- the better your r-squared value is -- the more meaningful that label of under or overperforming is.
+Residuals can also tell you who is under-performing and over-performing the model. And the more robust the model -- the better your r-squared value is -- the more meaningful that label of under or over-performing is.
 
 Let's go back to our model for college basketball. For our predictor, let's use Net FG Percentage - the difference between the two teams' shooting success.
 
@@ -17,7 +17,7 @@ library(downloadthis)
 library(glue)
 
 dllink <- download_link(
-  link = "https://dwillis.github.io/sports-data-files/cbblogs1523.csv",
+  link = "https://dwillis.github.io/sports-data-files/cbblogs1524.csv",
   button_label = "Download csv file",
   button_type = "danger",
   has_icon = TRUE,
@@ -38,7 +38,7 @@ library(tidyverse)
 ```
 
 ```{r}
-logs <- read_csv("data/cbblogs1523.csv")
+logs <- read_csv("data/cbblogs1524.csv")
 ```
 
 First, let's make the columns we'll need.
@@ -54,7 +54,7 @@ fit <- lm(differential ~ FGPctMargin, data = residualmodel)
 summary(fit)
 ```
 
-We've seen this output before, but let's review because if you are using scatterplots to make a point, you should do this. First, note the Min and Max residual at the top. A team has underperformed the model by 51 points (!), and a team has overperformed it by 68 points (!!). The median residual, where half are above and half are below, is just slightly below the fit line. Close here is good.
+We've seen this output before, but let's review because if you are using scatterplots to make a point, you should do this. First, note the Min and Max residual at the top. A team has under-performed the model by 51 points (!), and a team has overperformed it by 68 points (!!). The median residual, where half are above and half are below, is just slightly below the fit line. Close here is good.
 
 Next: Look at the Adjusted R-squared value. What that says is that 67 percent of a team's scoring differential can be predicted by their FG percentage margin.
 
