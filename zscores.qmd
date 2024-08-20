@@ -11,7 +11,7 @@ knitr::include_graphics(rep("images/simulations2.png"))
 
 If you think of the normal distribution, it means that 84.3 percent of all case are below that 1. If it were -1, it would mean the number is one standard deviation below the mean, and 84.3 percent of cases would be above that -1. So if you have numbers with z-scores of 3 or even 4, that means that number is waaaaaay above the mean.
 
-So let's use last year's Maryland women's basketball team, which if haven't been paying attention to current events, was very talented but had a few struggles.
+So let's use last year's Maryland women's basketball team, which if haven't been paying attention to current events, was talented but had a few struggles.
 
 ## Calculating a Z score in R
 
@@ -26,7 +26,7 @@ library(downloadthis)
 library(glue)
 
 dllink <- download_link(
-  link = "https://dwillis.github.io/sports-data-files/wbblogs23.csv",
+  link = "https://dwillis.github.io/sports-data-files/wbblogs24.csv",
   button_label = "Download csv file",
   button_type = "danger",
   has_icon = TRUE,
@@ -49,7 +49,7 @@ library(tidyverse)
 And load the data.
 
 ```{r}
-gamelogs <- read_csv("data/wbblogs23.csv")
+gamelogs <- read_csv("data/wbblogs24.csv")
 ```
 
 The first thing we need to do is select some fields we think represent team quality and a few things to help us keep things straight. So I'm going to pick shooting percentage, rebounding and the opponent version of the same two:
@@ -87,7 +87,7 @@ teamzscore <- teamtotals |>
   )  
 ```
 
-So now we have a dataframe called `teamzscore` that has 361 basketball teams with Z scores. What does it look like?
+So now we have a dataframe called `teamzscore` that has 360 basketball teams with Z scores. What does it look like?
 
 ```{r}
 head(teamzscore)
@@ -101,9 +101,9 @@ So who are the best teams in the country?
 teamzscore |> arrange(desc(TotalZscore))
 ```
 
-Don't sleep on Jackson State! If we look for Power Five schools, UConn and South Carolina are at the top, which checks out.
+Don't sleep on Fairfield! If we look for Power Five schools, UConn and South Carolina are at the top, which checks out.
 
-But closer to home, how is Maryland doing.
+But closer to home, how is Maryland doing?
 
 ```{r}
 teamzscore |> 
@@ -111,8 +111,7 @@ teamzscore |>
   arrange(desc(TotalZscore)) |>
   select(Team, TotalZscore)
 ```
-
-So, as we can see, with our composite Z Score, Maryland is below average but not great. But better than Ohio State. Notice how, by this measure, Indiana and Iowa are far ahead of most of the conference, with Illinois a surprising third.
+So, as we can see, with our composite Z Score, Maryland is below average; not great. But better than Ohio State. Notice how, by this measure, Indiana and Iowa are far ahead of most of the conference, with Nebraska a somewhat surprising third.
 
 We can limit our results to just Power Five conferences plus the Big East:
 
@@ -123,8 +122,7 @@ teamzscore |>
   arrange(desc(TotalZscore)) |>
   select(Team, TotalZscore)
 ```
-
-This makes a certain amount of sense: three of the Final Four teams - South Carolina, LSU and Iowa are in the top 10. Virginia Tech, the fourth team, ranks 13th. Kansas is an interesting #9 here. It doesn't necessarily mean they were the ninth-best team, but given their competition they shot the ball and rebounded the ball very well.
+This makes a certain amount of sense: three of the Final Four teams - South Carolina, UConn and Iowa are in the top 10. N.C. State, the fourth team, ranks 16th. Duke is an interesting #10 here. It doesn't necessarily mean they were the ninth-best team, but given their competition they shot the ball and rebounded the ball very well.
 
 ## Writing about z-scores
 
