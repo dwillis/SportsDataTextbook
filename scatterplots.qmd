@@ -2,7 +2,7 @@
 
 With the exception of those curmudgeons who love defense, everybody loves scoring. We enjoy blowout games (when our teams win) and bemoan low-scoring affairs. While scoring is a necessary condition for winning, it's not the only one. Plenty of bad teams score a lot - they just happen to give up more runs or points or goals.
 
-So how do we tell if a team that wins 10-1 is _better_ than a team that wins 2-1? How can we test the ingredients of success and determine what's a significant factor and what's a hot take? 
+So how do we tell if a team that wins 10-1 is *better* than a team that wins 2-1? How can we test the ingredients of success and determine what's a significant factor and what's a hot take?
 
 This is what we're going to start to answer today. And we'll do it with scatterplots and regressions. Scatterplots are very good at showing **relationships between two numbers**.
 
@@ -37,7 +37,8 @@ And the data.
 ```{r}
 logs <- read_csv("data/fieldhockey22.csv")
 ```
-This data is game-level, and we need to create a dataframe of all teams and their season stats. How much, team to team, does a thing matter? That's the question you're going to answer. 
+
+This data is game-level, and we need to create a dataframe of all teams and their season stats. How much, team to team, does a thing matter? That's the question you're going to answer.
 
 In our case, we want to know how much does scoring relate to wins? How much difference can we explain in wins by knowing how many goals a team scored? We're going to total up the number of goals each team scored and their season wins in one swoop.
 
@@ -92,15 +93,15 @@ The first thing: R-squared. In this case, the Adjusted R-squared value is 0.7555
 
 Second: The P-value. We want anything less than .05. If it's above .05, the difference between them is not statistically significant -- it's probably explained by random chance. In our case, we have 0.00000000000000022, so this isn't random chance. Which makes sense, because it's harder to win when you don't score.
 
-Normally, we'd stop here, but let's look at the third element: The coefficient. In this case, the coefficient for total_goals is 0.26671. What this model predicts, given that and the intercept of -1.14326, is this: For every goal you score, you add about .26 towards your wins total. So if you score 50 goals in a season, you'll be a 12-win team. Score 80, you're closer to a 20-win team, and so on. How am I doing that? Remember your algebra and y = mx + b. In this case, y is the wins, m is the coefficient, x is the number of goals and b is the intercept. 
+Normally, we'd stop here, but let's look at the third element: The coefficient. In this case, the coefficient for total_goals is 0.26671. What this model predicts, given that and the intercept of -1.14326, is this: For every goal you score, you add about .26 towards your wins total. So if you score 50 goals in a season, you'll be a 12-win team. Score 80, you're closer to a 20-win team, and so on. How am I doing that? Remember your algebra and y = mx + b. In this case, y is the wins, m is the coefficient, x is the number of goals and b is the intercept.
 
 Let's use Maryland as an example. They scored 81 goals last season.
 
-y = 0.26671 * 81 + -1.14326 or 20.4 wins
+y = 0.26671 \* 81 + -1.14326 or 20.4 wins
 
-How many wins did Maryland have? 19. 
+How many wins did Maryland have? 19.
 
-What does that mean? It means that Maryland slightly under-performed, according to this model, but not by much. Seems like goals is a pretty good predictor for Maryland. Where is Maryland on the plot? We know we can use layering for that. 
+What does that mean? It means that Maryland slightly under-performed, according to this model, but not by much. Seems like goals is a pretty good predictor for Maryland. Where is Maryland on the plot? We know we can use layering for that.
 
 ```{r}
 umd <- goals_wins |> filter(team == "Maryland Terrapins, Terps")
@@ -139,12 +140,13 @@ ggplot() +
 
 The downward slope from left to right indicates a negative relationship - the more fouls a team commits, the fewer wins it has. But the line here isn't very steep at all, and you can see the dots spread widely around the plot. So there's some kind of relationship, but how strong is it?
 
-Let's get our linear regression stats. 
+Let's get our linear regression stats.
 
 ```{r}
 foulsfit <- lm(wins ~ total_fouls, data = fouls_wins)
 summary(foulsfit)
 ```
+
 The p-value is a fair bit above 0.05, so the impact of fouls to wins (or losses) could just be random. The adjusted R-squared is all of 1 percent. We've do not have something here. Let's use our coefficients to look at Maryland's 2022-23 season.
 
 ```{r}

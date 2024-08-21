@@ -26,7 +26,7 @@ library(downloadthis)
 library(glue)
 
 dllink <- download_link(
-  link = "https://dwillis.github.io/sports-data-files/attendance.csv",
+  link = "https://thescoop.org/sports-data-files/attendance.csv",
   button_label = "Download csv file",
   button_type = "danger",
   has_icon = TRUE,
@@ -64,7 +64,6 @@ top10 <- attendance |> top_n(10, wt=change)
 bottom10 <- attendance |> top_n(10, wt=-change)
 ```
 
-
 Okay, now to do this I need to **save my plots to an object**. We do this the same way we save things to a dataframe -- with the arrow. We'll make two identical bar charts, one with the top 10 and one with the bottom 10.
 
 ```{r}
@@ -91,7 +90,7 @@ We can also stack them on top of each other:
 plot_grid(bar1, bar2, ncol=1) 
 ```
 
-To make these publishable, we should add headlines, chatter, decent labels, credit lines, etc. But to do this, we'll have to figure out which labels go on which charts, so we can make it look decent. For example -- both charts don't need x or y labels. If you don't have a title and subtitle on both, the spacing is off, so you need to leave one blank or the other blank. You'll just have to fiddle with it until you get it looking right. 
+To make these publishable, we should add headlines, chatter, decent labels, credit lines, etc. But to do this, we'll have to figure out which labels go on which charts, so we can make it look decent. For example -- both charts don't need x or y labels. If you don't have a title and subtitle on both, the spacing is off, so you need to leave one blank or the other blank. You'll just have to fiddle with it until you get it looking right.
 
 ```{r}
 bar1 <- ggplot() + 
@@ -137,7 +136,7 @@ bar1 <- ggplot() +
   geom_bar(data=top10, aes(x=reorder(Institution, change), weight=change)) + 
   geom_bar(data=sd, aes(x=reorder(Institution, change), weight=change), fill="#011E41") + 
   coord_flip() + 
-  labs(title="College football winners...", subtitle = "Not every football program saw attendance shrink in 2018. But some really did.",  x="", y="Percent change", caption = "") +
+  labs(title="College football winners...", subtitle = "Not every football program saw attendance shrink in 2022 But some really did.",  x="", y="Percent change", caption = "") +
   theme_minimal() + 
   theme(
     plot.title = element_text(size = 16, face = "bold"),
@@ -165,4 +164,3 @@ bar2 <- ggplot() +
 ```{r}
 plot_grid(bar1, bar2) 
 ```
-
