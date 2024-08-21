@@ -30,7 +30,7 @@ library(downloadthis)
 library(glue)
 
 dllink <- download_link(
-  link = "https://dwillis.github.io/sports-data-files/ncaa_womens_volleyball_matchstats_2022.csv",
+  link = "https://dwillis.github.io/sports-data-files/ncaa_womens_volleyball_matchstats_2023.csv",
   button_label = "Download csv file",
   button_type = "danger",
   has_icon = TRUE,
@@ -44,7 +44,7 @@ glue("<pre><p><strong>For this walkthrough:</strong></p><p>{dllink}</p></pre>")
 And load it.
 
 ```{r}
-logs <- read_csv("data/ncaa_womens_volleyball_matchstats_2022.csv")
+logs <- read_csv("data/ncaa_womens_volleyball_matchstats_2023.csv")
 ```
 
 For the first example, let's look at the difference between a team's errors versus their opponents' errors. To get this, we're going to add up all errors and opponent errors for a team in a season and take a look at where they come out. To make this readable, I'm going to focus on the Big Ten.
@@ -116,7 +116,7 @@ ggplot() +
   theme_minimal()
 ```
 
-Maryland's opponents have committed a lot of errors - that's good news for the Terps - but there's a clear gap between Maryland and the top teams in the conference when it comes to committing errors.
+Maryland's opponents have committed some errors - that's good news for the Terps - but there's a clear gap between Maryland and the top teams in the conference when it comes to committing errors.
 
 ## Lollipop charts
 
@@ -140,7 +140,7 @@ ggplot() +
     aes(y=reorder(team, opp_errors), x=opp_errors), 
     horizontal = TRUE
     ) + theme_minimal() + 
-  labs(title = "Maryland, Rutgers force more errors", y="team")
+  labs(title = "Wisconsin, Purdue force more errors", y="team")
 ```
 
 How about some layering?
@@ -163,7 +163,7 @@ ggplot() +
     color = "red"
   ) + 
   theme_minimal() + 
-  labs(title = "Maryland forced the most errors among Big Ten teams", y="team")
+  labs(title = "Maryland middle of the pack among Big Ten teams", y="team")
 ```
 
 The headline says it all.

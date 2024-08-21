@@ -15,7 +15,7 @@ library(downloadthis)
 library(glue)
 
 dllink <- download_link(
-  link = "https://dwillis.github.io/sports-data-files/wbblogs23.csv",
+  link = "https://dwillis.github.io/sports-data-files/wbblogs24.csv",
   button_label = "Download csv file",
   button_type = "danger",
   has_icon = TRUE,
@@ -36,7 +36,7 @@ library(tidyverse)
 And we need to load our logs data we just downloaded.
 
 ```{r}
-logs <- read_csv("data/wbblogs23.csv")
+logs <- read_csv("data/wbblogs24.csv")
 ```
 
 Here we're going to look at the scoring differential of teams. If you score more than your opponent, you win. So it stands to reason that if you score a lot more than your opponent over the course of a season, you should be very good, right? Let's see.
@@ -46,7 +46,7 @@ The first thing we're going to do is calculate that differential. Then, we'll gr
 ```{r}
 difflogs <- logs |> 
   mutate(Differential = TeamScore - OpponentScore) |> 
-  group_by(TeamFull) |> 
+  group_by(TeamFullName) |> 
   mutate(CumDiff = cumsum(Differential))
 ```
 
@@ -86,13 +86,13 @@ ggplot() +
   geom_step(data=bigdiff, aes(x=Date, y=CumDiff, group=Team), color="light grey") +
   geom_step(data=umd, aes(x=Date, y=CumDiff, group=Team), color="red") + 
   geom_step(data=ill, aes(x=Date, y=CumDiff, group=Team), color="orange") +
-  annotate("text", x=(as.Date("2022-12-10")), y=300, label="Illinois") +
-  annotate("text", x=(as.Date("2023-02-01")), y=150, label="Maryland") +
+  annotate("text", x=(as.Date("2023-12-10")), y=300, label="Illinois") +
+  annotate("text", x=(as.Date("2024-02-01")), y=150, label="Maryland") +
   labs(
     x="Date", 
     y="Cumulative Point Differential", 
     title="Maryland's Uphill Climb, Illinois Hits Plateau", 
-    subtitle="The Terps became among the Big Ten leaders in point differential.", 
+    subtitle="The Terps were middle of the pack in point differential.", 
     caption="Source: Sports-Reference.com | By Derek Willis") +
   theme_minimal()
 ```
