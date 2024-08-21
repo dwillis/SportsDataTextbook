@@ -13,7 +13,7 @@ library(downloadthis)
 library(glue)
 
 dllink <- download_link(
-  link = "https://dwillis.github.io/sportsdatafiles/logs23.csv",
+  link = "https://dwillis.github.io/sportsdatafiles/logs24.csv",
   button_label = "Download csv file",
   button_type = "danger",
   has_icon = TRUE,
@@ -36,7 +36,7 @@ library(tidyverse)
 And the data.
 
 ```{r}
-games <- read_csv("data/logs23.csv")
+games <- read_csv("data/logs24.csv")
 ```
 
 What we have here is every game in college basketball this past season. The question we want to answer is this: Who were the best rebounders in the Big Ten? And what role did offensive and defensive rebounds play in making that happen?
@@ -127,4 +127,4 @@ ggplot() +
   coord_flip()
 ```
 
-And just like that ... Purdue, the team with the best record in the league, comes out on top. Maryland is tenth, which seems worse than its record would indicate. Penn State is an interesting semi-outlier here. Why? 
+And just like that ... Purdue, the team with the best record in the league, comes out on top. Maryland is ninth, which seems a little worse than its record would indicate.
