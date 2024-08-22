@@ -22,7 +22,7 @@ Another bit of setup: we need to set the seed for the random number generator. T
 set.seed(1234)
 ```
 
-So let's look at last year's women's basketball team as a group of shooters. Last season we had some strong shooters in Diamond Miller and Abby Meyers, both of whom were drafted by WNBA teams in the first round. Who are the shooters-in-waiting?
+So let's look at last year's women's basketball team as a group of shooters. Maryland didn't really have someone like Diamond Miller or Abby Meyers on the team, and some of the better scorers have graduated. Who are the shooters-in-waiting?
 
 ```{r}
 #| warning: false
@@ -33,7 +33,7 @@ library(downloadthis)
 library(glue)
 
 dllink <- download_link(
-  link = "https://thescoop.org/sports-data-files/wbb_players_2023.csv",
+  link = "https://thescoop.org/sports-data-files/wbb_players24.csv",
   button_label = "Download csv file",
   button_type = "danger",
   has_icon = TRUE,
@@ -47,7 +47,7 @@ glue("<pre><p><strong>For this walkthrough:</strong></p><p>{dllink}</p></pre>")
 First we'll load our player data.
 
 ```{r}
-players <- read_csv("data/wbb_players_2023.csv")
+players <- read_csv("data/wbb_players24.csv") |> clean_names()
 ```
 
 We know this data has a lot of players who didn't play, so let's get rid of them.
@@ -68,16 +68,16 @@ If we include *all* players, we'll have too many dots. So let's narrow it down. 
 summary(activeplayers$fga)
 ```
 
-The median number of shots is 87, but we only really care about good ones. So let's use 182 attempts -- the third quartile -- as our cutoff.
+The median number of shots is 115, but we only really care about prolific ones. So let's use 224 attempts -- the third quartile -- as our cutoff.
 
 ```{r}
-shooters <- activeplayers |> filter(fga > 182)
+shooters <- activeplayers |> filter(fga > 224)
 ```
 
 Now we've got enough for a beeswarm plot. It works very much like you would expect -- the group value is the x, the number is the y. We're going to beeswarm by position, and the dots will be true shooting percentage.
 
 ```{r}
-ggplot() + geom_beeswarm(data=shooters, aes(x=position, y=tspct), color="grey")
+ggplot() + geom_beeswarm(data=shooters, aes(x=pos, y=tspct), color="grey")
 ```
 
 You can see that there's a lot fewer centers who have attempted more than 182 shots than guards, but then there's a lot more guards in college basketball than anything else. In the guards column, note that fat width of the swarm is between .5 and .6. So that means most guards who shoot more than 197 shots end up in that area. They're the average shooter at that level. You can see, some are better, some are worse.
@@ -88,12 +88,12 @@ We'll filter players on Maryland who meet our criteria.
 
 ```{r}
 umd <- activeplayers |> 
-  filter(team == "Maryland") |> 
-  filter(fga>182) |> 
+  filter(team == "Maryland Terrapins Women's") |> 
+  filter(fga>224) |> 
   arrange(desc(tspct))
 ```
 
-Six Terps took more than 182 shots. Number not on the roster this season? Two, but they were the two most-prolific shooters.
+Four Terps took more than 224 shots. Number not on the roster this season? Two: Brinae Alexander and Jakia Brown-Turner.
 
 But how good are they as true shooters?
 
@@ -104,14 +104,14 @@ ggplot() +
   geom_beeswarm(
     data=shooters, 
     groupOnX=TRUE, 
-    aes(x=position, y=tspct), color="grey") + 
+    aes(x=pos, y=tspct), color="grey") + 
   geom_beeswarm(
     data=umd, 
     groupOnX=TRUE, 
-    aes(x=position, y=tspct), color="red")
+    aes(x=pos, y=tspct), color="red")
 ```
 
-One very good guard, and some good forwards. Who are they?
+Who are they?
 
 This is where we can use ggrepel. Let's add a text layer and label the dots.
 
@@ -120,17 +120,17 @@ ggplot() +
   geom_beeswarm(
     data=shooters, 
     groupOnX=TRUE, 
-    aes(x=position, y=tspct), color="grey") + 
+    aes(x=pos, y=tspct), color="grey") + 
   geom_beeswarm(
     data=umd, 
     groupOnX=TRUE, 
-    aes(x=position, y=tspct), color="red") +
+    aes(x=pos, y=tspct), color="red") +
   geom_text_repel(
     data=umd, 
-    aes(x=position, y=tspct, label=player))
+    aes(x=pos, y=tspct, label=player))
 ```
 
-So Brinae Alexander was our best shooter by true shooting percentage. Most of the rest were at or above average shooters for that volume of shooting; only Lavender Briggs had a true shooting percentage under 50%.
+So Shyanne Sellers was our best shooter by true shooting percentage, with Brinae Alexander very close behind. The other two were at or above average shooters for that volume of shooting.
 
 ## A few other options
 
@@ -143,14 +143,14 @@ ggplot() +
   geom_quasirandom(
     data=shooters, 
     groupOnX=TRUE, 
-    aes(x=position, y=tspct), color="grey") + 
+    aes(x=pos, y=tspct), color="grey") + 
   geom_quasirandom(
     data=umd, 
     groupOnX=TRUE, 
-    aes(x=position, y=tspct), color="red") +
+    aes(x=pos, y=tspct), color="red") +
   geom_text_repel(
     data=umd, 
-    aes(x=position, y=tspct, label=player))
+    aes(x=pos, y=tspct, label=player))
 ```
 
 Quasirandom spreads out the dots you see in beeswarm using -- you guessed it -- quasirandom spacing.
@@ -161,13 +161,13 @@ For `geom_jitter`, we need to remove the groupOnX value. Why? No clue.
 ggplot() + 
   geom_jitter(
     data=shooters, 
-    aes(x=position, y=tspct), color="grey") + 
+    aes(x=pos, y=tspct), color="grey") + 
   geom_jitter(
     data=umd, 
-    aes(x=position, y=tspct), color="red") +
+    aes(x=pos, y=tspct), color="red") +
   geom_text_repel(
     data=umd, 
-    aes(x=position, y=tspct, label=player))
+    aes(x=pos, y=tspct, label=player))
 ```
 
 `geom_jitter` spreads out the dots evenly across the width of the column, randomly deciding where in the line of the true shooting percentage they appear.

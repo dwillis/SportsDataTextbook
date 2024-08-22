@@ -6,9 +6,11 @@ Sometimes, the best way to show your data is with a table -- simple rows and col
 
 For this assignment, we'll need `gt` so go over to the console and run:
 
-    install.packages("gt")
+```         
+install.packages("gt")
+```
 
-So what does all of these libraries do? Let's gather a few and use data of every men's basketball game between 2015-2023.
+So what does all of these libraries do? Let's gather a few and use data of every men's basketball game between 2015-2024.
 
 ```{r}
 #| warning: false
@@ -19,7 +21,7 @@ library(downloadthis)
 library(glue)
 
 dllink <- download_link(
-  link = "http://dwillis.github.io/sportsdatafiles/cbblogs1523.csv",
+  link = "http://dwillis.github.io/sportsdatafiles/cbblogs1524.csv",
   button_label = "Download csv file",
   button_type = "danger",
   has_icon = TRUE,
@@ -42,25 +44,25 @@ library(gt)
 And the data.
 
 ```{r}
-logs <- read_csv("data/cbblogs1523.csv")
+logs <- read_csv("data/cbblogs1524.csv")
 ```
 
 Let's ask this question: which college basketball team saw the greatest decrease in three point attempts per game between last season as a percentage of shots? The simplest way to calculate that is by percent change.
 
 We've got a little work to do, putting together ideas we've used before. What we need to end up with is some data that looks like this:
 
-`Team | 2021-2022 season threes | 2022-2023 season threes | pct change`
+`Team | 2022-2023 season threes | 2023-2024 season threes | pct change`
 
 To get that, we'll need to do some filtering to get the right seasons, some grouping and summarizing to get the right number, some pivoting to get it organized correctly so we can mutate the percent change.
 
 ```{r}
 threechange <- logs |>
-  filter(Season == "2021-2022" | Season == "2022-2023") |>
+  filter(Season == "2022-2023" | Season == "2023-2024") |>
   group_by(Team, Season) |>
   summarise(Total3PA = sum(Team3PA)) |>
   pivot_wider(names_from=Season, values_from = Total3PA) |>
-  filter(!is.na(`2022-2023`)) |> 
-  mutate(PercentChange = (`2022-2023`-`2021-2022`)/`2021-2022`) |>
+  filter(!is.na(`2023-2024`)) |> 
+  mutate(PercentChange = (`2023-2024`-`2022-2023`)/`2022-2023`) |>
   arrange(PercentChange) |> 
   ungroup() |>
   slice_head(n=10) # just want a top 10 list, but can't use top_n!

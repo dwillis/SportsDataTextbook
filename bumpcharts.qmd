@@ -151,7 +151,7 @@ ggplot() +
   scale_y_reverse() 
 ```
 
-And the last thing: anyone else annoyed at 7.5th place on the left? We can fix that too by specifying the breaks in scale_y\_reverse. We can do that with the x axis as well, but since we haven't reversed it, we do that in `scale_x_continuous` with the same breaks. Also: forgot my source and credit line.
+And the last thing: anyone else annoyed at 7.5th place on the left? We can fix that too by specifying the breaks in scale_y_reverse. We can do that with the x axis as well, but since we haven't reversed it, we do that in `scale_x_continuous` with the same breaks. Also: forgot my source and credit line.
 
 One last thing: Let's change the width of the chart to make the names fit. We can do that by adding `fig.width=X` in the `{r}` setup in your block. So something like this:
 
