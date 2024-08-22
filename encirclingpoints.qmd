@@ -139,7 +139,7 @@ mdtop <- players24 |> filter(Team == "Maryland Terrapins Men's") |> top_n(3, `3P
 And just like above, we can plug in our players geom, our mdtop dataframe into another geom, then encircle that dataframe. Slap some headlines and annotations on it and here's what we get:
 
 ```{r}
-ggplot() + geom_point(data=players23, aes(x=MP, y=`3PA`), color="grey") + geom_point(data=mdtop, aes(x=MP, y=`3PA`), color="red") + geom_encircle(data=mdtop, aes(x=MP, y=`3PA`), s_shape=.02, expand=.18, colour="red") +
+ggplot() + geom_point(data=players24, aes(x=MP, y=`3PA`), color="grey") + geom_point(data=mdtop, aes(x=MP, y=`3PA`), color="red") + geom_encircle(data=mdtop, aes(x=MP, y=`3PA`), s_shape=.02, expand=.18, colour="red") +
   geom_text(aes(x=400, y=200, label="Maryland's top three shooters")) + 
   labs(title="The Big Three?", subtitle="Maryland's top three point shooters not among the leaders in college basketball ", x="Minutes", y="Three point attempts") + 
   theme_minimal() + 

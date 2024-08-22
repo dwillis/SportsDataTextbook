@@ -12,6 +12,7 @@ Like ggalt and ggrepel, ggbeeswarm adds a couple new geoms to ggplot. We'll need
 #| warning: false
 #| message: false
 library(tidyverse)
+library(janitor)
 library(ggbeeswarm)
 library(ggrepel)
 ```
