@@ -6,7 +6,7 @@ book:
   title: "Sports Data Analysis and Visualization"
   subtitle: "Code, data and visuals for storytellers"
   author: "Matt Waite & Derek Willis"
-  date: "2024-08-19"
+  date: "2024-08-22"
   chapters:
     - index.qmd
     - intro.qmd

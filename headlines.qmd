@@ -1,16 +1,16 @@
 # Headlines
 
-These are the pieces of a good graphic: 
+These are the pieces of a good graphic:
 
-* Headline
-* Chatter
-* The main body
-* Annotations
-* Labels
-* Source line
-* Credit line
+-   Headline
+-   Chatter
+-   The main body
+-   Annotations
+-   Labels
+-   Source line
+-   Credit line
 
-The first on that list is the first for a reason. The headline is an incredibly important part of any graphic: it's often the first thing a reader will see. It's got to entice people in, tell them a little bit about what they're going to see, and help tell the story. 
+The first on that list is the first for a reason. The headline is an incredibly important part of any graphic: it's often the first thing a reader will see. It's got to entice people in, tell them a little bit about what they're going to see, and help tell the story.
 
 The second item is the chatter -- the text underneath that headline. It needs to work with the headline to further the story, drive people toward the point, maybe add some context.
 
@@ -52,13 +52,13 @@ ggplot(offense, aes(x=`Yards/G`, y=`Points/G`)) +
 
 First, let's start with some headline basics:
 
-* Your headline should be about what the chart is about, not what makes up the chart. What story is the chart telling? What made it interesting to you? Don't tell me what the stats are, tell me what it says.
-* Your headline should be specific. Generic headlines are boring and ignored. 
-* Your headline should, most often, have a verb. It's not a 100 percent requirement, but a headline without a verb means you're trying to be cute and ...
-* Your headline shouldn't be overly cute. Trying to get away with slang, a very Of The Moment cultural reference that will be forgotten soon, or some inside joke is asking for trouble. 
-* Your headline should provoke a reaction. 
+-   Your headline should be about what the chart is about, not what makes up the chart. What story is the chart telling? What made it interesting to you? Don't tell me what the stats are, tell me what it says.
+-   Your headline should be specific. Generic headlines are boring and ignored.
+-   Your headline should, most often, have a verb. It's not a 100 percent requirement, but a headline without a verb means you're trying to be cute and ...
+-   Your headline shouldn't be overly cute. Trying to get away with slang, a very Of The Moment cultural reference that will be forgotten soon, or some inside joke is asking for trouble.
+-   Your headline should provoke a reaction.
 
-Given our graph, here's a few that don't work. 
+Given our graph, here's a few that don't work.
 
 ```{r}
 ggplot(offense, aes(x=`Yards/G`, y=`Points/G`)) + 
@@ -74,12 +74,13 @@ ggplot(offense, aes(x=`Yards/G`, y=`Points/G`)) +
   geom_point(data=umd, aes(x=`Yards/G`, y=`Points/G`), color="red") + 
   geom_text_repel(data=umd, aes(x=`Yards/G`, y=`Points/G`, label="Maryland 2018"))
 ```
-The problems here: 
 
-* No verb. 
-* Generic, forgettable, doesn't say anything. 
-* What is this chart about? What does it say? We have no idea from the headline and chatter.
-* Don't repeat words from the headline in the chatter. Nebraska Nebraska looks bad. Make one of the Huskers if you're going to do this.
+The problems here:
+
+-   No verb.
+-   Generic, forgettable, doesn't say anything.
+-   What is this chart about? What does it say? We have no idea from the headline and chatter.
+-   Don't repeat words from the headline in the chatter. Nebraska Nebraska looks bad. Make one of the Huskers if you're going to do this.
 
 Another example:
 
@@ -97,13 +98,14 @@ ggplot(offense, aes(x=`Yards/G`, y=`Points/G`)) +
   geom_point(data=umd, aes(x=`Yards/G`, y=`Points/G`), color="red") + 
   geom_text_repel(data=umd, aes(x=`Yards/G`, y=`Points/G`, label="Maryland 2018"))
 ```
-What's wrong here? 
 
-* The headline is about the stats, not the story.
-* The headline lacks a verb. 
-* The headline lacks any interest, really. 
-* The headline at least moves in the direction of what this chart is about, but see the previous two.
-* The chatter adds more flavor to it, but what does "below the blue line" even mean? We're leaving the reader with a lot of questions and no real answers. That;s bad. 
+What's wrong here?
+
+-   The headline is about the stats, not the story.
+-   The headline lacks a verb.
+-   The headline lacks any interest, really.
+-   The headline at least moves in the direction of what this chart is about, but see the previous two.
+-   The chatter adds more flavor to it, but what does "below the blue line" even mean? We're leaving the reader with a lot of questions and no real answers. That;s bad.
 
 Let's try to do this better.
 
@@ -122,11 +124,11 @@ ggplot(offense, aes(x=`Yards/G`, y=`Points/G`)) +
   geom_text_repel(data=umd, aes(x=`Yards/G`, y=`Points/G`, label="Maryland 2018"))
 ```
 
-What works here: 
+What works here:
 
-* Provokes a reaction by asking a question. Drives at what the story is about.
-* The chatter answers the question in the headline without talking about the blue line, a model, anything. A reader can see it.
-* Simple, precise, direct language.
+-   Provokes a reaction by asking a question. Drives at what the story is about.
+-   The chatter answers the question in the headline without talking about the blue line, a model, anything. A reader can see it.
+-   Simple, precise, direct language.
 
 One more, same chart.
 
@@ -145,10 +147,10 @@ ggplot(offense, aes(x=`Yards/G`, y=`Points/G`)) +
   geom_text_repel(data=umd, aes(x=`Yards/G`, y=`Points/G`, label="Maryland 2018"))
 ```
 
-What works here: 
+What works here:
 
-* Strong verb: overperformed.
-* Headline tells the story. Chatter bolsters it. 
-* Doesn't repeat Maryland or Terps 
+-   Strong verb: overperformed.
+-   Headline tells the story. Chatter bolsters it.
+-   Doesn't repeat Maryland or Terps
 
 Taking time to sharpen your headlines will make your graphics better.
