@@ -1,0 +1,27 @@
+```{r}
+library(tidyverse)
+```
+
+
+### Aggregates Chapter
+
+```{r}
+nbaplayers <- read_csv("data/nbaadvancedplayers2324.csv")
+```
+```{r}
+logs24 <- read_csv("data/logs24.csv")
+
+logs1524 <- read_csv("data/cbblogs1524.csv")
+
+logs1524 <- logs1524 |> filter(Season != '2023-24') |> filter(Season !='2023-2024')
+
+logs1524 <- bind_rows(logs1524, logs24)
+
+write_csv(logs1524, "data/cbblogs1524.csv")
+```
+
+```{r}
+ucf_24 <- logs1524 |> filter(Team == 'UCF', Season == '2023-2024')
+```
+
+
