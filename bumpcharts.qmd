@@ -13,7 +13,7 @@ library(tidyverse)
 library(ggbump)
 ```
 
-Let's use the 2020-21 college football playoff rankings:
+Let's use the 2021-22 college football playoff rankings:
 
 ```{r}
 #| warning: false
@@ -119,7 +119,7 @@ ggplot() +
   geom_point(data=newrankings, aes(x=Week, y=Rank, color=Team), size = 4) +   
   geom_text(data = newrankings |> filter(Week == min(Week)), aes(x = Week - .2, y=Rank, label = Team), size = 3, hjust = 1) +
   geom_text(data = newrankings |> filter(Week == max(Week)), aes(x = Week + .2, y=Rank, label = Team), size = 3, hjust = 0) +
-  labs(title="Last year's top ten was anything but boring", subtitle="", y= "Rank", x = "Week") +
+  labs(title="The top ten was anything but boring in 2021-22", subtitle="", y= "Rank", x = "Week") +
   theme_minimal() +
   theme(
     legend.position = "none",
@@ -137,7 +137,7 @@ ggplot() +
   geom_point(data=newrankings, aes(x=Week, y=Rank, color=Team), size = 4) +   
   geom_text(data = newrankings |> filter(Week == min(Week)), aes(x = Week - .2, y=Rank, label = Team), size = 3, hjust = 1) +
   geom_text(data = newrankings |> filter(Week == max(Week)), aes(x = Week + .2, y=Rank, label = Team), size = 3, hjust = 0) +
-  labs(title="Last year's top ten was anything but boring", subtitle="", y= "Rank", x = "Week") +
+  labs(title="The top ten was anything but boring in 2021-22", subtitle="", y= "Rank", x = "Week") +
   theme_minimal() +
   theme(
     legend.position = "none",
@@ -155,13 +155,13 @@ And the last thing: anyone else annoyed at 7.5th place on the left? We can fix t
 
 One last thing: Let's change the width of the chart to make the names fit. We can do that by adding `fig.width=X` in the `{r}` setup in your block. So something like this:
 
-```{r fig.width=9}
+```{r fig.width=18}
 ggplot() + 
   geom_bump(data=newrankings, aes(x=Week, y=Rank, color=Team)) + 
   geom_point(data=newrankings, aes(x=Week, y=Rank, color=Team), size = 4) +   
   geom_text(data = newrankings |> filter(Week == min(Week)), aes(x = Week - .2, y=Rank, label = Team), size = 3, hjust = 1) +
   geom_text(data = newrankings |> filter(Week == max(Week)), aes(x = Week + .2, y=Rank, label = Team), size = 3, hjust = 0) +
-  labs(title="Last year's top ten was anything but boring", subtitle="", y= "Rank", x = "Week") +
+  labs(title="The top ten was anything but boring in 2021-22", subtitle="", y= "Rank", x = "Week") +
   theme_minimal() +
   theme(
     legend.position = "none",
