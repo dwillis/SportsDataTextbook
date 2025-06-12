@@ -49,11 +49,11 @@ If you want to see the first six rows -- handy to take a peek at your data -- yo
 head(attendance)
 ```
 
-The code to calculate percent change is pretty simple. Remember, with `summarize`, we used `n()` to count things. With `mutate`, we use very similar syntax to calculate a new value using other values in our dataset. So in this case, we're trying to do (new-old)/old, but we're doing it with fields. If we look at what we got when we did `head`, you'll see there's \`2023\` as the new data, and we'll use \`2022\` as the old data. So we're looking at one year. Then, to help us, we'll use arrange again to sort it, so we get the fastest growing school over one year.
+The code to calculate percent change is pretty simple. Remember, with `summarize`, we used `n()` to count things. With `mutate`, we use very similar syntax to calculate a new value using other values in our dataset. So in this case, we're trying to do (new-old)/old, but we're doing it with fields. If we look at what we got when we did `head`, you'll see there's \`2024\` as the new data, and we'll use \`2023\` as the old data. So we're looking at one year. Then, to help us, we'll use arrange again to sort it, so we get the fastest growing school over one year.
 
 ```{r}
 attendance |> mutate(
-  change = (`2023` - `2022`)/`2022`
+  change = (`2024` - `2023`)/`2023`
 ) 
 ```
 
@@ -61,7 +61,7 @@ What do we see right away? Do those numbers look like we expect them to? No. The
 
 ```{r}
 attendance |> mutate(
-  change = ((`2023` - `2022`)/`2022`)*100
+  change = ((`2024` - `2023`)/`2023`)*100
 ) 
 ```
 
@@ -69,11 +69,11 @@ Now, does this ordering do anything for us? No. Let's fix that with arrange.
 
 ```{r}
 attendance |> mutate(
-  change = ((`2023` - `2022`)/`2022`)*100
+  change = ((`2024` - `2023`)/`2023`)*100
 ) |> arrange(desc(change))
 ```
 
-So who had the most growth in 2023 compared to the year before? Houston, followed by USF and Arizona State. How about Maryland at #10!
+So who had the most growth in 2024 compared to the year before? SMU, followed by Ohio State and Colorado State. How about Central Michigan at #6!
 
 ## A more complex example
 
@@ -81,7 +81,7 @@ There's metric in basketball that's easy to understand -- shooting percentage. I
 
 Basketball nerds, because of these weaknesses, have created a new metric called [True Shooting Percentage](https://en.wikipedia.org/wiki/True_shooting_percentage). True shooting percentage takes into account all aspects of a players shooting to determine who the real shooters are.
 
-Using `dplyr` and `mutate`, we can calculate true shooting percentage. So let's look at a new dataset, one of every college basketball player's season stats in 2023-24 season. It's a dataset of 5,688 players, and we've got 59 variables -- one of them is True Shooting Percentage, but we're going to ignore that.
+Using `dplyr` and `mutate`, we can calculate true shooting percentage. So let's look at a new dataset, one of every college basketball player's season stats in 2024-25 season. It's a dataset of 5,688 players, and we've got 59 variables -- one of them is True Shooting Percentage, but we're going to ignore that.
 
 ```{r}
 #| warning: false
@@ -92,7 +92,7 @@ library(downloadthis)
 library(glue)
 
 dllink <- download_link(
-  link = "https://dwillis.github.io/sports-data-files/players24.csv",
+  link = "https://dwillis.github.io/sports-data-files/players25.csv",
   button_label = "Download csv file",
   button_type = "danger",
   has_icon = TRUE,
@@ -107,7 +107,7 @@ glue("<pre><p><strong>For this walkthrough:</strong></p><p>{dllink}</p></pre>")
 Import it like this:
 
 ```{r}
-players <- read_csv("data/players24.csv")
+players <- read_csv("data/players25.csv")
 ```
 
 The basic true shooting percentage formula is `(Points / (2*(FieldGoalAttempts + (.44 * FreeThrowAttempts)))) * 100`. Let's talk that through. Points divided by a lot. It's really field goal attempts plus 44 percent of the free throw attempts. Why? Because that's about what a free throw is worth, compared to other ways to score. After adding those things together, you double it. And after you divide points by that number, you multiply the whole lot by 100.
