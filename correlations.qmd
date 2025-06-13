@@ -6,7 +6,7 @@ Can we put some numbers behind that? Can we prove it or not?
 
 This is what we're going to start to answer. And we'll do it with correlations and regressions.
 
-First, we need data from the 2024 women's college soccer season.
+First, we need data from the 2025 women's college lacrosse season.
 
 ```{r}
 #| warning: false
@@ -43,7 +43,7 @@ Now import the data.
 correlations <- read_csv("https://raw.githubusercontent.com/dwillis/NCAAWomensSoccerData/main/data/ncaa_womens_soccer_matchstats_2024.csv")
 ```
 
-To do this, we need all college soccer teams and their season stats from this year. How much, over the course of a season, does a thing matter? That's the question you're going to answer.
+To do this, we need all college lacrosse teams and their season stats from this year. How much, over the course of a season, does a thing matter? That's the question you're going to answer.
 
 In our case, we want to know how much does a team's fouls influence the number of goals they score in a season? How much difference can we explain in goals with fouls?
 

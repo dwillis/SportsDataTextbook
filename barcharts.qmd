@@ -58,18 +58,18 @@ First, let's get a top 10 list by announced attendance in the most recent season
 
 ```{r}
 attendance |> 
-  arrange(desc(`2023`)) |> 
+  arrange(desc(`2024`)) |> 
   top_n(10) |> 
-  select(Institution, `2023`)
+  select(Institution, `2024`)
 ```
 
 That looks good, so let's save it to a new data frame and use that data frame instead going forward.
 
 ```{r}
 top10 <- attendance |>
-  arrange(desc(`2023`)) |> 
+  arrange(desc(`2024`)) |> 
   top_n(10) |> 
-  select(Institution, `2023`)
+  select(Institution, `2024`)
 ```
 
 ## The bar chart
@@ -96,7 +96,7 @@ We get ... weirdness. We expected to see bars of different sizes, but we get all
 ggplot() + 
   geom_bar(
     data=top10, 
-    aes(x=Institution, weight=`2023`)
+    aes(x=Institution, weight=`2024`)
   )
 ```
 
@@ -109,8 +109,8 @@ ggplot() +
   geom_bar(
     data=top10, 
     aes(
-      x=reorder(Institution, `2023`), 
-      weight=`2023`
+      x=reorder(Institution, `2024`), 
+      weight=`2024`
       )
     )
 ```
@@ -122,8 +122,8 @@ ggplot() +
   geom_bar(
     data=top10, 
     aes(
-      x=reorder(Institution, -`2023`), 
-      weight=`2023`
+      x=reorder(Institution, -`2024`), 
+      weight=`2024`
       )
     )
 ```
@@ -145,8 +145,8 @@ ggplot() +
   geom_bar(
     data=top10, 
     aes(
-      x=reorder(Institution, -`2023`), 
-      weight=`2023`
+      x=reorder(Institution, -`2024`), 
+      weight=`2024`
       )
     ) + 
   scale_y_continuous(labels=comma)
@@ -163,8 +163,8 @@ ggplot() +
   geom_bar(
     data=top10, 
     aes(
-      x=reorder(Institution, -`2023`), 
-      weight=`2023`)
+      x=reorder(Institution, -`2024`), 
+      weight=`2024`)
     ) + 
   scale_y_continuous(labels=comma) + 
   labs(
@@ -180,8 +180,8 @@ The library has lots and lots of ways to alter the styling -- we can programmati
 ggplot() + 
   geom_bar(
     data=top10, 
-    aes(x=reorder(Institution, -`2023`),
-        weight=`2023`)) + 
+    aes(x=reorder(Institution, -`2024`),
+        weight=`2024`)) + 
   scale_y_continuous(labels=comma) + 
   labs(
     title="Top 10 Football Programs By Attendance", 
@@ -196,8 +196,8 @@ Or the minimal theme:
 ggplot() + 
   geom_bar(
     data=top10, 
-    aes(x=reorder(Institution, -`2023`),
-        weight=`2023`)) + 
+    aes(x=reorder(Institution, -`2024`),
+        weight=`2024`)) + 
   scale_y_continuous(labels=comma) + 
   labs(
     title="Top 10 Football Programs By Attendance", 
@@ -216,8 +216,8 @@ Sometimes, we don't want vertical bars. Maybe we think this would look better ho
 ggplot() + 
   geom_bar(
     data=top10, 
-    aes(x=reorder(Institution, -`2023`),
-        weight=`2023`)) + 
+    aes(x=reorder(Institution, -`2024`),
+        weight=`2024`)) + 
   scale_y_continuous(labels=comma) + 
   labs(
     title="Top 10 Football Programs By Attendance", 
