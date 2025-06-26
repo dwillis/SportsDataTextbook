@@ -85,7 +85,7 @@ We'll filter players on Maryland who meet our criteria.
 umd <- activeplayers |> 
   filter(team == "Maryland Terrapins Women's") |> 
   filter(fga>222) |> 
-  arrange(desc(tspct))
+  arrange(desc(ts_percent))
 ```
 
 Five Terps took more than 222 shots. Number not on the roster this season? Three: Sarah Te-Biasu, Shyanne Sellers and Christina Dalce.
@@ -99,11 +99,11 @@ ggplot() +
   geom_beeswarm(
     data=shooters, 
     groupOnX=TRUE, 
-    aes(x=pos, y=tspct), color="grey") + 
+    aes(x=pos, y=ts_percent), color="grey") + 
   geom_beeswarm(
     data=umd, 
     groupOnX=TRUE, 
-    aes(x=pos, y=tspct), color="red")
+    aes(x=pos, y=ts_percent), color="red")
 ```
 
 Who are they?
@@ -115,14 +115,14 @@ ggplot() +
   geom_beeswarm(
     data=shooters, 
     groupOnX=TRUE, 
-    aes(x=pos, y=tspct), color="grey") + 
+    aes(x=pos, y=ts_percent), color="grey") + 
   geom_beeswarm(
     data=umd, 
     groupOnX=TRUE, 
-    aes(x=pos, y=tspct), color="red") +
+    aes(x=pos, y=ts_percent), color="red") +
   geom_text_repel(
     data=umd, 
-    aes(x=pos, y=tspct, label=player))
+    aes(x=pos, y=ts_percent, label=player))
 ```
 
 So Sarah Te-Biasu was our best shooter by true shooting percentage, with Shyanne Sellers close behind. The other three were at or above average shooters for that volume of shooting.
@@ -138,14 +138,14 @@ ggplot() +
   geom_quasirandom(
     data=shooters, 
     groupOnX=TRUE, 
-    aes(x=pos, y=tspct), color="grey") + 
+    aes(x=pos, y=ts_percent), color="grey") + 
   geom_quasirandom(
     data=umd, 
     groupOnX=TRUE, 
-    aes(x=pos, y=tspct), color="red") +
+    aes(x=pos, y=ts_percent), color="red") +
   geom_text_repel(
     data=umd, 
-    aes(x=pos, y=tspct, label=player))
+    aes(x=pos, y=ts_percent, label=player))
 ```
 
 Quasirandom spreads out the dots you see in beeswarm using -- you guessed it -- quasirandom spacing.
@@ -156,13 +156,13 @@ For `geom_jitter`, we need to remove the groupOnX value. Why? No clue.
 ggplot() + 
   geom_jitter(
     data=shooters, 
-    aes(x=pos, y=tspct), color="grey") + 
+    aes(x=pos, y=ts_percent), color="grey") + 
   geom_jitter(
     data=umd, 
-    aes(x=pos, y=tspct), color="red") +
+    aes(x=pos, y=ts_percent), color="red") +
   geom_text_repel(
     data=umd, 
-    aes(x=pos, y=tspct, label=player))
+    aes(x=pos, y=ts_percent, label=player))
 ```
 
 `geom_jitter` spreads out the dots evenly across the width of the column, randomly deciding where in the line of the true shooting percentage they appear.
