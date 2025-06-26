@@ -31,7 +31,7 @@ library(downloadthis)
 library(glue)
 
 dllink <- download_link(
-  link = "https://dwillis.github.io/sports-data-files/footballlogs22.csv",
+  link = "https://dwillis.github.io/sports-data-files/footballlogs24.csv",
   button_label = "Download csv file",
   button_type = "danger",
   has_icon = TRUE,
@@ -45,7 +45,7 @@ glue("<pre><p><strong>For this walkthrough:</strong></p><p>{dllink}</p></pre>")
 And load it.
 
 ```{r}
-logs <- read_csv("data/footballlogs22.csv")
+logs <- read_csv("data/footballlogs24.csv")
 ```
 
 To do this, I've got some work to do. First, I need to mutate the outcomes of the games into 1s and 0s so I can add up the wins. We've done this before, so this won't be new to you, just adjusted slightly from basketball data.
@@ -150,8 +150,8 @@ ggplot() +
     data=bigten, 
     aes(x=OffensiveYPP, y=DefensiveYPP, size=TotalWins), 
     color="red") + 
-  geom_vline(xintercept = 5.700174) + 
-  geom_hline(yintercept = 5.55143)
+  geom_vline(xintercept = 5.811255) + 
+  geom_hline(yintercept = 5.562701)
 ```
 
 Now, let's add another new geom for us, using a new library called `ggrepel`, which will help us label the dots without overwriting other labels. So we'll have to install that in the console:
@@ -175,15 +175,15 @@ ggplot() +
     data=bigten, 
     aes(x=OffensiveYPP, y=DefensiveYPP, size=TotalWins), 
     color="red") + 
-  geom_vline(xintercept = 5.700174) + 
-  geom_hline(yintercept = 5.55143) +
+  geom_vline(xintercept = 5.811255) + 
+  geom_hline(yintercept = 5.562701) +
   geom_text_repel(
     data=bigten, 
     aes(x=OffensiveYPP, y=DefensiveYPP, label=Team)
   )
 ```
 
-Well, what do you know about that? Maryland was ... really a mixed bag this season.
+Well, what do you know about that? Maryland was ... in the "worst" quadrant last season.
 
 All that's left is some labels and some finishing touches.
 
@@ -198,13 +198,13 @@ ggplot() +
     data=bigten, 
     aes(x=OffensiveYPP, y=DefensiveYPP, size=TotalWins), 
     color="red") + 
-  geom_vline(xintercept = 5.700174) + 
-  geom_hline(yintercept = 5.55143) + 
+  geom_vline(xintercept = 5.811255) + 
+  geom_hline(yintercept = 5.562701) +
   geom_text_repel(
     data=bigten, 
     aes(x=OffensiveYPP, y=DefensiveYPP, label=Team)
   ) +
-  labs(title="Is Maryland moving up to the Big Ten's best?", subtitle="The Terps offense and defense puts it among ranked teams in the conference.", caption="Source: NCAA | By Derek Willis")  + theme_minimal() + 
+  labs(title="A Step Back for Maryland", subtitle="The Terps offense and defense puts it among the worst teams in the conference.", caption="Source: NCAA | By Derek Willis")  + theme_minimal() + 
   theme(
     plot.title = element_text(size = 16, face = "bold"),
     axis.title = element_text(size = 8), 

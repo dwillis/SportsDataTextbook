@@ -8,7 +8,7 @@ In this chapter, we're going to use a method that sounds advanced but it really 
 
 Imagine two dots on a scatterplot. If you took a ruler out and measured the distance between those dots, you'd know how far apart they are. In math, that's called the Euclidean distance. It's just the space between them in numbers. Where k-nearest neighbor comes in, you have lots of dots and you want measure the distance between all of them. What does k-means clustering do? It lumps them into groups based on the average distance between them. Players who are good on offense but bad on defense are over here, good offense good defense are over here. And using the Euclidean distance between them, we can decide who is in and who is out of those groups.
 
-For this exercise, I want to look at Jalen Smith, who played two seasons at Maryland before decamping for the NBA. Had he stayed, he might have been among the all-time Terp greats. So who does Jalen Smith compare to?
+For this exercise, I want to look at Derik Queen, who played one season at Maryland before decamping for the NBA. Had he stayed, he might have been among the all-time Terp greats. So who does Derik Queen compare to?
 
 To answer this, we'll use k-means clustering.
 
@@ -21,14 +21,14 @@ library(cluster)
 set.seed(1234)
 ```
 
-I've gone and scraped stats for every player in that season.
+I've gone and scraped stats for every player last season.
 
 ```{r echo=FALSE, class.output="bg-info", results="asis",  message=FALSE,  warning=FALSE}
 library(downloadthis)
 library(glue)
 
 dllink <- download_link(
-  link = "https://dwillis.github.io/sports-data-files/players20.csv",
+  link = "https://dwillis.github.io/sports-data-files/players25.csv",
   button_label = "Download csv file",
   button_type = "danger",
   has_icon = TRUE,
@@ -42,16 +42,16 @@ glue("<pre><p><strong>For this walkthrough:</strong></p><p>{dllink}</p></pre>")
 Now load that data.
 
 ```{r}
-players <- read_csv("data/players20.csv")
+players <- read_csv("data/players25.csv")
 ```
 
 To cluster this data properly, we have some work to do.
 
-First, it won't do to have players who haven't played, so we can use filter to find anyone with greater than 0 minutes played. Next, Jalen Smith is a forward, so let's just look at forwards. Third, we want to limit the data to things that make sense to look at for Smith -- things like shooting, rebounds, blocks, turnovers and points.
+First, it won't do to have players who haven't played, so we can use filter to find anyone with greater than 0 minutes played. Next, Derik Queen is listed as a center, so let's just look at centers. Third, we want to limit the data to things that make sense to look at for Queen -- things like shooting, rebounds, blocks, turnovers and points.
 
 ```{r}
 playersselected <- players |>
-  filter(MP>0) |> filter(Pos == "F") |>
+  filter(MP>0) |> filter(Pos.x == "C") |>
   select(Player, Team, Pos, MP, `FG%`, TRB, BLK, TOV, PTS) |>
   na.omit()
 ```
@@ -99,52 +99,52 @@ Let's look at what we get.
 k8
 ```
 
-Interpreting this output, the very first thing you need to know is that **the cluster numbers are meaningless**. They aren't ranks. They aren't anything. After you have taken that on board, look at the cluster sizes at the top. Clusters 3 and 4 are pretty large compared to others. That's notable. Then we can look at the cluster means. For reference, 0 is going to be average. So group 1 is below average on minutes played. Groups 8 is slightly above, group 5 is well above.
+Interpreting this output, the very first thing you need to know is that **the cluster numbers are meaningless**. They aren't ranks. They aren't anything. After you have taken that on board, look at the cluster sizes at the top. Clusters 2 and 8 are pretty large compared to others. That's notable. Then we can look at the cluster means. For reference, 0 is going to be average. So group 5 is above average on minutes played. Groups 2 is slightly below, group 1 is well above.
 
-So which group is Jalen Smith in? Well, first we have to put our data back together again. In K8, there is a list of cluster assignments in the same order we put them in, but recall we have no names. So we need to re-combine them with our original data. We can do that with the following:
+So which group is Derik Queen in? Well, first we have to put our data back together again. In K8, there is a list of cluster assignments in the same order we put them in, but recall we have no names. So we need to re-combine them with our original data. We can do that with the following:
 
 ```{r}
 playercluster <- data.frame(playersselected, k8$cluster)
 ```
 
-Now we have a dataframe called playercluster that has our player names and what cluster they are in. The fastest way to find Jalen Smith is to double click on the playercluster table in the environment and use the search in the top right of the table. Because this is based on some random selections of points to start the groupings, these may change from person to person, but Smith is in Group 2 in my data.
+Now we have a dataframe called playercluster that has our player names and what cluster they are in. The fastest way to find Derik Queen is to double click on the playercluster table in the environment and use the search in the top right of the table. Because this is based on some random selections of points to start the groupings, these may change from person to person, but Smith is in Group 2 in my data.
 
-We now have a dataset and can plot it like anything else. Let's get Jalen Smith and then plot him against the rest of college basketball on rebounds versus minutes played.
+We now have a dataset and can plot it like anything else. Let's get Derik Queen and then plot him against the rest of college basketball on rebounds versus minutes played.
 
 ```{r}
-cm <- playercluster |> filter(Player == "Jalen Smith")
+dq <- playercluster |> filter(Player == "Derik Queen")
 
-cm
+dq
 ```
 
-So Jalen's in cluster 2, which if you look at our clusters, puts him in the cluster with all above average metrics. What does that look like? We know Jalen was a rebounding machine, so where do group 2 people grade out on rebounds?
+So Derik's in cluster 1, which if you look at our clusters, puts him in the cluster with nearly all above average metrics. What does that look like? We know Derik was a rebounding machine, so where do group 1 people grade out on rebounds?
 
 ```{r}
 ggplot() +
   geom_point(data=playercluster, aes(x=MP, y=TRB, color=k8.cluster)) +
-  geom_point(data=cm, aes(x=MP, y=TRB), color="red")
+  geom_point(data=dq, aes(x=MP, y=TRB), color="red")
 ```
 
-Not bad, not bad. But who are Jalen Smith's peers? If we look at the numbers in Group 2, there's 495 of them. So let's limit them to just Big Ten guards. Unfortunately, my scraper didn't quite work and in the place of Conference is the coach's name. So I'm going to have to do this the hard way and make a list of Big Ten teams and filter on that. Then I'll sort by minutes played.
+Not bad, not bad. But who are Derik Queen's peers? If we look at the numbers in Group 1, there's 8 of them.
 
 ```{r}
-big10 <- c("Nebraska Cornhuskers", "Iowa Hawkeyes", "Minnesota Golden Gophers", "Illinois Fighting Illini", "Northwestern Wildcats", "Wisconsin Badgers", "Indiana Hoosiers", "Purdue Boilermakers", "Ohio State Buckeyes", "Michigan Wolverines", "Michigan State Spartans", "Penn State Nittany Lions", "Rutgers Scarlet Knights", "Maryland Terrapins")
+#big10 <- c("Nebraska Cornhuskers", "Iowa Hawkeyes", "Minnesota Golden Gophers", "Illinois Fighting Illini", "Northwestern Wildcats", "Wisconsin Badgers", "Indiana Hoosiers", "Purdue Boilermakers", "Ohio State Buckeyes", "Michigan Wolverines", "Michigan State Spartans", "Penn State Nittany Lions", "Rutgers Scarlet Knights", "Maryland Terrapins")
 
-playercluster |> filter(k8.cluster == 2) |> filter(Team %in% big10) |> arrange(desc(MP))
+playercluster |> filter(k8.cluster == 1) |> arrange(desc(MP))
 ```
 
-So there are the 4 forwards most like Jalen Smith in the Big Ten. Are they the best forwards in the conference?
+So there are the 7 centers most like Derik Queen last season. Were they the best centers in the country?
 
 ## Advanced metrics
 
-How much does this change if we change the metrics? I used pretty standard box score metrics above. What if we did it using Player Efficiency Rating, True Shooting Percentage, Point Production, Assist Percentage, Win Shares Per 40 Minutes and Box Plus Minus (you can get definitions of all of them by [hovering over the stats on Nebraksa's stats page](https://www.sports-reference.com/cbb/schools/nebraska/2020.html)).
+How much does this change if we change the metrics? I used pretty standard box score metrics above. What if we did it using Player Efficiency Rating, True Shooting Percentage, Point Production, Assist Percentage, Win Shares Per 40 Minutes and Box Plus Minus (you can get definitions of all of them by [hovering over the stats on Maryland's stats page](https://www.sports-reference.com/cbb/schools/maryland/men/2025.html)).
 
 We'll repeat the process. Filter out players who don't play, players with stats missing, and just focus on those stats listed above.
 
 ```{r}
 playersadvanced <- players |>
   filter(MP>0) |>
-  filter(Pos == "F") |>
+  filter(Pos.x == "C") |>
   select(Player, Team, Pos, PER, `TS%`, PProd, `AST%`, `WS/40`, BPM) |>
   na.omit()
 ```
@@ -178,40 +178,39 @@ plot(k.values, wss_values,
        ylab="Total within-clusters sum of squares")
 ```
 
-Looks like 4.
+Looks like 8 again.
 
 ```{r}
-advk4 <- kmeans(playersadvscaled, centers = 4, nstart = 25)
+advk8 <- kmeans(playersadvscaled, centers = 8, nstart = 25)
 ```
 
 What do we have here?
 
 ```{r}
-advk4
+advk8
 ```
 
-Looks like this time, cluster 1 is all below average and cluster 5 is all above. Which cluster is Jalen Smith in?
+Looks like this time, cluster 3 is all below average and cluster 8 is all above. Which cluster is Derik Queen in?
 
 ```{r}
-playeradvcluster <- data.frame(playersadvanced, advk4$cluster)
+playeradvcluster <- data.frame(playersadvanced, advk8$cluster)
 ```
 
 ```{r}
-jsadv <- playeradvcluster |> filter(Player == "Jalen Smith")
+dqadv <- playeradvcluster |> filter(Player == "Derik Queen")
 
-jsadv
+dqadv
 ```
 
-Cluster 4 on my dataset. So in this season, we can say he's in a big group of players who are all above average on these advanced metrics.
+Cluster 8 on my dataset. So in this season, we can say he's in a group of players who are all above average on these advanced metrics.
 
-Now who are his Big Ten peers?
+Now who are his peers?
 
 ```{r}
 playeradvcluster |>
-  filter(advk4.cluster == 4) |>
-  filter(Team %in% big10) |>
+  filter(advk8.cluster == 8) |>
   arrange(desc(PProd))
 
 ```
 
-Sorting on Points Produced, Jalen Smith is third out of the 15 forwards in the Big Ten who land in Cluster 4. Seems advanced metrics rate Jalen Smith pretty highly.
+Sorting on Points Produced, Derik Queen is second out of the 25 centers who land in Cluster 8. Seems advanced metrics rate Derik Queen pretty highly.

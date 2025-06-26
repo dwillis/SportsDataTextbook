@@ -44,7 +44,7 @@ Sports Reference’s win columns are weird, so we need to scan through them and 
 
 ```{r}
 winlosslogs <- logs |> 
-  filter(Date < '2024-03-15') |> 
+  filter(Date < '2025-03-15') |> 
   mutate(winloss = case_when(
     grepl("W", W_L) ~ 1, 
     grepl("L", W_L) ~ 0)
@@ -116,7 +116,7 @@ oppwinlosslogs <- logs |>
     grepl("W", W_L) ~ 0, 
     grepl("L", W_L) ~ 1)
 ) |> 
-  filter(Date < "2024-03-15")
+  filter(Date < "2025-03-15")
 ```
 
 So now we have a dataframe called oppwinlosslogs that has an inverted winloss column. So now we can group by the Opponent and sum the wins and it will tell us how many games the Opponent won. We can also count the wins and get a winning percentage.
@@ -135,7 +135,7 @@ winlosslogs <- logs |>
     grepl("W", W_L) ~ 1, 
     grepl("L", W_L) ~ 0)
 ) |> 
-  filter(Date < "2024-03-15")
+  filter(Date < "2025-03-15")
 ```
 
 ```{r}

@@ -46,17 +46,17 @@ attendance <- read_csv("data/attendance.csv")
 Making a quick percent change.
 
 ```{r}
-attendance <- attendance |> mutate(change = ((`2023`-`2022`)/`2022`)*100)
+attendance <- attendance |> mutate(change = ((`2024`-`2023`)/`2023`)*100)
 ```
 
 Let's chart the top 10 and bottom 10 of college football ticket growth ... and shrinkage.
 
 ```{r}
-top10 <- attendance |> top_n(10, wt=change)
-bottom10 <- attendance |> top_n(10, wt=-change)
+top10 <- attendance |> top_n(10, wt=change) |> arrange(desc(change))
+bottom10 <- attendance |> top_n(10, wt=-change) |> arrange(change)
 ```
 
-Hey, there are those Terps at #10 in the top 10!
+Ohio State is benefiting from the extended playoffs, but hello, SMU and Indiana!
 
 Okay, now to do this I need to **save my plots to an object**. We do this the same way we save things to a dataframe -- with the arrow. We'll make two identical bar charts, one with the top 10 and one with the bottom 10.
 
@@ -90,7 +90,7 @@ To make these publishable, we should add headlines, chatter, decent labels, cred
 bar1 <- ggplot() + 
   geom_bar(data=top10, aes(x=reorder(Institution, change), weight=change)) +
   coord_flip() + 
-  labs(title="College football winners...", subtitle = "Not every football program saw attendance shrink in 2023. But some really did.",  x="", y="Percent change", caption = "") + 
+  labs(title="College football winners...", subtitle = "Not every football program saw attendance shrink in 2024. But some really did.",  x="", y="Percent change", caption = "") + 
   theme_minimal() + 
   theme(
     plot.title = element_text(size = 16, face = "bold"),
@@ -121,14 +121,14 @@ plot_grid(bar1, bar2)
 What's missing here? Color. Our eyes aren't drawn to anything (except maybe the top and bottom). So we need to help that. A bar chart without context or color to draw attention to something isn't much of a bar chart. Same with a line chart -- if your line chart has one line, no context, no color, it's going to fare poorly.
 
 ```{r}
-lo <- bottom10 |> filter(Institution == "Akron")
-sd <- top10 |> filter(Institution == "Houston")
+nw <- bottom10 |> filter(Institution == "Northwestern")
+sm <- top10 |> filter(Institution == "SMU")
 ```
 
 ```{r}
 bar1 <- ggplot() + 
   geom_bar(data=top10, aes(x=reorder(Institution, change), weight=change)) + 
-  geom_bar(data=sd, aes(x=reorder(Institution, change), weight=change), fill="#011E41") + 
+  geom_bar(data=sm, aes(x=reorder(Institution, change), weight=change), fill="blue") + 
   coord_flip() + 
   labs(title="College football winners...", subtitle = "Not every football program saw attendance shrink in 2023 But some really did.",  x="", y="Percent change", caption = "") +
   theme_minimal() + 
@@ -143,7 +143,7 @@ bar1 <- ggplot() +
 ```{r}
 bar2 <- ggplot() + 
   geom_bar(data=bottom10, aes(x=reorder(Institution, change), weight=change)) + 
-  geom_bar(data=lo, aes(x=reorder(Institution, change), weight=change), fill="#006F71") + 
+  geom_bar(data=nw, aes(x=reorder(Institution, change), weight=change), fill="purple") + 
   coord_flip() +  
   labs(title = "... and losers", subtitle= "", x="", y="",  caption="Source: NCAA | By Derek Willis") + 
   theme_minimal() + 
