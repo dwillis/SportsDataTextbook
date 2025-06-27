@@ -30,7 +30,7 @@ library(downloadthis)
 library(glue)
 
 dllink <- download_link(
-  link = "https://dwillis.github.io/sports-data-files/ncaa_womens_volleyball_matchstats_2023.csv",
+  link = "https://dwillis.github.io/sports-data-files/ncaa_womens_volleyball_matchstats_2024.csv",
   button_label = "Download csv file",
   button_type = "danger",
   has_icon = TRUE,
@@ -44,13 +44,13 @@ glue("<pre><p><strong>For this walkthrough:</strong></p><p>{dllink}</p></pre>")
 And load it.
 
 ```{r}
-logs <- read_csv("data/ncaa_womens_volleyball_matchstats_2023.csv")
+logs <- read_csv("data/ncaa_womens_volleyball_matchstats_2024.csv")
 ```
 
 For the first example, let's look at the difference between a team's errors versus their opponents' errors. To get this, we're going to add up all errors and opponent errors for a team in a season and take a look at where they come out. To make this readable, I'm going to focus on the Big Ten.
 
 ```{r}
-big10 <- c("Nebraska Cornhuskers", "Iowa Hawkeyes", "Minnesota Golden Gophers", "Illinois Fighting Illini", "Northwestern Wildcats", "Wisconsin Badgers", "Indiana Hoosiers", "Purdue Boilermakers", "Ohio State Buckeyes", "Michigan Wolverines", "Michigan State Spartans", "Penn State Nittany Lions", "Rutgers Scarlet Knights", "Maryland Terrapins, Terps")
+big10 <- c("Nebraska", "Iowa", "Minnesota", "Illinois", "Northwestern", "Wisconsin", "Indiana", "Purdue", "Ohio St.", "Michigan", "Michigan St.", "Penn St.", "Rutgers", "Maryland", "Southern California", "UCLA", "Washington", "Oregon")
 
 errors <- logs |>
   filter(team %in% big10) |> 
@@ -88,14 +88,14 @@ ggplot() +
     colour_xend = "red")
 ```
 
-Better. Let's make two more tweaks. First, let's make the whole thing bigger with a `size` element. And let's add `theme_minimal` to clean out some cruft.
+Better. Let's make two more tweaks. First, let's make the lines bigger with a `linewidth` element. And let's add `theme_minimal` to clean out some cruft.
 
 ```{r}
 ggplot() + 
   geom_dumbbell(
     data=errors, 
     aes(y=team, x=opp_errors, xend=total_errors),
-    size = 1,
+    linewidth = 1,
     color = "grey",
     colour_x = "green",
     colour_xend = "red") + 
@@ -116,7 +116,7 @@ ggplot() +
   theme_minimal()
 ```
 
-Maryland's opponents have committed some errors - that's good news for the Terps - but there's a clear gap between Maryland and the top teams in the conference when it comes to committing errors.
+Maryland's opponents have committed some errors - that's good news for the Terps - but there's a clear gap between Maryland and the top teams in the conference when it comes to committing errors. And the gap between "good" errors and "bad" errors for the Terps is tiny.
 
 ## Lollipop charts
 
@@ -140,13 +140,13 @@ ggplot() +
     aes(y=reorder(team, opp_errors), x=opp_errors), 
     horizontal = TRUE
     ) + theme_minimal() + 
-  labs(title = "Wisconsin, Purdue force more errors", y="team")
+  labs(title = "Nebraska, Penn State force more errors", y="team")
 ```
 
 How about some layering?
 
 ```{r}
-md <- errors |> filter(team == "Maryland Terrapins, Terps")
+md <- errors |> filter(team == "Maryland")
 ```
 
 ```{r}
@@ -163,7 +163,7 @@ ggplot() +
     color = "red"
   ) + 
   theme_minimal() + 
-  labs(title = "Maryland middle of the pack among Big Ten teams", y="team")
+  labs(title = "Maryland near the bottom of Big Ten teams", y="team")
 ```
 
 The headline says it all.
