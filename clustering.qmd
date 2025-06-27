@@ -51,7 +51,7 @@ First, it won't do to have players who haven't played, so we can use filter to f
 
 ```{r}
 playersselected <- players |>
-  filter(MP>0) |> filter(Pos.x == "C") |>
+  filter(MP>0) |> filter(Pos == "C") |>
   select(Player, Team, Pos, MP, `FG%`, TRB, BLK, TOV, PTS) |>
   na.omit()
 ```
@@ -130,10 +130,10 @@ Not bad, not bad. But who are Derik Queen's peers? If we look at the numbers in 
 ```{r}
 #big10 <- c("Nebraska Cornhuskers", "Iowa Hawkeyes", "Minnesota Golden Gophers", "Illinois Fighting Illini", "Northwestern Wildcats", "Wisconsin Badgers", "Indiana Hoosiers", "Purdue Boilermakers", "Ohio State Buckeyes", "Michigan Wolverines", "Michigan State Spartans", "Penn State Nittany Lions", "Rutgers Scarlet Knights", "Maryland Terrapins")
 
-playercluster |> filter(k8.cluster == 1) |> arrange(desc(MP))
+playercluster |> filter(k8.cluster == 6) |> arrange(desc(MP))
 ```
 
-So there are the 7 centers most like Derik Queen last season. Were they the best centers in the country?
+So here are the 7 centers most like Derik Queen last season. Were they the best centers in the country?
 
 ## Advanced metrics
 
@@ -144,7 +144,7 @@ We'll repeat the process. Filter out players who don't play, players with stats 
 ```{r}
 playersadvanced <- players |>
   filter(MP>0) |>
-  filter(Pos.x == "C") |>
+  filter(Pos == "C") |>
   select(Player, Team, Pos, PER, `TS%`, PProd, `AST%`, `WS/40`, BPM) |>
   na.omit()
 ```
@@ -190,7 +190,7 @@ What do we have here?
 advk8
 ```
 
-Looks like this time, cluster 3 is all below average and cluster 8 is all above. Which cluster is Derik Queen in?
+Looks like this time, cluster 1 is all below average and cluster 4 is all above. Which cluster is Derik Queen in?
 
 ```{r}
 playeradvcluster <- data.frame(playersadvanced, advk8$cluster)
@@ -202,15 +202,15 @@ dqadv <- playeradvcluster |> filter(Player == "Derik Queen")
 dqadv
 ```
 
-Cluster 8 on my dataset. So in this season, we can say he's in a group of players who are all above average on these advanced metrics.
+Cluster 4 on my dataset. So in this season, we can say he's in a group of players who are all above average on these advanced metrics.
 
 Now who are his peers?
 
 ```{r}
 playeradvcluster |>
-  filter(advk8.cluster == 8) |>
+  filter(advk8.cluster == 4) |>
   arrange(desc(PProd))
 
 ```
 
-Sorting on Points Produced, Derik Queen is second out of the 25 centers who land in Cluster 8. Seems advanced metrics rate Derik Queen pretty highly.
+Sorting on Points Produced, Derik Queen is second out of the 25 centers who land in Cluster 4. Seems advanced metrics rate him pretty highly.

@@ -90,19 +90,15 @@ umd <- activeplayers |>
 
 Five Terps took more than 222 shots. Number not on the roster this season? Three: Sarah Te-Biasu, Shyanne Sellers and Christina Dalce.
 
-But how good are they as true shooters?
-
-When you add another beeswarm, we need to pass another element in -- we need to tell it if we're grouping on the x value. Not sure why, but you'll get a warning if you don't.
+But how good are they as true shooters? Let's add them to the graphic:
 
 ```{r}
 ggplot() + 
   geom_beeswarm(
     data=shooters, 
-    groupOnX=TRUE, 
     aes(x=pos, y=ts_percent), color="grey") + 
   geom_beeswarm(
     data=umd, 
-    groupOnX=TRUE, 
     aes(x=pos, y=ts_percent), color="red")
 ```
 
@@ -114,11 +110,9 @@ This is where we can use ggrepel. Let's add a text layer and label the dots.
 ggplot() + 
   geom_beeswarm(
     data=shooters, 
-    groupOnX=TRUE, 
     aes(x=pos, y=ts_percent), color="grey") + 
   geom_beeswarm(
     data=umd, 
-    groupOnX=TRUE, 
     aes(x=pos, y=ts_percent), color="red") +
   geom_text_repel(
     data=umd, 
@@ -137,11 +131,9 @@ There's not a lot to change from our example to see what they do.
 ggplot() + 
   geom_quasirandom(
     data=shooters, 
-    groupOnX=TRUE, 
     aes(x=pos, y=ts_percent), color="grey") + 
   geom_quasirandom(
     data=umd, 
-    groupOnX=TRUE, 
     aes(x=pos, y=ts_percent), color="red") +
   geom_text_repel(
     data=umd, 
@@ -149,8 +141,6 @@ ggplot() +
 ```
 
 Quasirandom spreads out the dots you see in beeswarm using -- you guessed it -- quasirandom spacing.
-
-For `geom_jitter`, we need to remove the groupOnX value. Why? No clue.
 
 ```{r}
 ggplot() + 
