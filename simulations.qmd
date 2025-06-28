@@ -34,7 +34,7 @@ How do we read this? The first row and the second row form a pair. The top row i
 knitr::include_graphics(rep("images/simulations1.png"))
 ```
 
-So what we see is given her season-long shooting percentage, it's not out of the realm of randomness that she'd make 6 of those 9 attempts. In 1000 simulations, it comes up 130 times. So more than one time in 10, Brinae Alexander will go 6-9 from deep. More likely, she'd hit 4 or 5 of those attempts.
+So what we see is given her season-long shooting percentage, it's not out of the realm of randomness that she'd make 6 of those 9 attempts. In 1000 simulations, it comes up 130 times. So more than one time in 10, Brinae Alexander will go 6-9 from deep. While it's more likely that she'd hit 4 or 5 of those attempts, a one-in-ten chance isn't nothing.
 
 ## Cold streaks
 
@@ -54,7 +54,7 @@ Short answer: Pretty weird, but not totally unheard of. If you simulate 15 three
 
 ## The hottest of streaks
 
-Last season, [Terps baseball player Sam Hojnar](https://umterps.com/sports/baseball/roster/sam-hojnar/12369) hit two home runs in consecutive games. He hit 16 HRs for the season in 233 at-bats, so his home run probability per at-bat was just under seven percent. We'll use that and the number of games (56) to calculate the odds that he'd hit two home runs in each of two consecutive games.
+Two years ago, [Terps baseball player Sam Hojnar](https://umterps.com/sports/baseball/roster/sam-hojnar/12369) hit two home runs in consecutive games. He hit 16 HRs for the season in 233 at-bats, so his home run probability per at-bat was just under seven percent. We'll use that and the number of games (56) to calculate the odds that he'd hit two home runs in each of two consecutive games.
 
 ```{r}
 # Hojnar's statistics
