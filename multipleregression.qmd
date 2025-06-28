@@ -2,7 +2,7 @@
 
 Last chapter, we looked at correlations and linear regression to predict how one element of a game would predict the score. But we know that a single variable, in all but the rarest instances, is not going to be that predictive. We need more than one. Enter multiple regression. Multiple regression lets us add -- wait for it -- multiple predictors to our equation to help us get a better fit to reality.
 
-That presents it's own problems. So let's get set up. The dataset we'll use is all men's college basketball games between 2015 and 2024.
+That presents it's own problems. So let's get set up. The dataset we'll use is all men's college basketball games between 2011 and 2025.
 
 ```{r}
 #| warning: false
@@ -13,7 +13,7 @@ library(downloadthis)
 library(glue)
 
 dllink <- download_link(
-  link = "https://dwillis.github.io/sports-data-files/cbblogs1524.csv",
+  link = "https://dwillis.github.io/sports-data-files/cbblogs1125.csv",
   button_label = "Download csv file",
   button_type = "danger",
   has_icon = TRUE,
@@ -36,7 +36,7 @@ library(tidyverse)
 And the data.
 
 ```{r}
-logs <- read_csv("data/cbblogs1524.csv")
+logs <- read_csv("data/cbblogs1125.csv")
 ```
 
 One way to show how successful a basketball team was for a game is to show the differential between the team's score and the opponent's score. Score a lot more than the opponent = good, score a lot less than the opponent = bad. And, relatively speaking, the more the better. So let's create that differential. Let's add in net rebounds. And because we'll need it later, let's add the turnover margin.
@@ -55,7 +55,7 @@ rebounds <- lm(Differential ~ NetRebounds, data=logs)
 summary(rebounds)
 ```
 
-Remember: There's a lot here, but only some of it we care about. What is the Adjusted R-squared value? What's the p-value and is it less than .05? In this case, we can predict about 39 percent of the difference in differential with the net rebounds in the game.
+Remember: There's a lot here, but only some of it we care about. What is the Adjusted R-squared value? What's the p-value and is it less than .05? In this case, we can predict about 38 percent of the difference in differential with the net rebounds in the game.
 
 To add more predictors to this mix, we merely add them. But it's not that simple, as you'll see in a moment. So first, let's look at adding turnover margin to our prediction model:
 
@@ -68,7 +68,7 @@ First things first: What is the adjusted R-squared? This model predicts about 61
 
 Second: what is the p-value and is it less than .05?
 
-Third: Compare the residual standard error. We went from 12.95 to 10.3. The meaning of this is both really opaque and also simple -- by adding data, we reduced the amount of error in our model. Residual standard error is the total distance between what our model would predict and what we actually have in the data. So lots of residual error means the distance between reality and our model is wider. So the width of our predictive range in this example shrank while we improved the amount of the difference we could predict. That's good, and not always going to be the case.
+Third: Compare the residual standard error. We went from 12.94 to 10.3. The meaning of this is both really opaque and also simple -- by adding data, we reduced the amount of error in our model. Residual standard error is the total distance between what our model would predict and what we actually have in the data. So lots of residual error means the distance between reality and our model is wider. So the width of our predictive range in this example shrank while we improved the amount of the difference we could predict. That's good, and not always going to be the case.
 
 One of the more difficult things to understand about multiple regression is the issue of multicollinearity. What that means is that there is significant correlation overlap between two variables -- the two are related to each other as well as to the target output -- and all you are doing by adding both of them is adding error with no real value to the R-squared. In pure statistics, we don't want any multicollinearity at all. Violating that assumption limits the applicability of what you are doing. So if we have some multicollinearity, it limits our scope of application to college basketball. We can't say this will work for every basketball league and level everywhere. What we need to do is see how correlated each value is to each other and throw out ones that are highly co-correlated.
 
@@ -113,13 +113,13 @@ What is the Adjusted R-squared now? What is the p-value and is it less than .05?
 
 The final thing we can do with this is predict things. Look at our coefficients table. See the Estimates? We can build a formula from that, same as we did with linear regressions.
 
-How does this apply in the real world? Let's pretend for a minute that you are Kevin Willard, and you want to win conference titles. To do that, we need to know what attributes of a team we should emphasize. We can do that by looking at what previous Big Ten conference champions looked like.
+How does this apply in the real world? Let's pretend for a minute that you are Buzz Williams, and you want to win conference titles. To do that, we need to know what attributes of a team we should emphasize. We can do that by looking at what previous Big Ten conference champions looked like.
 
-So if our goal is to predict a conference champion team, we need to know what those teams did. Here's the regular season conference champions in this dataset.
+So if our goal is to predict a conference champion team, we need to know what those teams did. Here's the regular season conference champions in this dataset since the 2017 season:
 
 ```{r}
 logs |> 
-  filter(Team == "Michigan" & Season == '2020-2021' | Team == "Wisconsin" & Season == '2019-2020' | Team == "Michigan State" & Season == '2018-2019' | Team == "Michigan State" & Season == '2017-2018' | Team == 'Illinois' & Season == '2021-2022' | Team == 'Purdue' & Season == '2022-2023' | Team == 'Purdue' & Season == '2023-2024') |> 
+  filter(Team == "Michigan" & Season == '2020-2021' | Team == "Wisconsin" & Season == '2019-2020' | Team == "Michigan State" & Season == '2018-2019' | Team == "Michigan State" & Season == '2017-2018' | Team == 'Illinois' & Season == '2021-2022' | Team == 'Purdue' & Season == '2022-2023' | Team == 'Purdue' & Season == '2023-2024' | Team == "Michigan State" & Season == '2024-2025') |> 
   summarise(
     meanNetRebounds = mean(NetRebounds),
     meanTurnoverMargin = mean(TurnoverMargin),
@@ -132,17 +132,17 @@ Now it's just plug and chug.
 
 ```{r}
 # (netrebounds estimate * meanNetRebounds) + (turnover margin estimate * meanTurnoverMargin) + (TeamFGPCT estimate * meanTeamFGPCT) + (OpponentFGPCT estimate * meanOpponentFGPCT) + Intercept
-(0.657726*9.645933) + (-1.313064*1.933014) + (91.403110*0.4780766) + (-91.650923*0.3981818) + 0.233954
+(0.655831*8.155235) + (-1.317830*1.397112) + (89.952654*0.46787) + (-90.064048*0.4012419) + 0.168687
 ```
 
-So a team with those numbers is going to average scoring 11 more points per game than their opponent. Not a ton, but hey, the Big Ten has been a competitive conference lately.
+So a team with those numbers is going to average scoring 9.6 more points per game than their opponent. Not a ton, but hey, the Big Ten has been a competitive conference lately.
 
-How does that compare to Maryland in 2023-24 season?
+How does that compare to Maryland in 2024-25 season?
 
 ```{r}
 logs |> 
   filter(
-    Team == "Maryland" & Season == '2023-2024'
+    Team == "Maryland" & Season == '2024-2025'
     ) |> 
   summarise(
     meanNetRebounds = mean(NetRebounds),
@@ -153,16 +153,16 @@ logs |>
 ```
 
 ```{r}
-(0.657726*1.277778) + (-0.3055556*1.933014) + (91.403110*0.4133056) + (-91.650923*0.4171944) + 0.233954
+(0.655831*2.472222) + (-1.317830*-3.444444) + (89.952654*0.4687778) + (-90.064048*0.4150278) + 0.168687
 ```
 
-By this model, it predicted we would, on average, barely outscore our opponents over that season. The reality?
+By this model, it predicted UMD would, on average, outscore its opponents by 11 points over that season. The reality?
 
 ```{r}
 logs |> 
      filter(
-         Team == "Maryland" & Season == '2023-2024'
+         Team == "Maryland" & Season == '2024-2025'
      ) |> summarise(avg_score = mean(TeamScore), avg_opp = mean(OpponentScore))
 ```
 
-We outscored them by about 3 points on average, so maybe this isn't the best model, or suggests that perhaps Maryland found a way to be successful outside of these parameters. What would you change?
+We outscored them by nearly 14 points on average, which suggests that perhaps Maryland found a way to be even more successful outside of these parameters. What would you change?
