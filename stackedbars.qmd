@@ -13,7 +13,7 @@ library(downloadthis)
 library(glue)
 
 dllink <- download_link(
-  link = "https://dwillis.github.io/sportsdatafiles/logs24.csv",
+  link = "https://dwillis.github.io/sportsdatafiles/logs25.csv",
   button_label = "Download csv file",
   button_type = "danger",
   has_icon = TRUE,
@@ -36,7 +36,7 @@ library(tidyverse)
 And the data.
 
 ```{r}
-games <- read_csv("data/logs24.csv")
+games <- read_csv("data/logs25.csv")
 ```
 
 What we have here is every game in college basketball this past season. The question we want to answer is this: Who were the best rebounders in the Big Ten? And what role did offensive and defensive rebounds play in making that happen?
@@ -67,7 +67,7 @@ By looking at this, we can see we got what we needed. We have 14 teams and numbe
 
 ```{r}
 #| message: false
-games |> 
+rebounds <- games |> 
   filter(!is.na(TeamTotalRebounds)) |> 
   group_by(Conference, Team) |> 
   summarise(
@@ -80,7 +80,7 @@ games |>
   select(
     -SeasonTotalRebounds
   ) |> 
-  filter(Conference == "Big Ten MBB") -> rebounds
+  filter(Conference == "Big Ten MBB")
 ```
 
 Now, the problem we have is that ggplot wants long data and this data is wide. So we need to use `tidyr` to make it long, just like we did in the transforming data chapter.
@@ -96,11 +96,11 @@ rebounds |>
 What you can see now is that we have two rows for each team: one for offensive rebounds, one for defensive rebounds. This is what ggplot needs. Save it to a new dataframe.
 
 ```{r}
-rebounds |> 
+reboundslong <- rebounds |> 
   pivot_longer(
     cols=starts_with("Season"), 
     names_to="Type", 
-    values_to="Rebounds") -> reboundswide
+    values_to="Rebounds")
 ```
 
 Building on what we learned in the last chapter, we know we can turn this into a bar chart with an x value, a weight and a geom_bar. What we are going to add is a `fill`. The `fill` will stack bars on each other based on which element it is. In this case, we can fill the bar by Type, which means it will stack the number of offensive rebounds on top of defensive rebounds and we can see how they compare.
@@ -108,7 +108,7 @@ Building on what we learned in the last chapter, we know we can turn this into a
 ```{r}
 ggplot() + 
   geom_bar(
-    data=reboundswide, 
+    data=reboundslong, 
     aes(x=Team, weight=Rebounds, fill=Type)) + 
   coord_flip()
 ```
@@ -120,11 +120,11 @@ There's a couple of things, one of which we'll deal with now: The ordering is al
 ```{r}
 ggplot() + 
   geom_bar(
-    data=reboundswide, 
+    data=reboundslong, 
     aes(x=reorder(Team, Rebounds), 
         weight=Rebounds, 
         fill=Type)) + 
   coord_flip()
 ```
 
-And just like that ... Purdue, the team with the best record in the league, comes out on top. Maryland is ninth, which seems a little worse than its record would indicate.
+And just like that ... Michigan State, the team with the best record in the league, comes out #2 behind Illinois. Maryland is fifth, which seems about right.
