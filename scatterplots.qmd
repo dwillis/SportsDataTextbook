@@ -1,21 +1,21 @@
 # Scatterplots
 
-With the exception of those curmudgeons who love defense, everybody loves scoring. We enjoy blowout games (when our teams win) and bemoan low-scoring affairs. While scoring is a necessary condition for winning, it's not the only one. Plenty of bad teams score a lot - they just happen to give up more runs or points or goals.
+With the exception of those curmudgeons who love defense, everybody loves scoring. We enjoy blowout games (when our teams win) and bemoan low-scoring affairs. But does how you score matter? Does it make a difference if you rely on a single star to go one-on-one versus if you move the ball around? While scoring is a necessary condition for winning, it's not the only one. Plenty of bad teams score a lot - they just happen to give up more runs or points or goals.
 
-So how do we tell if a team that wins 10-1 is *better* than a team that wins 2-1? How can we test the ingredients of success and determine what's a significant factor and what's a hot take?
+So how do we tell if good passing makes a difference? How can we test the ingredients of success and determine what's a significant factor and what's a hot take?
 
 This is what we're going to start to answer today. And we'll do it with scatterplots and regressions. Scatterplots are very good at showing **relationships between two numbers**.
 
-To demonstrate this, we'll look at college field hockey from the 2022 season, and we'll see how scoring and wins are related.
+To demonstrate this, we'll look at women's college lacrosse from the 2025 season, and we'll see how assists and wins are related.
 
-First, we need libraries and every college field hockey game from the last season. **What we're interested in is less about a specific team and more about a general point: Are these numbers related and by how much? What can they tell you about your team in general?**
+First, we need libraries and every college lacrosse game from the last season. **What we're interested in is less about a specific team and more about a general point: Are these numbers related and by how much? What can they tell you about your team in general?**
 
 ```{r echo=FALSE, class.output="bg-info", results="asis",  message=FALSE,  warning=FALSE}
 library(downloadthis)
 library(glue)
 
 dllink <- download_link(
-  link = "https://dwillis.github.io/sports-data-files/logs1520.csv",
+  link = "https://dwillis.github.io/sports-data-files/wlax_team_stats_2025.csv",
   button_label = "Download csv file",
   button_type = "danger",
   has_icon = TRUE,
@@ -35,124 +35,85 @@ library(tidyverse)
 And the data.
 
 ```{r}
-logs <- read_csv("data/fieldhockey22.csv")
+teams <- read_csv("data/wlax_team_stats_2025.csv")
 ```
-
-This data is game-level, and we need to create a dataframe of all teams and their season stats. How much, team to team, does a thing matter? That's the question you're going to answer.
-
-In our case, we want to know how much does scoring relate to wins? How much difference can we explain in wins by knowing how many goals a team scored? We're going to total up the number of goals each team scored and their season wins in one swoop.
-
-To do this, we need to use conditional logic -- `case_when` in this case -- to determine if the team won or lost the game. In this case, we'll create a new column called `winloss`. Case when statements can be read like this: When This is True, Do This. This bit of code -- which you can use in a lot of contexts in this class -- uses the `grepl` function to look for the letter W in the result column and, if it finds it, makes winloss 1. If it finds an L, it makes it 0. Sum your winloss column and you have your season win total.
+We've got columns for overall_wins and assists. Now let's look at the scatterplot. With a scatterplot, we put what predicts the thing on the X axis, and the thing being predicted on the Y axis. In this case, X is our assists, y is our wins.
 
 ```{r}
-winlosslogs <- logs |> 
-  mutate(
-    winloss = case_when(
-      grepl("W", result) ~ 1, 
-      grepl("L", result) ~ 0)
-)
+ggplot() + geom_point(data=teams, aes(x=assists, y=overall_wins))
 ```
 
-Then we can create our aggregate dataframe by adding up the wins and goals:
-
-```{r}
-goals_wins <- winlosslogs |> 
-  group_by(team) |> 
-  summarise(
-    wins = sum(winloss), 
-    total_goals = sum(goals)
-    ) |> na.omit()
-```
-
-Now let's look at the scatterplot. With a scatterplot, we put what predicts the thing on the X axis, and the thing being predicted on the Y axis. In this case, X is our goals, y is our wins.
-
-```{r}
-ggplot() + geom_point(data=goals_wins, aes(x=total_goals, y=wins))
-```
-
-Let's talk about this. Ok, there's really a clear pattern here - as goals increase, so do wins, generally. But can we get a better sense of this? Yes, by adding another geom -- `geom_smooth`. It's identical to our `geom_point`, but we add a method to the end, which in this case we're using the linear method or `lm`.
+Let's talk about this. Ok, there's really a clear pattern here - as assists increase, so do wins, generally. But can we get a better sense of this? Yes, by adding another geom -- `geom_smooth`. It's identical to our `geom_point`, but we add a method to the end, which in this case we're using the linear method or `lm`.
 
 ```{r}
 ggplot() + 
-  geom_point(data=goals_wins, aes(x=total_goals, y=wins)) +
-  geom_smooth(data=goals_wins, aes(x=total_goals, y=wins), method="lm")
+  geom_point(data=teams, aes(x=assists, y=overall_wins)) +
+  geom_smooth(data=teams, aes(x=assists, y=overall_wins), method="lm")
 ```
 
-A line climbing from left to right is good. It means there's a solid positive relationship here. The numbers don't suggest anything. Still, it's worth asking: can we know exactly how strong of a relationship is this? How much can goals scored explain wins? Can we put some numbers to this?
+A line climbing from left to right is good. It means there's a solid positive relationship here. The numbers don't suggest anything. Still, it's worth asking: can we know exactly how strong of a relationship is this? How much can assists scored explain wins? Can we put some numbers to this?
 
 Of course we can. We can apply a linear model to this -- remember Chapter 9? We're going to create an object called fit, and then we're going to put into that object a linear model -- `lm` -- and the way to read this is "wins are predicted by opponent threes". Then we just want the summary of that model.
 
 ```{r}
-fit <- lm(wins ~ total_goals, data = goals_wins)
+fit <- lm(overall_wins ~ assists, data = teams)
 summary(fit)
 ```
 
 Remember from Chapter 9: There's just a few things you really need.
 
-The first thing: R-squared. In this case, the Adjusted R-squared value is 0.7555, which we can interpret as the number of goals a team scores predicts about 75 percent of the variance in wins. Pretty good!
+The first thing: R-squared. In this case, the Adjusted R-squared value is 0.7257, which we can interpret as the number of assists a team records predicts about 72 percent of the variance in wins. Pretty good!
 
 Second: The P-value. We want anything less than .05. If it's above .05, the difference between them is not statistically significant -- it's probably explained by random chance. In our case, we have 0.00000000000000022, so this isn't random chance. Which makes sense, because it's harder to win when you don't score.
 
-Normally, we'd stop here, but let's look at the third element: The coefficient. In this case, the coefficient for total_goals is 0.26671. What this model predicts, given that and the intercept of -1.14326, is this: For every goal you score, you add about .26 towards your wins total. So if you score 50 goals in a season, you'll be a 12-win team. Score 80, you're closer to a 20-win team, and so on. How am I doing that? Remember your algebra and y = mx + b. In this case, y is the wins, m is the coefficient, x is the number of goals and b is the intercept.
+Normally, we'd stop here, but let's look at the third element: The coefficient. In this case, the coefficient for assists is 0.103026. What this model predicts, given that and the intercept of -1.141803, is this: For every assist you tally, you add about .10 towards your wins total. So if you have 50 assists in a season, you'll be a 5-win team. Notch 150, you're closer to a 15-win team, and so on. How am I doing that? Remember your algebra and y = mx + b. In this case, y is the wins, m is the coefficient, x is the number of goals and b is the intercept.
 
-Let's use Maryland as an example. They scored 81 goals last season.
+Let's use Maryland as an example. They recorded 118 assists last season.
 
-y = 0.26671 \* 81 + -1.14326 or 20.4 wins
+y = 0.103026 \* 118 + -1.141803 or 11 wins
 
-How many wins did Maryland have? 19.
+How many wins did Maryland have? 15.
 
-What does that mean? It means that Maryland slightly under-performed, according to this model, but not by much. Seems like goals is a pretty good predictor for Maryland. Where is Maryland on the plot? We know we can use layering for that.
+What does that mean? It means that Maryland over-performed, according to this model. Seems like assists is an ok predictor for Maryland, but maybe not a great one. Perhaps the Terps relied on one-on-one scoring opportunities instead of passing. Where is Maryland on the plot? We know we can use layering for that.
 
 ```{r}
-umd <- goals_wins |> filter(team == "Maryland Terrapins, Terps")
+umd <- teams |> filter(school_name == "Maryland")
 ```
 
 ```{r}
 ggplot() + 
-  geom_point(data=goals_wins, aes(x=total_goals, y=wins)) +
-  geom_smooth(data=goals_wins, aes(x=total_goals, y=wins), method="lm") +
-  geom_point(data=umd, aes(x=total_goals, y=wins), color="red")
+  geom_point(data=teams, aes(x=assists, y=overall_wins)) +
+  geom_smooth(data=teams, aes(x=assists, y=overall_wins), method="lm") +
+  geom_point(data=umd, aes(x=assists, y=overall_wins), color="red")
 ```
 
-Maryland's not the most interesting team on this plot, though.
+Maryland's not the most interesting team on this plot, though. Who is?
 
 ## Let's see it fail
 
-Scatterplots also are useful for shooting down the hottest of takes. What about fouls? Are they related to wins in field hockey?
-
-```{r}
-fouls_wins <- winlosslogs |> 
-  group_by(team) |> 
-  summarise(
-    wins = sum(winloss),
-    total_fouls = sum(fouls)
-    ) |> 
-  na.omit()
-```
-
-Now we can chart it and see what our relationship looks like.
+Scatterplots also are useful for shooting down the hottest of takes. What about green cards? Are they related to wins in lacrosse?
 
 ```{r}
 ggplot() + 
-  geom_point(data=fouls_wins, aes(x=total_fouls, y=wins)) +
-  geom_smooth(data=fouls_wins, aes(x=total_fouls, y=wins), method="lm")
+  geom_point(data=teams, aes(x=green_cards, y=overall_wins)) +
+  geom_smooth(data=teams, aes(x=green_cards, y=overall_wins), method="lm")
 ```
 
-The downward slope from left to right indicates a negative relationship - the more fouls a team commits, the fewer wins it has. But the line here isn't very steep at all, and you can see the dots spread widely around the plot. So there's some kind of relationship, but how strong is it?
+This is basically a flat line and a lot of dots spread all over the plot. There appears to be absolutely no relationship, but let's test that out just to be sure.
 
 Let's get our linear regression stats.
 
 ```{r}
-foulsfit <- lm(wins ~ total_fouls, data = fouls_wins)
-summary(foulsfit)
+gcfit <- lm(overall_wins ~ green_cards, data = teams)
+summary(gcfit)
 ```
 
-The p-value is a fair bit above 0.05, so the impact of fouls to wins (or losses) could just be random. The adjusted R-squared is all of 1 percent. We've do not have something here. Let's use our coefficients to look at Maryland's 2022-23 season.
+The p-value is way above 0.05, so the impact of green cards to wins (or losses) could just be random. The adjusted R-squared is all of -0.00775 percent. We've do not have something here. Let's use our coefficients to look at Maryland's 2024-25 season.
 
 ```{r}
-(-0.004753 * 12) + 10.101065
+(0.0004536 * 31) + 8.6319063
 ```
 
-This model says that based only on Maryland's fouls, they should have won 10 games. They won 19. Maybe not a great model for many teams.
+This model says that based only on Maryland's green cards, they should have won 8, maybe 9 games. They won 15. Not a great model for many teams.
 
 The power in combining scatterplots + regression is that we can answer two questions: is there a relationship, and how meaningful is it?
