@@ -12,9 +12,9 @@ Here's our requirements:
 
 ## Setup
 
-With those requirements in mind, we're going to use a library called Quarto, which supercharges R Markdown to make documents, websites, blogs and books. It's new, and growing, and you can do a lot with it. 
+With those requirements in mind, we're going to use a library called Quarto, which supercharges R Markdown to make documents, websites, blogs and books. It's new, and growing, and you can do a lot with it.
 
-You'll first go to [Quarto's website](https://quarto.org/docs/get-started/) and wait just one moment before you do anything. 
+You'll first go to [Quarto's website](https://quarto.org/docs/get-started/) and wait just one moment before you do anything.
 
 Before you install Quarto, you should close R Studio. So close R Studio, install it, restart R Studio and come back to this tutorial. Then install Quarto.
 
@@ -24,17 +24,17 @@ And now we've come to our first decision point.
 
 First, name the directory you're going to put this into. Keep it simple. Blog is fine. Then decide where on your computer you're going to put it. Put it somewhere you're going to remember. Don't put it on your Desktop. Put it in a folder. Remember what folder because you're going to need this later. Choose "None" as your engine and check the "Open in new session" box. Do NOT create a new repository at this point, then create the project.
 
-When you hit Create Project, you should get an R Studio screen. You might have two files open -- _quarto.yml and index.qmd. If you don't, open them (you can use the files pane in the bottom right). The important one for now is _quarto.yml. This file will look different depending on some choices you make. 
+When you hit Create Project, you should get an R Studio screen. You might have two files open -- \_quarto.yml and index.qmd. If you don't, open them (you can use the files pane in the bottom right). The important one for now is \_quarto.yml. This file will look different depending on some choices you make.
 
-The choices you need to make: 
+The choices you need to make:
 
-* The website title should be yours.
-* The Github account (more on this soon) and Twitter handles should be yours.
-* If you want a custom favicon logo, you'll have to include one. You can ignore this for a while. 
-* You should pick a [not-default theme](https://quarto.org/docs/websites/website-blog.html#themes). If you want to have themes for light and dark mode, the code below handles that. If you want just one theme, the default code you get in your _quarto.yml file does that. 
-* Add the execute: freeze bits below to your file. This way, your code only executes when you change it. This will become more important later when you have multiple posts.
+-   The website title should be yours.
+-   The Github account (more on this soon) and Twitter handles should be yours.
+-   If you want a custom favicon logo, you'll have to include one. You can ignore this for a while.
+-   You should pick a [not-default theme](https://quarto.org/docs/websites/website-blog.html#themes). If you want to have themes for light and dark mode, the code below handles that. If you want just one theme, the default code you get in your \_quarto.yml file does that.
+-   Add the execute: freeze bits below to your file. This way, your code only executes when you change it. This will become more important later when you have multiple posts.
 
-```
+```         
 project:
   type: website
 
@@ -65,23 +65,23 @@ execute:
 
 ## Creating a post
 
-Under the files tab on the lower right, you'll see a folder named posts. In there, you'll find two folders with sample posts in them. There's not much to them, but they're useful to look at before we delete them. 
+Under the files tab on the lower right, you'll see a folder named posts. In there, you'll find two folders with sample posts in them. There's not much to them, but they're useful to look at before we delete them.
 
-To create a post, you're going to first create a folder for it. **The folder name matters because it's going to be part of your url.** For this to work your folder name has to do a couple of things: 
+To create a post, you're going to first create a folder for it. **The folder name matters because it's going to be part of your url.** For this to work your folder name has to do a couple of things:
 
-* Contain only lowercase letters and dashes instead of spaces. So My Awesome Post will not work. It should be my-awesome-post. 
-* Contain words that are in your post, and would be something people would search for. If your post is about Maryland women's run into the NCAA Tournament, make sure your post title and folder name contains those words. 
-* In other words, **you need to think about what your post is about before you make this folder**. Can you change it later? Yes. But the sooner you start focusing on a topic the better. 
+-   Contain only lowercase letters and dashes instead of spaces. So My Awesome Post will not work. It should be my-awesome-post.
+-   Contain words that are in your post, and would be something people would search for. If your post is about Maryland women's run into the NCAA Tournament, make sure your post title and folder name contains those words.
+-   In other words, **you need to think about what your post is about before you make this folder**. Can you change it later? Yes. But the sooner you start focusing on a topic the better.
 
 After you have created the folder, go to the button next to the create folder button and create a Quarto Document. Name that document index.qmd. **DO NOT NAME IT CAPITAL I INDEX. IT'S LOWER CASE I.**
 
-At the top, you will have something called a yaml header, which are things that set up the page. They are quite simple to figure out. Here is an example you should copy and edit for all of your posts. 
+At the top, you will have something called a yaml header, which are things that set up the page. They are quite simple to figure out. Here is an example you should copy and edit for all of your posts.
 
-```
+```         
 ---
 title: "CHANGE THIS TO BE THE TITLE OF YOUR POST"
 author: "THIS IS YOUR NAME"
-date: '2023-XX-XX'
+date: '2025-XX-XX'
 categories: [lowercaseword, lowercaseword, lowercaseword]
 image: "image.png"
 format: 
@@ -90,9 +90,9 @@ format:
 ---
 ```
 
-For us, the cold-fold bit is important, and it is not standard. This will allow users to see your code that makes your graphics, without displaying it. Users can decide if they want to see the code. 
+For us, the cold-fold bit is important, and it is not standard. This will allow users to see your code that makes your graphics, without displaying it. Users can decide if they want to see the code.
 
-Now that you have a folder and an index.qmd file with a proper yaml header, you're ready to write your post. This document works just the same as any .qmd file we've worked with all semester. Create text between code blocks, and your code blocks will execute to produce graphics. 
+Now that you have a folder and an index.qmd file with a proper yaml header, you're ready to write your post. This document works just the same as any .qmd file we've worked with all semester. Create text between code blocks, and your code blocks will execute to produce graphics.
 
 ## Seeing your site
 
@@ -113,7 +113,7 @@ Publishing takes a lot of steps to get set up, but once it is, it's easy.
 
 **Step 1: Get a GitHub account**
 
-Go to [GitHub](https://GitHub.com/) and sign up for an account. NOTE: Your username will be part of your website address, and you could potentially be sending this to employers. I'm sure blaze420rryday has been your handle since middle school, but do you want an employer to see that? My GitHub user name is dwillis See what I'm getting at here?
+Go to [GitHub](https://GitHub.com/) and sign up for an account. NOTE: Your username will be part of your website address, and you could potentially be sending this to employers. I'm sure blaze420rryday has been your handle since middle school, but do you want an employer to see that? My GitHub user name is dwillis. See what I'm getting at here?
 
 **Step 2: Set up your website repository**
 
@@ -126,7 +126,7 @@ To start, you can click on the plus sign in the top right corner or hit the gree
 knitr::include_graphics(rep("images/blog7.png"))
 ```
 
-In the create a new repository page, **the name of your respository needs to follow this pattern**: yourusernamehere.github.io where yourusernamehere is ... your username. So my site is dwillis.github.io because my username is dwillis This is why you do not want to select swaggylovedoctor as your username, no matter how attached to it you are. Your employment chances are zero with something dumb like that.
+In the create a new repository page, **the name of your respository needs to follow this pattern**: yourusernamehere.github.io where yourusernamehere is ... your username. So my site is dwillis.github.io because my username is dwillis. This is why you do not want to select swaggylovedoctor as your username, no matter how attached to it you are. Your employment chances are zero with something dumb like that.
 
 After you've named the repository correctly, leave it public, check add .gitignore, and then select a gitignore template. Type R into the search, select it, and the create repository button will become active. Click create repository.
 
@@ -145,7 +145,7 @@ In a new tab, [download the GitHub Desktop App](https://desktop.github.com/) and
 
 GitHub is a version control system and a social network mixed together. Version control is like Track Changes in Word, but on steroids. If you plan on a career in analytics or data science, GitHub is a skill you will have to learn, but it's beyond the scope of this book.
 
-To work around this, we're going to use GitHub Desktop to manage our interactions with GitHub. Open GitHub Desktop and log into your GitHub account in the app. 
+To work around this, we're going to use GitHub Desktop to manage our interactions with GitHub. Open GitHub Desktop and log into your GitHub account in the app.
 
 To get your repository into GitHub Desktop, go back to your tab with your GitHub repository in it. Find the Code button and click it. Click on the Open With GitHub Desktop button.
 
@@ -166,9 +166,11 @@ To do this, we need to change config.yaml. We need to tell your website project 
 
 Open `_quarto.yml` in your blog project. Near the top, below type: website, add this line:
 
-    output-dir: docs
+```         
+output-dir: docs
+```
 
-Save _quarto.yml.
+Save \_quarto.yml.
 
 Then, add a .nojekyll file to the root of your repository that tells GitHub Pages not to do additional processing of your published site using Jekyll (the GitHub default site generation tool). You can [follow these instructions](https://quarto.org/docs/publishing/github-pages.html#render-to-docs) on how to do that.
 
