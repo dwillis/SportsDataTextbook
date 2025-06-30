@@ -1,12 +1,12 @@
 # Residuals
 
-When looking at a linear model of your data, there's a measure you need to be aware of called residuals. The residual is the distance between what the model predicted and what the real outcome is. Take our model at the end of the correlation and regression chapter. Our model predicted Maryland's women soccer should have outscored Navy by 2.12 goals a year ago. The match was a 3-3 draw. So our residual is -2.12.
+When looking at a linear model of your data, there's a measure you need to be aware of called residuals. The residual is the distance between what the model predicted and what the real outcome is. Take our model at the end of the correlation and regression chapter. Our model predicted Maryland's women soccer should have outscored George Mason by a goal a year ago. The match was a 3-2 loss. So our residual is -2.
 
 Residuals can tell you several things, but most important is if a linear model the right model for your data. If the residuals appear to be random, then a linear model is appropriate. If they have a pattern, it means something else is going on in your data and a linear model isn't appropriate.
 
 Residuals can also tell you who is under-performing and over-performing the model. And the more robust the model -- the better your r-squared value is -- the more meaningful that label of under or over-performing is.
 
-Let's go back to our model for college basketball. For our predictor, let's use Net FG Percentage - the difference between the two teams' shooting success.
+Let's go back to our model for men's college basketball. For our predictor, let's use Net FG Percentage - the difference between the two teams' shooting success.
 
 ```{r}
 #| warning: false
@@ -17,7 +17,7 @@ library(downloadthis)
 library(glue)
 
 dllink <- download_link(
-  link = "https://dwillis.github.io/sports-data-files/cbblogs1524.csv",
+  link = "https://dwillis.github.io/sports-data-files/cbblogs1125.csv.zip",
   button_label = "Download csv file",
   button_type = "danger",
   has_icon = TRUE,
@@ -38,7 +38,7 @@ library(tidyverse)
 ```
 
 ```{r}
-logs <- read_csv("data/cbblogs1524.csv")
+logs <- read_csv("data/cbblogs1125.csv.zip")
 ```
 
 First, let's make the columns we'll need.
@@ -54,9 +54,9 @@ fit <- lm(differential ~ FGPctMargin, data = residualmodel)
 summary(fit)
 ```
 
-We've seen this output before, but let's review because if you are using scatterplots to make a point, you should do this. First, note the Min and Max residual at the top. A team has under-performed the model by 51 points (!), and a team has overperformed it by 68 points (!!). The median residual, where half are above and half are below, is just slightly below the fit line. Close here is good.
+We've seen this output before, but let's review because if you are using scatterplots to make a point, you should do this. First, note the Min and Max residual at the top. A team has under-performed the model by 51 points (!), and a team has overperformed it by 70 points (!!). The median residual, where half are above and half are below, is just slightly below the fit line. Close here is good.
 
-Next: Look at the Adjusted R-squared value. What that says is that 67 percent of a team's scoring differential can be predicted by their FG percentage margin.
+Next: Look at the Adjusted R-squared value. What that says is that 66 percent of a team's scoring differential can be predicted by their FG percentage margin.
 
 Last: Look at the p-value. We are looking for a p-value smaller than .05. At .05, we can say that our correlation didn't happen at random. And, in this case, it REALLY didn't happen at random. But if you know a little bit about basketball, it doesn't surprise you that the more you shoot better than your opponent, the more you win by. It's an intuitive result.
 
@@ -79,15 +79,15 @@ Now we can try re-running the code to add the predicted and residuals columns:
 residualmodel <- residualmodel |> mutate(predicted = predict(fit), residuals = residuals(fit))
 ```
 
-Now we can sort our data by those residuals. Sorting in descending order gives us the games where teams overperformed the model. To make it easier to read, I'm going to use select to give us just the columns we need to see and limit our results to Big Ten teams.
+Now we can sort our data by those residuals. Sorting in descending order gives us the games where teams overperformed the model. To make it easier to read, I'm going to use select to give us just the columns we need to see and limit our results to Big Ten games.
 
 ```{r}
-residualmodel |> filter(Conference == 'Big Ten') |> arrange(desc(residuals)) |> select(Date, Team, Opponent, W_L, differential, FGPctMargin, predicted, residuals)
+residualmodel |> filter(Conference == 'Big Ten MBB', GameType == 'REG (Conf)') |> arrange(desc(residuals)) |> select(Date, Team, Opponent, W_L, differential, FGPctMargin, predicted, residuals)
 ```
 
-So looking at this table, what you see here are the teams who scored more than their FG percentage margin would indicate. One of them should jump off the page at you.
+So looking at this table, what you see here are the teams who scored more than their FG percentage margin would indicate. One of the predicted values should jump off the page at you.
 
-Look at that Maryland-Northwestern game from 2020. The Wildcats shot better than the Terps, but the model predicted Northwestern would win by 17 points. Instead, Maryland **won by 11**!
+Look at that Maryland-Northwestern game from 2020. The Wildcats shot better than the Terps, and the model predicted Northwestern would win by 17 points. Instead, Maryland **won by 11**!
 
 But, before we can bestow any validity on this model, we need to see if this linear model is appropriate. We've done that some looking at our p-values and R-squared values. But one more check is to look at the residuals themselves. We do that by plotting the residuals with the predictor. We'll get into plotting soon, but for now just seeing it is enough.
 
@@ -126,11 +126,11 @@ summary(pfit)
 
 So from top to bottom:
 
--   Our min and max go from -94 to positive 107
--   Our adjusted R-squared is ... 0.000986. Not much at all.
+-   Our min and max go from -95 to positive 107
+-   Our adjusted R-squared is ... 0.0009825. Not much at all.
 -   Our p-value is ... is less than than .05, so that's something.
 
-So what we can say about this model is that it's statistically significant, but doesn't really explain much. It's not meaningless, but on its own the total number of fouls doesn't go very far in explaining the point differential. Normally, we'd stop right here -- why bother going forward with a predictive model that isn't terribly predictive? But let's do it anyway. Oh, and see that "(65 observations deleted due to missingness)" bit? That means we need to lose some incomplete data again.
+So what we can say about this model is that it's statistically significant, but doesn't really explain much. It's not meaningless, but on its own the total number of fouls doesn't go very far in explaining the point differential. Normally, we'd stop right here -- why bother going forward with a predictive model that isn't terribly predictive? But let's do it anyway. Oh, and see that "(4 observations deleted due to missingness)" bit? That means we need to lose some incomplete data again.
 
 ```{r}
 fouls <- fouls |> filter(!is.na(TotalFouls))
