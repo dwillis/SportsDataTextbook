@@ -76,7 +76,7 @@ newcorrelations |> summarise(correlation = cor(differential, yellow_cards, metho
 
 So wait, what does this all mean?
 
-It means that when you look at every game in college soccer, the number of goals and yellow cards have a negative impact on the score difference between your team and the other team. But the relationship is barely anything at all. Like 91+ percent plus not related. So neither fouls nor yellow cards have much of any relationship with the difference in goal-scoring.
+It means that when you look at every game in college soccer, the number of goals and yellow cards do have a small impact on the score difference between your team and the other team. But the relationship is barely anything at all. Like 93+ percent plus not related. So neither fouls nor yellow cards have much of any relationship with the difference in goal-scoring.
 
 Normally, at this point, you'd quit while you were ahead. A correlation coefficient that shows there's no relationship between two things means stop. It's pointless to go on. But let's put this fully to rest.
 
@@ -93,9 +93,9 @@ summary(fit)
 
 There's three things we need here:
 
-1.  First we want to look at the p-value. It's at the bottom right corner of the output. In the case of fouls, the p-value is 0.5571. The threshold we're looking for here is .05. If it's less than .05, then the relationship is considered to be *statistically significant*. Significance here does not mean it's a big deal. It means it's not random. That's it. Just that. Not random. So in our case, the relationship between fouls and a team's aggregate point differential are **not statistically significant**. The differences in score difference and fouls could be completely random. This is another sign we should just stop with this.
-2.  Second, we look at the Adjusted R-squared value. It's right above the p-value. Adjusted R-squared is a measure of how much of the difference between teams aggregate point values can be explained by fouls. Our correlation coefficient said they're 2 percent related to each other, but fouls' ability to explain the difference between teams? About -0.0002991 percent. That's ... not much. It's really nothing. Again, we should quit.
-3.  The third thing we can look at, and we only bother if the first two are meaningful, is the coefficients. In the middle, you can see the (Intercept) is 0.008153 and the fouls coefficient is 0.009306 Remember high school algebra? Remember learning the equation of a line? Remember swearing that learning `y=mx+b` is stupid because you'll never need it again? Surprise. It's useful again. In this case, we could try to predict a team's score differential in a game -- will they score more than they give up -- by using `y=mx+b`. In this case, y is the aggregate score, m is 0.009306 and b is 0.008153. So we would multiply a teams total fouls by 0.009306 and then add 0.008153. to it. The result would tell you what the total aggregate score in the game would be, according to our model. Chance that you're even close with this? Almost none. Did I say we should quit? Yeah.
+1.  First we want to look at the p-value. It's at the bottom right corner of the output. In the case of fouls, the p-value is 0.1469. The threshold we're looking for here is .05. If it's less than .05, then the relationship is considered to be *statistically significant*. Significance here does not mean it's a big deal. It means it's not random. That's it. Just that. Not random. So in our case, the relationship between fouls and a team's aggregate point differential are **not statistically significant**. The differences in score difference and fouls could be completely random. This is another sign we should just stop with this.
+2.  Second, we look at the Adjusted R-squared value. It's right above the p-value. Adjusted R-squared is a measure of how much of the difference between teams aggregate point values can be explained by fouls. Our correlation coefficient said they're not quite 2 percent related to each other, but fouls' ability to explain the difference between teams? About 0.0001712 percent. That's ... not much. It's really nothing. Again, we should quit.
+3.  The third thing we can look at, and we only bother if the first two are meaningful, is the coefficients. In the middle, you can see the (Intercept) is -0.065158 and the fouls coefficient is 0.011381. Remember high school algebra? Remember learning the equation of a line? Remember swearing that learning `y=mx+b` is stupid because you'll never need it again? Surprise. It's useful again. In this case, we could try to predict a team's score differential in a game -- will they score more than they give up -- by using `y=mx+b`. In this case, y is the aggregate score, m is 0.011381. and b is -0.065158. So we would multiply a teams total fouls by 0.011381 and then add -0.065158 to it. The result would tell you what the total aggregate score in the game would be, according to our model. Chance that you're even close with this? Almost none. Did I say we should quit? Yeah.
 
 So fouls are totally meaningless to the outcome of a game.
 
@@ -118,7 +118,7 @@ newcorrelations |>
   summarise(correlation = cor(differential, so_g, method="pearson"))
 ```
 
-Answer: 67 percent. Not a perfect relationship, but pretty good. But how meaningful is that relationship and how predictive is it?
+Answer: 60 percent. Not a perfect relationship, but pretty good. But how meaningful is that relationship and how predictive is it?
 
 ```{r}
 net <- lm(differential ~ so_g, data = newcorrelations)
@@ -127,12 +127,12 @@ summary(net)
 
 First we check p-value: 0.00000000000000022. That's sixteen zeros between the decimal and 22. Is that less than .05? Uh, yeah. So this is really, really, really not random. But anyone who has watched a game of soccer knows this is true. It makes intuitive sense.
 
-Second, Adjusted R-squared: 0.4608. So we can predict about 46 percent of the difference in the score differential by simply looking at the shots on goal the team has.
+Second, Adjusted R-squared: 0.3626. So we can predict about 36 percent of the difference in the score differential by simply looking at the shots on goal the team has.
 
-Third, the coefficients: In this case, our `y=mx+b` formula looks like `y = 0.44111x + -2.48075`. So if we were applying this, let's look at Maryland's 3-2 loss to George Mason on Sept. 1, 2024. Maryland's shots on goal in that game? 9. What does our model say the point differential should have been?
+Third, the coefficients: In this case, our `y=mx+b` formula looks like `y = 0.37923x + -2.13264`. So if we were applying this, let's look at Maryland's 3-2 loss to George Mason on Sept. 1, 2024. Maryland's shots on goal in that game? 9. What does our model say the point differential should have been?
 
 ```{r}
-(0.44111*9)+-2.48075 
+(0.37923*9)+-2.13264 
 ```
 
-So by our model, Maryland should have won by at least one goal. Some games are closer than others. But when you can explain 46 percent of the difference, this is the kind of result you get. What would improve the model? Using more data to start. And using more inputs.
+So by our model, Maryland should have won by at least one goal. Some games are closer than others. But when you can explain 36 percent of the difference, this is the kind of result you get. What would improve the model? Using more data to start. And using more inputs.
