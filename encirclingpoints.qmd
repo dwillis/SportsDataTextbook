@@ -17,7 +17,7 @@ library(tidyverse)
 library(ggalt)
 ```
 
-Let's say we want to highlight the top scorers in women's college basketball. So let's use our player data.
+Let's say we want to highlight the top scorers in women's college lacrosse. So let's use our player data.
 
 ```{r}
 #| warning: false
@@ -42,29 +42,29 @@ glue("<pre><p><strong>For this walkthrough:</strong></p><p>{dllink}</p></pre>")
 And while we're loading it, let's filter out anyone who hasn't played.
 
 ```{r}
-players <- read_csv("https://raw.githubusercontent.com/dwillis/hhs-snapshots/main/data/player_totals_20240410.csv") |> filter(mp > 0)
+players <- read_csv("data/wlax_playerstats_2025.csv") |> filter(player_GP > 0)
 ```
 
-We've done this before, but let's make a standard scatterplot of minutes and points.
+We've done this before, but let's make a standard scatterplot of games and points.
 
 ```{r}
-ggplot() + geom_point(data=players, aes(x=mp, y=pts))
+ggplot() + geom_point(data=players, aes(x=player_GP, y=player_PTS))
 ```
 
 So we can see right away that there are some dots at the very top that we'd want to highlight. Who are these scoring machines?
 
-Like we have done in the past, let's make a dataframe of top scorers. We'll set the cutoff at 800 points.
+Like we have done in the past, let's make a dataframe of top scorers. We'll set the cutoff at 120 points.
 
 ```{r}
-topscorers <- players |> filter(pts > 799)
+topscorers <- players |> filter(player_PTS > 120)
 ```
 
 And like we've done in the past, we can add it to the chart with another geom_point. We'll make all the players grey, we'll make all the top scorers black.
 
 ```{r}
 ggplot() + 
-  geom_point(data=players, aes(x=mp, y=pts), color="grey") +
-  geom_point(data=topscorers, aes(x=mp, y=pts), color="black")
+  geom_point(data=players, aes(x=player_GP, y=player_PTS), color="grey") +
+  geom_point(data=topscorers, aes(x=player_GP, y=player_PTS), color="black")
 ```
 
 And like that, we're on the path to something publishable. We'll need to label those dots with `ggrepel` and we'll need to drop the default grey and add some headlines and all that. And, for the most part, we've got a solid chart.
@@ -77,9 +77,9 @@ Let's start with `s_shape` 1 and `expand` 1.
 
 ```{r}
 ggplot() + 
-  geom_point(data=players, aes(x=mp, y=pts), color="grey") + 
-  geom_point(data=topscorers, aes(x=mp, y=pts), color="black") + 
-  geom_encircle(data=topscorers, aes(x=mp, y=pts), s_shape=1, expand=1, colour="red")
+  geom_point(data=players, aes(x=player_GP, y=player_PTS), color="grey") +
+  geom_point(data=topscorers, aes(x=player_GP, y=player_PTS), color="black") +
+  geom_encircle(data=topscorers, aes(x=player_GP, y=player_PTS), s_shape=1, expand=1, colour="red")
 ```
 
 Whoa. That's ... not good.
@@ -88,32 +88,34 @@ Let's go the opposite direction.
 
 ```{r}
 ggplot() + 
-  geom_point(data=players, aes(x=mp, y=pts), color="grey") + 
-  geom_point(data=topscorers, aes(x=mp, y=pts), color="black") + 
-  geom_encircle(data=topscorers, aes(x=mp, y=pts), s_shape=0, expand=0, colour="red")
+  geom_point(data=players, aes(x=player_GP, y=player_PTS), color="grey") +
+  geom_point(data=topscorers, aes(x=player_GP, y=player_PTS), color="black") + 
+  geom_encircle(data=topscorers, aes(x=player_GP, y=player_PTS), s_shape=0, expand=0, colour="red")
 ```
 
 Better, but ... the circle cuts through multiple dots.
 
-This takes a little bit of finessing, but a shape of .5 means the line will have some bend to it -- it'll look more like someone circled it with a pen. Then, the expand is better if you use hundredths instead of tenths. So .01 instead of .1. Here's mine after fiddling with it for a bit, and I'll add in player names as a label.
+This takes a little bit of finessing, but a shape of .5 means the line will have some bend to it -- it'll look more like someone circled it with a pen. Then, the expand is better if you use hundredths instead of tenths. So .01 instead of .1. Here's mine after fiddling with it for a bit, and I'll add in player names as a label, use geom_text_repel to make some space for the names and extend the x-axis for more room.
 
 ```{r}
 ggplot() + 
-  geom_point(data=players, aes(x=mp, y=pts), color="grey") + 
-  geom_point(data=topscorers, aes(x=mp, y=pts), color="black") + 
-  geom_text(data=topscorers, aes(x=mp, y=pts, label=full_name), hjust = 0, vjust=1) +
-  geom_encircle(data=topscorers, aes(x=mp, y=pts), s_shape=.5, expand=.03, colour="red")
+  geom_point(data=players, aes(x=player_GP, y=player_PTS), color="grey") +
+  geom_point(data=topscorers, aes(x=player_GP, y=player_PTS), color="black") + 
+  geom_encircle(data=topscorers, aes(x=player_GP, y=player_PTS), s_shape=.5, expand=.03, colour="red") +
+  geom_text_repel(data=topscorers, aes(x=player_GP, y=player_PTS, label=player_full_name), hjust = 0, vjust=1) + 
+  scale_x_continuous(limits = c(0, 28))
 ```
 
 Now let's clean this up and make it presentable. If you look at the top scorers, all four are guards. So here's what a chart telling that story might look like.
 
 ```{r}
 ggplot() + 
-  geom_point(data=players, aes(x=mp, y=pts), color="grey") + 
-  geom_point(data=topscorers, aes(x=mp, y=pts), color="black") + 
-  geom_encircle(data=topscorers, aes(x=mp, y=pts), s_shape=.5, expand=.03, colour="red") +
-  geom_text(aes(x=275, y=275, label="Top scorers")) + 
-  labs(title="Caitlin Clark Alone At Top", subtitle="The Iowa star is by far the top scorer among all NCAA players", x="Minutes", y="Points") + 
+  geom_point(data=players, aes(x=player_GP, y=player_PTS), color="grey") +
+  geom_point(data=topscorers, aes(x=player_GP, y=player_PTS), color="black") + 
+  geom_encircle(data=topscorers, aes(x=player_GP, y=player_PTS), s_shape=.5, expand=.03, colour="red") +
+  geom_text_repel(data=topscorers, aes(x=player_GP, y=player_PTS, label=player_full_name), hjust = 0, vjust=1) + 
+  scale_x_continuous(limits = c(0, 28)) +
+  labs(title="Madison Taylor Alone At Top", subtitle="The Northwestern star is by far the top scorer among all NCAA players", x="Games", y="Points") + 
   theme_minimal() + 
   theme(
     plot.title = element_text(size = 16, face = "bold"),
@@ -129,19 +131,23 @@ You can use circling outside of the top of something. It's a bit obvious that th
 
 Works the same way -- use layering and color smartly and tell the story with all your tools.
 
-Let's grab the top three point attempt takers on the 2023-24 Maryland roster.
+Let's grab the top three point attempt takers on the 2024-25 Maryland roster.
 
 ```{r}
-players24 <- read_csv("https://thescoop.org/sports-data-files/players24.csv")
+players24 <- read_csv("https://thescoop.org/sports-data-files/players25.csv")
 mdtop <- players24 |> filter(Team == "Maryland Terrapins Men's") |> top_n(3, `3PA`)
 ```
 
 And just like above, we can plug in our players geom, our mdtop dataframe into another geom, then encircle that dataframe. Slap some headlines and annotations on it and here's what we get:
 
 ```{r}
-ggplot() + geom_point(data=players24, aes(x=MP, y=`3PA`), color="grey") + geom_point(data=mdtop, aes(x=MP, y=`3PA`), color="red") + geom_encircle(data=mdtop, aes(x=MP, y=`3PA`), s_shape=.02, expand=.18, colour="red") +
+ggplot() + 
+  geom_point(data=players24, aes(x=MP, y=`3PA`), color="grey") + 
+  geom_point(data=mdtop, aes(x=MP, y=`3PA`), color="red") + 
+  geom_encircle(data=mdtop, aes(x=MP, y=`3PA`), s_shape=.02, expand=.10, colour="red") +
+  geom_text_repel(data=mdtop, aes(x=MP, y=`3PA`, label=Player)) +
   geom_text(aes(x=400, y=200, label="Maryland's top three shooters")) + 
-  labs(title="The Big Three?", subtitle="Maryland's top three point shooters not among the leaders in college basketball ", x="Minutes", y="Three point attempts") + 
+  labs(title="Terp Task: Replace the Big Three", subtitle="None of Maryland's most prolific long-range shooters return this season", x="Minutes", y="Three point attempts") + 
   theme_minimal() + 
   theme(
     plot.title = element_text(size = 16, face = "bold"),
@@ -151,4 +157,4 @@ ggplot() + geom_point(data=players24, aes(x=MP, y=`3PA`), color="grey") + geom_p
     )
 ```
 
-From the top, Maryland's dots are Jahmir Young, Donta Scott and Jamie Kaiser. None of them return this season.
+None of them return this season.
