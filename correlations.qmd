@@ -6,7 +6,7 @@ Can we put some numbers behind that? Can we prove it or not?
 
 This is what we're going to start to answer. And we'll do it with correlations and regressions.
 
-First, we need data from the 2025 women's college lacrosse season.
+First, we need data from the 2024 women's college soccer season.
 
 ```{r}
 #| warning: false
@@ -43,7 +43,7 @@ Now import the data.
 correlations <- read_csv("https://raw.githubusercontent.com/dwillis/NCAAWomensSoccerData/main/data/ncaa_womens_soccer_matchstats_2024.csv")
 ```
 
-To do this, we need all college lacrosse teams and their season stats from this year. How much, over the course of a season, does a thing matter? That's the question you're going to answer.
+To do this, we need all college soccer teams and their season stats from last year. How much, over the course of a season, does a thing matter? That's the question you're going to answer.
 
 In our case, we want to know how much does a team's fouls influence the number of goals they score in a season? How much difference can we explain in goals with fouls?
 
@@ -66,7 +66,7 @@ In R, there is a `cor` function, and it works much the same as `mean` or `median
 newcorrelations |> summarise(correlation = cor(differential, fouls, method="pearson"))
 ```
 
-So on a scale of -1 to 1, where 0 means there's no relationship at all and 1 or -1 means a perfect relationship, fouls and whether or not the team scores more goals than it gives up are at 0.01254812. You could say they're 1.3 percent related toward the positive -- more fouls, the higher your differential. Another way to say it? They're almost 99 percent not related.
+So on a scale of -1 to 1, where 0 means there's no relationship at all and 1 or -1 means a perfect relationship, fouls and whether or not the team scores more goals than it gives up are at 0.01806104 You could say they're 1.8 percent related toward the positive -- more fouls, the higher your differential. Another way to say it? They're almost 98 percent not related.
 
 What about the number of yellow cards instead of fouls? Do more aggressive defensive teams also score more?
 
@@ -76,7 +76,7 @@ newcorrelations |> summarise(correlation = cor(differential, yellow_cards, metho
 
 So wait, what does this all mean?
 
-It means that when you look at every game in college soccer, the number of goals and yellow cards do have a small impact on the score difference between your team and the other team. But the relationship is barely anything at all. Like 93+ percent plus not related. So neither fouls nor yellow cards have much of any relationship with the difference in goal-scoring.
+It means that when you look at every game in college soccer, the number of goals and yellow cards do have a small impact on the score difference between your team and the other team. But the relationship is barely anything at all. For yellow cards, it's a negative correlation of about 7 percent. So like 93+ percent plus not related. So neither fouls nor yellow cards have much of any relationship with the difference in goal-scoring.
 
 Normally, at this point, you'd quit while you were ahead. A correlation coefficient that shows there's no relationship between two things means stop. It's pointless to go on. But let's put this fully to rest.
 
