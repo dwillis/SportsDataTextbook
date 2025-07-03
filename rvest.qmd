@@ -2,7 +2,7 @@
 
 All the way back in Chapter 2, we used Google Sheets and importHTML to get our own data out of a website. For me, that's a lot of pointing and clicking and copying and pasting. R has a library that can automate the harvesting of data from HTML on the internet. It's called `rvest`.
 
-Let's grab [a simple, basic HTML table from College Football Stats](http://www.cfbstats.com/2022/leader/national/team/offense/split01/category09/sort01.html). There's nothing particularly strange about this table -- it's simply formatted and easy to scrape.
+Let's grab [a simple, basic HTML table from College Football Stats](http://www.cfbstats.com/2023/leader/national/team/offense/split01/category09/sort01.html). There's nothing particularly strange about this table -- it's simply formatted and easy to scrape.
 
 First we'll need some libraries. We're going to use a library called `rvest`, which you can get by running `install.packages('rvest')` in the console.
 
@@ -56,40 +56,40 @@ This is a common problem. What if we want to look at every scoring offense going
 
 First, we should note, that the data does not have anything in it to indicate what year it comes from. So we're going to have to add that. And we're going to have to figure out a way to stack two dataframes on top of each other.
 
-So let's grab 2022.
+So let's grab 2024.
 
 ```{r}
-scoringoffenseurl22 <- "http://www.cfbstats.com/2022/leader/national/team/offense/split01/category09/sort01.html"
+scoringoffenseurl24 <- "http://www.cfbstats.com/2024/leader/national/team/offense/split01/category09/sort01.html"
 
-scoringoffense22 <- scoringoffenseurl22 |>
+scoringoffense24 <- scoringoffenseurl24 |>
   read_html() |>
   html_nodes(xpath = '//*[@id="content"]/div[2]/table') |>
   html_table()
 
-scoringoffense22 <- scoringoffense22[[1]]
+scoringoffense24 <- scoringoffense24[[1]]
 ```
 
 First, how are we going to know, in the data, which year our data is from? We can use mutate.
 
 ```{r}
 #| error: true
-scoringoffense22 <- scoringoffense22 |> mutate(YEAR = 2022)
+scoringoffense24 <- scoringoffense24 |> mutate(YEAR = 2024)
 ```
 
 Uh oh. Error. What does it say? It's ... not clear, but a hint is that our first column doesn't have a name. Each column must be named. If you look at our data in the environment tab in the upper right corner, you'll see that indeed, the first column has no name. It's the FBS rank of each team. So we can fix that and mutate in the same step. We'll do that using `rename` and since the field doesn't have a name to rename it, we'll use a position argument. We'll say rename column 1 as Rank.
 
 ```{r}
 scoringoffense23 <- scoringoffense |> rename(Rank = 1) |> mutate(YEAR = 2023)
-scoringoffense22 <- scoringoffense22 |> rename(Rank = 1) |> mutate(YEAR = 2022)
+scoringoffense24 <- scoringoffense24 |> rename(Rank = 1) |> mutate(YEAR = 2024)
 ```
 
 And now, to combine the two tables together length-wise -- we need to make long data -- we'll use a dpylr function called `bind_rows`. The good thing is bind_rows is simple.
 
 ```{r}
-combined <- bind_rows(scoringoffense23, scoringoffense22)
+combined <- bind_rows(scoringoffense23, scoringoffense24)
 ```
 
-Note in the environment tab we now have a data frame called combined that has 264 observations -- which just so happens to be what 131 from 2022 and 133 from 2023 add up to.
+Note in the environment tab we now have a data frame called combined that has 268 observations -- which just so happens to be what 134 from 2024 and 2023 add up to.
 
 ```{r}
 head(combined)
@@ -103,12 +103,12 @@ Unfortunately, non-standard means there's no one way to do it -- it's going to d
 
 I'll explain.
 
-Let's try to get [season team stats from Sports Reference](https://www.sports-reference.com/cbb/seasons/2022-school-stats.html). If you look at that page, you'll see the problem right away -- the headers span two rows, and they repeat. That's going to be all kinds of no good. You can't import that. Dataframes must have names all in one row. If you have two-line headers, you have a problem you have to fix before you can do anything else with it.
+Let's try to get [season team stats from Sports Reference](https://www.sports-reference.com/cbb/seasons/2024-school-stats.html). If you look at that page, you'll see the problem right away -- the headers span two rows, and they repeat. That's going to be all kinds of no good. You can't import that. Dataframes must have names all in one row. If you have two-line headers, you have a problem you have to fix before you can do anything else with it.
 
 First we'll grab the page.
 
 ```{r}
-url <- "https://www.sports-reference.com/cbb/seasons/2023-school-stats.html"
+url <- "https://www.sports-reference.com/cbb/seasons/2024-school-stats.html"
 ```
 
 Now, similar to our example above, we'll read the html, use XPath to find the table, and then read that table with a directive passed to it setting the header to FALSE. That tells rvest that there isn't a header row. Just import it as data.
@@ -132,7 +132,7 @@ And we'll take a look at what we have.
 head(stats)
 ```
 
-So, that's not ideal. We have headers and data mixed together, and our columns are named X1 to X38. Also note: They're all character fields. Because the headers are interspersed with data, it all gets called character data. So we've got to first rename each field.
+So, that's not ideal. Our columns are named X1 to X38. Also note: They're all character fields. Because the headers are interspersed with data, it all gets called character data. So we've got to first rename each field.
 
 ```{r}
 stats <- stats |> rename(Rank=X1, School=X2, Games=X3, OverallWins=X4, OverallLosses=X5, WinPct=X6, OverallSRS=X7, OverallSOS=X8, Blank1=X9, ConferenceWins=X10, ConferenceLosses=X11, Blank2=X12, HomeWins=X13, HomeLosses=X14, Blank3=X15, AwayWins=X16, AwayLosses=X17, Blank4=X18, ForPoints=X19, OppPoints=X20, Blank5=X21, Minutes=X22, FieldGoalsMade=X23, FieldGoalsAttempted=X24, FieldGoalPCT=X25, ThreePointMade=X26, ThreePointAttempts=X27, ThreePointPct=X28, FreeThrowsMade=X29, FreeThrowsAttempted=X30, FreeThrowPCT=X31, OffensiveRebounds=X32, TotalRebounds=X33, Assists=X34, Steals=X35, Blocks=X36, Turnovers=X37, PersonalFouls=X38)
