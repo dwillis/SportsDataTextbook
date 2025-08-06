@@ -39,9 +39,9 @@ Great idea. Let's do it. You'll need to make sure that your API key has been add
 
 The first thing to do is [read the documentation](https://cfbfastr.sportsdataverse.org/). You'll see that you can request data for each week. For example, here's week 1 against Buffalo.
 
-```{r}
+```{r, eval=FALSE}
 maryland <- cfbd_pbp_data(
- 2022,
+ 2024,
   week=1, 
   season_type = "regular",
   team = "Maryland",
@@ -51,7 +51,7 @@ maryland <- cfbd_pbp_data(
 
 There's not an easy way to get all of a single team's games. A way to do it that's not very pretty but it works is like this:
 
-```{r}
+```{r, eval=FALSE}
 #| message: false
 #| warning: false
 wk1 <- cfbd_pbp_data(2022, week=1, season_type = "regular", team = "Maryland", epa_wpa = TRUE)
@@ -83,7 +83,7 @@ The sys.sleep bits just pauses for two seconds before running the next block. Si
 
 Now you're ready to look at heartbreak. How do we define heartbreak? How about like this: you first have to lose the game, it comes in the third or fourth quarter, it involves a play (i.e. not a timeout), and it results in the biggest drop in win probability.
 
-```{r}
+```{r, eval=FALSE}
 umplays |> 
   filter(pos_team == "Maryland" & wk > 4 & play_type != "Timeout") |> 
   filter(period == 3 | period == 4) |> 
@@ -107,9 +107,9 @@ Many of these libraries have more than play-by-play data. For example, wehoop ha
 
 So, who is Maryland's single season points champion over the last six seasons?
 
-```{r}
+```{r, eval=FALSE}
 progressr::with_progress({
-  wbb_player_box <- wehoop::load_wbb_player_box(2018:2022)
+  wbb_player_box <- wehoop::load_wbb_player_box(2021:2025)
 })
 ```
 
@@ -117,7 +117,7 @@ With progressr, you'll see a progress bar in the console, which lets you know th
 
 If you look at the wbb_player_box data we now have, we have each player in each game over each season -- more than 300,000 records. Finding out who Maryland's top 10 single-season scoring leaders are is a matter of grouping, summing and filtering.
 
-```{r}
+```{r, eval=FALSE}
 #| message: false
 #| warning: false
 wbb_player_box |> 

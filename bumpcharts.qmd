@@ -13,7 +13,7 @@ library(tidyverse)
 library(ggbump)
 ```
 
-Let's use the 2021-22 college football playoff rankings:
+Let's use the 2024-25 college football playoff rankings:
 
 ```{r}
 #| warning: false
@@ -91,7 +91,7 @@ ggplot() +
 
 Another step. That makes it more subway-map like. But the colors are all wrong. To fix this, we're going to use `scale_color_manual` and we're going to Google the hex codes for each team. The legend will tell you what order your `scale_color_manual` needs to be.
 
-```{r}
+```{r, eval=FALSE}
 ggplot() + 
   geom_bump(data=newrankings, aes(x=Week, y=Rank, color=Team)) + 
   geom_point(data=newrankings, aes(x=Week, y=Rank, color=Team), size = 4) + 
@@ -101,19 +101,19 @@ ggplot() +
 
 Another step. But the legend is annoying. And trying to find which red is Alabama vs Ohio State is hard. So what if we labeled each dot at the beginning and end? We can do that with some clever usage of geom_text and a little dplyr filtering inside the data step. We filter out the first and last weeks, then use hjust -- horizontal justification -- to move them left or right.
 
-```{r}
+```{r, eval=FALSE}
 ggplot() + 
   geom_bump(data=newrankings, aes(x=Week, y=Rank, color=Team)) + 
   geom_point(data=newrankings, aes(x=Week, y=Rank, color=Team), size = 4) +   
   geom_text(data = newrankings |> filter(Week == min(Week)), aes(x = Week - .2, y=Rank, label = Team), size = 3, hjust = 1) +
   geom_text(data = newrankings |> filter(Week == max(Week)), aes(x = Week + .2, y=Rank, label = Team), size = 3, hjust = 0) +
-  scale_color_manual(values = c("#9E1B32","#F56600", "#BA0C2F", "#0021A5", "#ffcb05", "#BB0000", "#4d1979","#FF8200", "#990000", "#CC0000")) +
+  scale_color_manual(values = c("HEX CODE", "HEX CODE")) # replace HEX CODE with each team's code) +
   scale_y_reverse() 
 ```
 
 Better, but the legend is still there. We can drop it in a theme directive by saying `legend.position = "none"`. We'll also throw a theme_minimal on there to drop the default grey, and we'll add some better labeling.
 
-```{r}
+```{r, eval=FALSE}
 ggplot() + 
   geom_bump(data=newrankings, aes(x=Week, y=Rank, color=Team)) + 
   geom_point(data=newrankings, aes(x=Week, y=Rank, color=Team), size = 4) +   
@@ -125,13 +125,13 @@ ggplot() +
     legend.position = "none",
     panel.grid.major = element_blank()
     ) +
-  scale_color_manual(values = c("#9E1B32","#F56600", "#BA0C2F", "#0021A5", "#ffcb05", "#BB0000", "#4d1979","#FF8200", "#990000", "#CC0000")) +
+  scale_color_manual(values = c("HEX CODE", "HEX CODE")) # replace HEX CODE with each team's code) +
   scale_y_reverse() 
 ```
 
 Now let's fix our text hierarchy.
 
-```{r}
+```{r, eval=FALSE}
 ggplot() + 
   geom_bump(data=newrankings, aes(x=Week, y=Rank, color=Team)) + 
   geom_point(data=newrankings, aes(x=Week, y=Rank, color=Team), size = 4) +   
@@ -147,7 +147,7 @@ ggplot() +
     plot.subtitle = element_text(size=10), 
     panel.grid.minor = element_blank()
     ) +
-  scale_color_manual(values = c("#9E1B32","#F56600", "#BA0C2F", "#0021A5", "#ffcb05", "#BB0000", "#4d1979","#FF8200", "#990000", "#CC0000")) +
+  scale_color_manual(values = c("HEX CODE", "HEX CODE")) # replace HEX CODE with each team's code) +
   scale_y_reverse() 
 ```
 
@@ -155,7 +155,7 @@ And the last thing: anyone else annoyed at 7.5th place on the left? We can fix t
 
 One last thing: Let's change the width of the chart to make the names fit. We can do that by adding `fig.width=X` in the `{r}` setup in your block. So something like this:
 
-```{r fig.width=18}
+```{r fig.width=18, eval=FALSE}
 ggplot() + 
   geom_bump(data=newrankings, aes(x=Week, y=Rank, color=Team)) + 
   geom_point(data=newrankings, aes(x=Week, y=Rank, color=Team), size = 4) +   
@@ -171,7 +171,7 @@ ggplot() +
     plot.subtitle = element_text(size=10), 
     panel.grid.minor = element_blank()
     ) +
-  scale_color_manual(values = c("#9E1B32","#F56600", "#BA0C2F", "#0021A5", "#ffcb05", "#BB0000", "#4d1979","#FF8200", "#990000", "#CC0000")) +
+  scale_color_manual(values = c("HEX CODE", "HEX CODE")) # replace HEX CODE with each team's code) +
   scale_x_continuous(breaks=c(13,14,15,16,17)) + 
   scale_y_reverse(breaks=c(1,2,3,4,5,6,7,8,9,10,11,12,13,14,15))
 ```

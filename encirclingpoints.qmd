@@ -15,6 +15,7 @@ There's a bunch of things that `ggalt` does, but one of the most useful for us i
 #| message: false
 library(tidyverse)
 library(ggalt)
+library(ggrepel)
 ```
 
 Let's say we want to highlight the top scorers in women's college lacrosse. So let's use our player data.
