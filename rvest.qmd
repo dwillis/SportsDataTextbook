@@ -108,7 +108,7 @@ Let's try to get [season team stats from Sports Reference](https://www.sports-re
 First we'll grab the page.
 
 ```{r}
-url <- "https://www.sports-reference.com/cbb/seasons/2024-school-stats.html"
+url <- "https://www.sports-reference.com/cbb/seasons/men/2024-school-stats.html"
 ```
 
 Now, similar to our example above, we'll read the html, use XPath to find the table, and then read that table with a directive passed to it setting the header to FALSE. That tells rvest that there isn't a header row. Just import it as data.
