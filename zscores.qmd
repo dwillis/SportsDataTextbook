@@ -111,6 +111,7 @@ teamzscore |>
   arrange(desc(TotalZscore)) |>
   select(Team, TotalZscore)
 ```
+
 So, as we can see, with our composite Z Score, Maryland is below average; not great. But better than Ohio State. Notice how, by this measure, Indiana and Iowa are far ahead of most of the conference, with Nebraska a somewhat surprising third.
 
 We can limit our results to just Power Five conferences plus the Big East:
@@ -122,7 +123,8 @@ teamzscore |>
   arrange(desc(TotalZscore)) |>
   select(Team, TotalZscore)
 ```
-This makes a certain amount of sense: three of the Final Four teams - South Carolina, UConn and Iowa are in the top 10. N.C. State, the fourth team, ranks 16th. Duke is an interesting #10 here. It doesn't necessarily mean they were the ninth-best team, but given their competition they shot the ball and rebounded the ball very well.
+
+This makes a certain amount of sense: three of the Final Four teams - South Carolina, UConn and Iowa are in the top 10. N.C. State, the fourth team, ranks 16th. Virginia Tech is an interesting #7 here. It doesn't necessarily mean they were the seventh-best team, but given their competition they shot the ball and rebounded the ball very well.
 
 ## Writing about z-scores
 
